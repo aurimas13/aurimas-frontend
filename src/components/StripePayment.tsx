@@ -30,7 +30,7 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
 
     try {
       // Create checkout session on your Railway backend
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://aurimas-backend-production.up.railway.app';
       const response = await fetch(`${apiUrl}/api/create-payment-intent`, {
         method: 'POST',
         headers: {
