@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure Tailwind is properly loaded */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-size: 16px;
   }
   
   body {
@@ -13,6 +17,18 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  #root {
+    min-height: 100vh;
+    width: 100%;
   }
 }
 
