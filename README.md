@@ -1,2 +1,0 @@
-# aurimas-frontend
-aurimas-frontend
