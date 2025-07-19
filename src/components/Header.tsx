@@ -29,10 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onSectionChange 
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="relative">
-              <img src="/UoE.png" alt="University of Edinburgh" className="w-8 h-8" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-bounce"></div>
-            </div>
+            <Sparkles className="w-8 h-8 text-yellow-500" />
             <span className="text-2xl font-bold text-gray-800">
               <span className="text-yellow-300">Au</span><span className="text-black">rimas</span>
             </span>

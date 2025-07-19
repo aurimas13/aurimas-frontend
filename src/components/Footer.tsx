@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-white py-16 border-t border-yellow-200">
-      <div className="container mx-auto px-4">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Connect With Me Section - Top */}
         <div className="text-center mb-12">
           <h3 className="text-3xl font-bold text-gray-800 mb-8">{t.footer.connectWithMe}</h3>

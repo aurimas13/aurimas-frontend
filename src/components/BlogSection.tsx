@@ -13,7 +13,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
 
   return (
     <section id="blogs" className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             {t.blogs.title}
