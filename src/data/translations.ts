@@ -9,7 +9,7 @@ export const translations = {
       cv: 'CV'
     },
     hero: {
-      greeting: 'Hello, I\'m',
+      greeting: 'Hi, I\'m',
       name: 'Aurimas',
       subtitle: 'Chemist turned AI Architect & Writer',
       description: 'Welcome to my digital space where chemistry meets code, and stories come to life.',
