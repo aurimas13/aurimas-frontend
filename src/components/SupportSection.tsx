@@ -4,7 +4,6 @@ import { Heart, CreditCard, Banknote, Coffee, Star, Shield, CheckCircle, Clock, 
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 import { StripePayment } from './StripePayment';
-import { createTransaction, isSupabaseConfigured } from '../lib/supabase';
 
 export const SupportSection: React.FC = () => {
   const { currentLanguage } = useLanguage();
@@ -56,27 +55,6 @@ export const SupportSection: React.FC = () => {
     setIsProcessingPayment(true);
     setPaymentError(null);
 
-    // Create transaction record in Supabase if configured
-    if (isSupabaseConfigured()) {
-      try {
-        await createTransaction({
-          customer_email: 'anonymous@aurimas.io',
-          amount: Math.round(amount * 100), // Convert to cents
-          currency: 'eur',
-          payment_type: paymentType,
-          status: 'pending',
-          metadata: {
-            source: 'website',
-            user_agent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-          }
-        });
-      } catch (error) {
-        console.error('Failed to create transaction record:', error);
-        // Continue with payment even if transaction record fails
-      }
-    }
-
     setShowStripePayment(true);
     setIsProcessingPayment(false);
   };
@@ -118,9 +96,6 @@ export const SupportSection: React.FC = () => {
                 <h3 className="text-2xl font-bold text-green-800">Payment Successful!</h3>
               </div>
               <p className="text-green-700">Thank you for supporting my work! Your contribution means a lot.</p>
-              {isSupabaseConfigured() && (
-                <p className="text-green-600 text-sm mt-2">Transaction has been recorded and you'll receive a confirmation email.</p>
-              )}
             </div>
           )}
 
@@ -178,12 +153,6 @@ export const SupportSection: React.FC = () => {
                 <div className="flex items-center space-x-1 text-xs text-gray-500">
                   <Shield className="w-3 h-3" />
                   <span>Secured by Stripe</span>
-                  {isSupabaseConfigured() && (
-                    <>
-                      <span className="mx-1">•</span>
-                      <span>Tracked by Supabase</span>
-                    </>
-                  )}
                 </div>
               </div>
               
@@ -279,12 +248,6 @@ export const SupportSection: React.FC = () => {
                         </li>
                       </>
                     )}
-                    {isSupabaseConfigured() && (
-                      <li className="flex items-center">
-                        <Star className="w-4 h-4 text-blue-500 mr-2" />
-                        Transaction tracking and history
-                      </li>
-                    )}
                   </ul>
                 </div>
               </div>
@@ -307,7 +270,6 @@ export const SupportSection: React.FC = () => {
                     amount={getCurrentAmount()}
                     currency="EUR"
                     paymentType={paymentType}
-                    customerEmail="anonymous@aurimas.io"
                     onSuccess={handlePaymentSuccess}
                     onError={handlePaymentError}
                   />

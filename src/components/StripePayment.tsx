@@ -20,11 +20,15 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
 
   const handlePayment = async () => {
-    if (!amount || amount < 0.5) {
-      onError?.('Minimum payment amount is €0.50');
+    if (paymentType === 'subscription' && (!amount || amount < 1)) {
+      onError?.('Minimum monthly amount is €1');
       return;
     }
 
+    if (paymentType === 'one-time' && (!amount || amount < 10)) {
+      onError?.('Minimum one-time amount is €10');
+      return;
+    }
     setIsProcessing(true);
     setPaymentStatus('processing');
 
@@ -68,7 +72,7 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
           amount: Math.round(amount * 100), // Convert to cents
           currency: currency.toLowerCase(),
           payment_type: paymentType,
-          customer_email: 'support@aurimas.io', // You can make this dynamic later
+          customer_email: 'support@aurimas.io',
         }),
       });
 
@@ -158,6 +162,7 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
       <div className="text-xs text-gray-500 text-center">
         <p>Secure payment processing by Stripe</p>
         <p>Your payment information is encrypted and secure</p>
+        <p>Transaction will be tracked for your records</p>
       </div>
     </div>
   );
