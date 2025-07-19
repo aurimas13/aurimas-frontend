@@ -1,95 +1,43 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-/* Ensure Tailwind is properly loaded */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-@layer base {
-  html {
-    scroll-behavior: smooth;
-    font-size: 16px;
-  }
-  
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #ffffff;
-    margin: 0;
-    padding: 0;
-    line-height: 1.5;
-  }
-  
-  * {
-    box-sizing: border-box;
-  }
-  
-  #root {
-    min-height: 100vh;
-    width: 100%;
-  }
+/* Custom CSS Variables */
+:root {
+  --color-primary: #eab308;
+  --color-primary-dark: #ca8a04;
+  --color-secondary: #f59e0b;
+  --color-accent: #fbbf24;
+  --color-background: #ffffff;
+  --color-text: #1f2937;
+  --color-text-light: #6b7280;
 }
 
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 1s ease-out forwards;
-    opacity: 0;
-  }
-  
-  .animate-fade-in.delay-300 {
-    animation-delay: 0.3s;
-  }
-  
-  .animate-fade-in.delay-500 {
-    animation-delay: 0.5s;
-  }
-  
-  .animate-fade-in.delay-700 {
-    animation-delay: 0.7s;
-  }
-  
-  .animate-fade-in.delay-1000 {
-    animation-delay: 1s;
-  }
-  
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  .animate-float.delay-1000 {
-    animation-delay: 1s;
-  }
-  
-  .animate-float.delay-2000 {
-    animation-delay: 2s;
-  }
-  
-  .animate-spin-slow {
-    animation: spin 8s linear infinite;
-  }
-  
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .character-float {
-    animation: characterFloat 4s ease-in-out infinite;
-  }
-
-  .character-bounce {
-    animation: characterBounce 2s ease-in-out infinite;
-  }
+/* Base Styles */
+* {
+  box-sizing: border-box;
 }
 
-@keyframes fadeIn {
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Animations */
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -102,148 +50,81 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-10px);
   }
 }
 
-@keyframes characterFloat {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
   }
-  50% {
-    transform: translateY(-15px) rotate(5deg);
-  }
-}
-
-@keyframes characterBounce {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
+  to {
+    transform: rotate(360deg);
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
 }
 
-::-webkit-scrollbar-track {
-  background: #fef3c7;
+.animate-fade-in.delay-300 {
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #fbbf24, #f59e0b);
-  border-radius: 4px;
+.animate-fade-in.delay-500 {
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #f59e0b, #d97706);
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
 
-/* Disney-inspired magical effects */
-.magical-sparkle {
-  position: relative;
+.animate-float.delay-1000 {
+  animation-delay: 1s;
 }
 
-.magical-sparkle::before {
-  content: '✨';
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  animation: sparkle 2s infinite;
+.animate-float.delay-2000 {
+  animation-delay: 2s;
 }
 
-@keyframes sparkle {
-  0%, 100% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1);
-  }
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
 }
 
-/* Cartoonish button effects */
-.cartoon-button {
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.1s;
-}
-
-.cartoon-button:active {
-  transform: translateY(2px);
-}
-
-.cartoon-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, rgba(255,255,255,0.3), transparent);
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-/* Character animations */
+/* Custom Components */
 .character-selector {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.character-selector:hover {
-  transform: scale(1.15);
-  filter: brightness(1.1);
+.character-float {
+  animation: float 4s ease-in-out infinite;
 }
 
-/* Custom cursor styles */
-.custom-cursor {
-  position: fixed;
-  width: 40px;
-  height: 40px;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
+/* Utility Classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-/* Ensure all text is visible */
-.text-gray-800 {
-  color: #1f2937 !important;
+/* Responsive Design */
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem;
+  }
 }
 
-.text-gray-600 {
-  color: #4b5563 !important;
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
 }
 
-.text-gray-700 {
-  color: #374151 !important;
-}
-
-/* Ensure backgrounds are visible */
-.bg-white {
-  background-color: #ffffff !important;
-}
-
-.bg-yellow-100 {
-  background-color: #fef3c7 !important;
-}
-
-.bg-yellow-200 {
-  background-color: #fde68a !important;
-}
-
-.bg-yellow-300 {
-  background-color: #fcd34d !important;
-}
-
-.bg-yellow-400 {
-  background-color: #fbbf24 !important;
-}
-
-.bg-yellow-500 {
-  background-color: #f59e0b !important;
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }
