@@ -13,37 +13,40 @@ export const isSupabaseConfigured = () => {
   return !!(supabaseUrl && supabaseAnonKey)
 }
 
-// Blog post types for future Supabase integration
-export interface BlogPost {
+// Transaction types for Supabase
+export interface Transaction {
   id: string
-  title: string
-  content: string
-  excerpt: string
-  published_at: string
-  author: string
-  category: string
-  tags: string[]
-  is_premium: boolean
+  stripe_session_id?: string
+  customer_email: string
+  amount: number
+  currency: string
+  payment_type: 'subscription' | 'one-time'
+  status: 'pending' | 'completed' | 'failed' | 'cancelled'
+  stripe_customer_id?: string
+  subscription_id?: string
+  metadata?: Record<string, any>
+  created_at: string
+  updated_at: string
 }
 
-// Future function to fetch blog posts from Supabase
-export const getBlogPosts = async (): Promise<BlogPost[]> => {
+// Create a new transaction record
+export const createTransaction = async (transaction: Omit<Transaction, 'id' | 'created_at' | 'updated_at'>): Promise<Transaction | null> => {
   if (!supabase) {
-    console.log('Supabase not configured, using local storage')
-    return []
+    console.log('Supabase not configured, cannot create transaction');
+    return null
   }
 
   try {
     const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('published', true)
-      .order('published_at', { ascending: false })
+      .from('transactions')
+      .insert([transaction])
+      .select()
+      .single();
 
-    if (error) throw error
-    return data || []
+    if (error) throw error;
+    return data;
   } catch (error) {
-    console.error('Error fetching blog posts:', error)
-    return []
+    console.error('Error creating transaction:', error);
+    return null;
   }
 }
