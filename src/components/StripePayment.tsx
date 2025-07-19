@@ -29,11 +29,34 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
     setPaymentStatus('processing');
 
     try {
-      // Create checkout session on your Railway backend
-      const apiUrl = import.meta.env.VITE_API_URL;
+      // Determine API URL based on environment
+      const isDevelopment = window.location.hostname === 'localhost';
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       
-      if (!apiUrl) {
-        throw new Error('API URL not configured');
+      console.log('Environment:', isDevelopment ? 'development' : 'production');
+      console.log('Using API URL:', apiUrl);
+      
+      // Test backend connectivity first
+      try {
+        const healthResponse = await fetch(`${apiUrl}/api/health`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (!healthResponse.ok) {
+          throw new Error(`Backend not accessible: ${healthResponse.status}`);
+        }
+        
+        console.log('Backend health check passed');
+      } catch (healthError) {
+        console.error('Backend health check failed:', healthError);
+        if (isDevelopment) {
+          throw new Error(`Backend server not running. Please start it by running:\n\ncd backend\nnpm install\nnpm run dev\n\nThen verify it's working at: http://localhost:3001/api/health`);
+        } else {
+          throw new Error('Cannot connect to payment server. Please try again later.');
+        }
       }
       
       const response = await fetch(`${apiUrl}/api/create-payment-intent`, {
@@ -50,7 +73,24 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create payment intent');
+        let errorMessage = 'Payment processing failed';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          const errorText = await response.text();
+          errorMessage = errorText || errorMessage;
+        }
+        
+        console.error('API Error:', response.status, errorMessage);
+        
+        if (response.status === 500) {
+          throw new Error('Payment service configuration error. Please contact support.');
+        } else if (response.status === 400) {
+          throw new Error(errorMessage);
+        } else {
+          throw new Error(`Payment failed (${response.status}). Please try again.`);
+        }
       }
 
       const { url } = await response.json();
@@ -67,7 +107,8 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
     } catch (error) {
       console.error('Payment error:', error);
       setPaymentStatus('error');
-      onError?.(error instanceof Error ? error.message : 'Payment failed');
+      const errorMessage = error instanceof Error ? error.message : 'Payment failed';
+      onError?.(errorMessage);
     } finally {
       setIsProcessing(false);
     }
