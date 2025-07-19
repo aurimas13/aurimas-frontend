@@ -11,7 +11,7 @@ export const translations = {
     hero: {
       greeting: 'Hello, I\'m',
       name: 'Aurimas',
-      subtitle: 'Chemist turned AI Engineer & Writer',
+      subtitle: 'Chemist turned AI Architect & Writer',
       description: 'Welcome to my digital space where chemistry meets code, and stories come to life.',
       cta: 'Explore My Journey'
     },
@@ -141,9 +141,9 @@ export const translations = {
       cv: 'CV'
     },
     hero: {
-      greeting: 'Sveiki, esu',
+      greeting: 'Laba, esu',
       name: 'Aurimas',
-      subtitle: 'Chemikas tapęs DI inžinieriumi ir rašytoju',
+      subtitle: 'Chemikas tapęs DI architektu ir rašytoju',
       description: 'Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, o istorijos atgyja ant lapo.',
       cta: 'Tyrinėti mano kelionę'
     },
@@ -274,7 +274,7 @@ export const translations = {
     hero: {
       greeting: 'Bonjour, je m\'appelle',
       name: 'Aurimas',
-      subtitle: 'Chimiste devenu ingénieur IA et écrivain',
+      subtitle: 'Chimiste devenu architecte IA et écrivain',
       description: 'Bienvenue dans mon espace virtuel, où la chimie devient code et où l\'histoire reprend vie.',
       cta: 'Explorer mon parcours'
     },
