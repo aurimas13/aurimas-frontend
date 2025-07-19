@@ -15,27 +15,27 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
     <section className="min-h-screen relative overflow-hidden pt-20 bg-white">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden w-full">
-        <div className="absolute top-20 left-[5%] w-16 md:w-20 h-16 md:h-20 bg-yellow-200 rounded-full opacity-30 animate-bounce"></div>
-        <div className="absolute top-40 right-[5%] w-12 md:w-16 h-12 md:h-16 bg-yellow-300 rounded-full opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-40 left-[10%] w-20 md:w-24 h-20 md:h-24 bg-yellow-100 rounded-full opacity-30 animate-bounce delay-1000"></div>
-        <div className="absolute bottom-20 right-[10%] w-10 md:w-12 h-10 md:h-12 bg-yellow-400 rounded-full opacity-30 animate-pulse delay-500"></div>
+        <div className="absolute top-20 left-4 md:left-[8%] w-16 md:w-20 h-16 md:h-20 bg-yellow-200 rounded-full opacity-30 animate-bounce"></div>
+        <div className="absolute top-40 right-4 md:right-[8%] w-12 md:w-16 h-12 md:h-16 bg-yellow-300 rounded-full opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-40 left-4 md:left-[12%] w-20 md:w-24 h-20 md:h-24 bg-yellow-100 rounded-full opacity-30 animate-bounce delay-1000"></div>
+        <div className="absolute bottom-20 right-4 md:right-[12%] w-10 md:w-12 h-10 md:h-12 bg-yellow-400 rounded-full opacity-30 animate-pulse delay-500"></div>
         
         {/* Floating Icons */}
-        <div className="absolute top-32 left-[20%] animate-float hidden md:block">
+        <div className="absolute top-32 left-[15%] animate-float hidden lg:block">
           <Beaker className="w-6 md:w-8 h-6 md:h-8 text-yellow-500 opacity-60" />
         </div>
-        <div className="absolute top-48 right-[20%] animate-float delay-1000 hidden md:block">
+        <div className="absolute top-48 right-[15%] animate-float delay-1000 hidden lg:block">
           <Code className="w-6 md:w-8 h-6 md:h-8 text-yellow-600 opacity-60" />
         </div>
-        <div className="absolute bottom-48 left-[30%] animate-float delay-2000 hidden md:block">
+        <div className="absolute bottom-48 left-[25%] animate-float delay-2000 hidden lg:block">
           <Heart className="w-6 md:w-8 h-6 md:h-8 text-yellow-400 opacity-60" />
         </div>
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 min-h-screen flex items-center relative z-10 pt-8">
+      <div className="w-screen px-4 sm:px-6 lg:px-8 xl:px-12 min-h-screen flex items-center relative z-10 pt-8">
 
         {/* Main Content */}
-        <div className="text-center w-full max-w-6xl mx-auto">
+        <div className="text-center w-full max-w-7xl mx-auto">
           {/* Profile Image */}
           <div className="mb-8 relative">
             <div className="w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 border-yellow-400 shadow-2xl relative">

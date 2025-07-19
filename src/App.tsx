@@ -38,7 +38,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white relative w-full overflow-x-hidden">
+    <div className="min-h-screen bg-white relative w-screen min-w-screen max-w-screen overflow-x-hidden">
       <Header 
         currentSection={showBlogManager ? 'blog-manager' : currentSection} 
         onSectionChange={(section) => {
