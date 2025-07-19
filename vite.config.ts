@@ -6,9 +6,6 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
-  define: {
-    global: 'globalThis',
-  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -22,7 +19,7 @@ export default defineConfig({
         }
       }
     }
-  }
+  },
   server: {
     port: 5173,
     host: true
