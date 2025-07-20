@@ -89,29 +89,45 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
           if (endIndex > startIndex) {
             const url = line.substring(startIndex, endIndex);
             
-            // Extract video ID and create proper title
+            // Extract video ID and fetch title
             let videoId = '';
-            let videoTitle = 'YouTube Video';
+            let videoTitle = 'Loading video title...';
             
             if (url.includes('youtu.be/')) {
-              videoId = url.split('youtu.be/')[1].split('?')[0];
+              videoId = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
             } else if (url.includes('youtube.com/watch?v=')) {
-              videoId = url.split('v=')[1].split('&')[0];
+              videoId = url.split('v=')[1].split('&')[0].split('#')[0];
             }
             
             if (videoId) {
-              // For now, we'll show the video ID as title since we can't fetch the actual title
-              // In a real app, you'd use YouTube API to get the actual title
-              videoTitle = `Video ID: ${videoId}`;
+              // Fetch video title using YouTube oEmbed API
+              fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+                .then(response => response.json())
+                .then(data => {
+                  if (data.title) {
+                    // Update the title in the DOM
+                    const titleElement = document.querySelector(`[data-video-id="${videoId}"] .video-title`);
+                    if (titleElement) {
+                      titleElement.textContent = data.title;
+                    }
+                  }
+                })
+                .catch(error => {
+                  console.error('Error fetching YouTube title:', error);
+                  const titleElement = document.querySelector(`[data-video-id="${videoId}"] .video-title`);
+                  if (titleElement) {
+                    titleElement.textContent = 'YouTube Video';
+                  }
+                });
             }
              
             return (
-              <div key={index} className="my-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div key={index} className="my-4 p-4 bg-red-50 border border-red-200 rounded-lg" data-video-id={videoId}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-red-600">
                     <span className="text-2xl">📺</span>
                     <div>
-                      <div className="font-bold">{videoTitle}</div>
+                      <div className="font-bold video-title">{videoTitle}</div>
                       <div className="text-sm text-gray-600">YouTube</div>
                     </div>
                   </div>
@@ -136,33 +152,53 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
           if (endIndex > startIndex) {
             const url = line.substring(startIndex, endIndex);
             
-            // Extract track ID and create proper title
-            let trackId = '';
-            let trackTitle = 'Spotify Track';
+            // Extract track/album/playlist ID and fetch title
+            let itemId = '';
+            let itemTitle = 'Loading...';
+            let itemType = 'track';
             
             if (url.includes('spotify.com/track/')) {
-              trackId = url.split('track/')[1].split('?')[0];
+              itemId = url.split('track/')[1].split('?')[0].split('#')[0];
+              itemType = 'track';
+              itemTitle = 'Loading track...';
             } else if (url.includes('spotify.com/album/')) {
-              trackId = url.split('album/')[1].split('?')[0];
-              trackTitle = 'Spotify Album';
+              itemId = url.split('album/')[1].split('?')[0].split('#')[0];
+              itemType = 'album';
+              itemTitle = 'Loading album...';
             } else if (url.includes('spotify.com/playlist/')) {
-              trackId = url.split('playlist/')[1].split('?')[0];
-              trackTitle = 'Spotify Playlist';
+              itemId = url.split('playlist/')[1].split('?')[0].split('#')[0];
+              itemType = 'playlist';
+              itemTitle = 'Loading playlist...';
             }
             
-            if (trackId && url.includes('track/')) {
-              // For now, we'll show the track ID as title since we can't fetch the actual title
-              // In a real app, you'd use Spotify API to get the actual title
-              trackTitle = `Track ID: ${trackId}`;
+            if (itemId) {
+              // Try to fetch title using Spotify oEmbed (limited but works for some content)
+              fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`)
+                .then(response => response.json())
+                .then(data => {
+                  if (data.title) {
+                    const titleElement = document.querySelector(`[data-spotify-id="${itemId}"] .spotify-title`);
+                    if (titleElement) {
+                      titleElement.textContent = data.title;
+                    }
+                  }
+                })
+                .catch(error => {
+                  console.error('Error fetching Spotify title:', error);
+                  const titleElement = document.querySelector(`[data-spotify-id="${itemId}"] .spotify-title`);
+                  if (titleElement) {
+                    titleElement.textContent = `Spotify ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`;
+                  }
+                });
             }
              
             return (
-              <div key={index} className="my-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div key={index} className="my-4 p-4 bg-green-50 border border-green-200 rounded-lg" data-spotify-id={itemId}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-green-600">
                     <span className="text-2xl">🎵</span>
                     <div>
-                      <div className="font-bold">{trackTitle}</div>
+                      <div className="font-bold spotify-title">{itemTitle}</div>
                       <div className="text-sm text-gray-600">Spotify</div>
                     </div>
                   </div>
@@ -296,30 +332,31 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Alt Text</label>
                         <input
                           type="text"
+                          maxLength={100}
                           value={currentMetadata.alt}
                           onChange={(e) => setImageMetadata(prev => ({
                             ...prev,
                             [imageId]: { ...currentMetadata, alt: e.target.value }
                           }))}
-                          onFocus={(e) => e.target.select()}
-                          autoFocus
                           className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
                           placeholder="Describe the image..."
                         />
+                        <div className="text-xs text-gray-500 mt-1">{currentMetadata.alt.length}/100</div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
                         <input
                           type="text"
+                          maxLength={100}
                           value={currentMetadata.keywords}
                           onChange={(e) => setImageMetadata(prev => ({
                             ...prev,
                             [imageId]: { ...currentMetadata, keywords: e.target.value }
                           }))}
-                          onFocus={(e) => e.target.select()}
                           className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
                           placeholder="SEO keywords..."
                         />
+                        <div className="text-xs text-gray-500 mt-1">{currentMetadata.keywords.length}/100</div>
                       </div>
                       <button
                         onClick={() => setShowImageMenu(null)}
