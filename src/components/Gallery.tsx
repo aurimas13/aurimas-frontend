@@ -10,6 +10,13 @@ export const Gallery: React.FC = () => {
 
   const galleryImages = [
     {
+      src: '/1_Edinburgh.jpg',
+      alt: 'Aurimas in Edinburgh',
+      title: 'Edinburgh Adventures',
+      location: 'Edinburgh, Scotland',
+      description: 'Exploring the beautiful city of Edinburgh during my time at the University.'
+    },
+    {
       src: '/basketball.jpg',
       alt: 'Aurimas playing basketball',
       title: 'Basketball Passion',
@@ -22,6 +29,13 @@ export const Gallery: React.FC = () => {
       title: 'Fitness Journey',
       location: 'Gym',
       description: 'Staying fit and healthy is essential for maintaining the energy needed for coding and writing.'
+    },
+    {
+      src: '/high_lands_2.JPG',
+      alt: 'Highland scenery',
+      title: 'Highland Beauty',
+      location: 'Scottish Highlands',
+      description: 'The stunning landscapes of the Scottish Highlands that inspire my daily walks.'
     },
     {
       src: '/high_lands_3.jpeg',
@@ -52,11 +66,11 @@ export const Gallery: React.FC = () => {
       description: 'Capturing the perfect sunset - moments like these fuel my writing.'
     },
     {
-      src: '/less.jpg',
-      alt: 'Less is more philosophy',
-      title: 'Less is More',
-      location: 'Minimalist Space',
-      description: 'Embracing minimalism in both life and code - simplicity is the ultimate sophistication.'
+      src: '/homestead_run.JPG',
+      alt: 'Running at the homestead',
+      title: 'Homestead Run',
+      location: 'Lithuanian Countryside',
+      description: 'Morning runs through the peaceful countryside, connecting with nature and my roots.'
     }
   ];
 
