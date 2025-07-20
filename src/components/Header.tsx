@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Sparkles, Edit, FileText, Image, Heart, Mail } from 'lucide-react';
+import { Menu, X, Edit, FileText, Image, Heart, Mail } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onSectionChange 
   const t = translations[currentLanguage];
 
   const navItems = [
-    { id: 'home', label: t.nav.home, icon: Sparkles },
+    { id: 'home', label: t.nav.home, icon: Image },
     { id: 'about', label: t.nav.about, icon: FileText },
     { id: 'blogs', label: t.nav.blogs, icon: Edit },
     { id: 'gallery', label: t.nav.gallery, icon: Image },
@@ -24,12 +24,12 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onSectionChange 
   ];
 
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 shadow-sm border-b border-yellow-200">
-      <div className="container mx-auto px-4 py-4">
+    <header className="fixed top-0 w-screen bg-white/95 backdrop-blur-md z-50 shadow-sm border-b border-yellow-200">
+      <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-12 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-8 h-8 text-yellow-500" />
+            <img src="/UoE.png" alt="University of Edinburgh" className="w-8 h-8 rounded-full" />
             <span className="text-2xl font-bold text-gray-800">
               <span className="text-yellow-300">Au</span><span className="text-black">rimas</span>
             </span>

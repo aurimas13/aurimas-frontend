@@ -81,63 +81,64 @@ export const About: React.FC = () => {
 
   return (
     <section id="about" className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+      <div className="w-screen px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-8 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             {t.about.title}
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-orange-400 to-red-500 mx-auto rounded-full"></div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-start">
           {/* Bio Section */}
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="flex items-center mb-6">
                 <BookOpen className="w-8 h-8 text-green-600 mr-3" />
                 <h3 className="text-2xl font-bold text-gray-800">{t.about.myStory}</h3>
               </div>
               <div className="prose prose-gray max-w-none">
                 {t.about.bio.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="text-gray-600 leading-relaxed mb-4">
+                  <p key={index} className="text-gray-600 leading-relaxed mb-4 text-sm sm:text-base">
                     {paragraph}
                   </p>
                 ))}
-            <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl p-6 text-white text-center">
+              </div>
+            <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl p-4 sm:p-6 text-white text-center">
               <h4 className="text-xl font-bold mb-2">{t.about.downloadCVShort}</h4>
-              <p className="mb-4">{t.about.downloadDescription}</p>
-              <div className="flex justify-center space-x-3">
+              <p className="mb-4 text-sm sm:text-base">{t.about.downloadDescription}</p>
+              <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-3">
                 <button
                   onClick={() => handlePDFDownload('/Aurimas_Nausedas_Resume_2025_July.pdf', 'Aurimas_Nausedas_CV_English.pdf')}
-                  className="bg-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center space-x-2 text-sm text-gray-800"
+                  className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
                 >
                   <Download className="w-4 h-4" />
                   <span>{t.about.download} (EN)</span>
                 </button>
                 <button
                   onClick={() => handlePDFDownload('/CV_Aurimas_Liepa.pdf', 'Aurimas_Nausedas_CV_Lithuanian.pdf')}
-                  className="bg-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center space-x-2 text-sm text-gray-800"
+                  className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
                 >
                   <Download className="w-4 h-4" />
                   <span>{t.about.download} (LT)</span>
                 </button>
                 <button
                   onClick={() => handlePDFDownload('/CV_Aurimas_Juillet.pdf', 'Aurimas_Nausedas_CV_French.pdf')}
-                  className="bg-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center space-x-2 text-sm text-gray-800"
+                  className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
                 >
                   <Download className="w-4 h-4" />
                   <span>{t.about.download} (FR)</span>
                 </button>
               </div>
                 </div>
-              </div>
             </div>
           </div>
 
           {/* Skills & Experience */}
           <div className="space-y-8">
             {/* Skills */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="flex items-center mb-6">
                 <Code className="w-8 h-8 text-green-600 mr-3" />
                 <h3 className="text-2xl font-bold text-gray-800">{t.about.skills}</h3>
@@ -146,8 +147,8 @@ export const About: React.FC = () => {
                 {skills.map((skill) => (
                   <div key={skill.name}>
                     <div className="flex justify-between mb-2">
-                      <span className="font-medium text-gray-700">{skill.name}</span>
-                      <span className="text-gray-500">{skill.level}%</span>
+                      <span className="font-medium text-gray-700 text-sm sm:text-base">{skill.name}</span>
+                      <span className="text-gray-500 text-sm sm:text-base">{skill.level}%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-3">
                       <div
@@ -161,7 +162,7 @@ export const About: React.FC = () => {
             </div>
 
             {/* Experience Highlights */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="flex items-center mb-6">
                 <Award className="w-8 h-8 text-yellow-600 mr-3" />
                 <h3 className="text-2xl font-bold text-gray-800">{t.about.experience}</h3>
@@ -178,7 +179,7 @@ export const About: React.FC = () => {
                      currentLanguage === 'fr' ? '2022 - présent' : 
                      '2022 - Present'}
                   </p>
-                  <p className="text-gray-700 mt-2">
+                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
                       'Specializuojuosi dirbtinio intelekto ruošimo ir sprendimų architektūroje, mašininio mokymosi sistemų kūrime bei duomenų mokslo projektų vadovavime. Dirbu su įvairiomis technologijomis: Python, TensorFlow, PyTorch, bei debesų platformomis.' :
                      currentLanguage === 'fr' ? 
@@ -197,7 +198,7 @@ export const About: React.FC = () => {
                      currentLanguage === 'fr' ? 'Université d\'Édimbourg et autres' : 
                      'University of Edinburgh & Others'}
                   </p>
-                  <p className="text-gray-700 mt-2">
+                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
                       'Patirtis mokslinių tyrimų srityje, įskaitant kompiuterinę chemiją, molekulinį modeliavimą, duomenų analizę, biochemiją ir mokslinių straipsnių rengimą. Dalyvavimas tarptautiniuose projektuose ir konferencijose.' :
                      currentLanguage === 'fr' ? 
@@ -216,7 +217,7 @@ export const About: React.FC = () => {
                      currentLanguage === 'fr' ? 'Diverses organisations et projets' : 
                      'Various Organizations & Projects'}
                   </p>
-                  <p className="text-gray-700 mt-2">
+                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
                       'Įvairi veiklos patirtis, įskaitant mokslo švietimą bendruomenėje, mentorystę programavimo srityje, tyrimų pagalbą universitetuose, dalyvavimą STEM skatinimo programose, dirbtinio intelekto programų kūrime ir rankų darbų reikalaujančiose veiklose.' :
                      currentLanguage === 'fr' ? 
@@ -227,6 +228,7 @@ export const About: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>

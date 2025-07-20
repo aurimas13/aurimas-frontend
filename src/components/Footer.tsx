@@ -68,7 +68,7 @@ export const Footer: React.FC = () => {
         <div className="border-t border-yellow-200 pt-8 pb-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-600 text-sm">
-              © 2024 Aurimas Aleksandras Nausėdas. {t.footer.rights}
+              © 2025 Aurimas Aleksandras Nausėdas. {t.footer.rights}
             </p>
             <div className="flex items-center space-x-3 text-gray-600 text-sm mt-2 md:mt-0">
               <MapPin className="w-4 h-4" />

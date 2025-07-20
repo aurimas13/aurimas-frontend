@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, Sparkles, Heart, Code, Beaker, FileText, Image, Mail, User } from 'lucide-react';
+import { ChevronDown, Heart, Code, Beaker, FileText, Image, Mail, User } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
@@ -21,14 +21,28 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
         <div className="absolute bottom-20 right-4 md:right-[12%] w-10 md:w-12 h-10 md:h-12 bg-yellow-400 rounded-full opacity-30 animate-pulse delay-500"></div>
         
         {/* Floating Icons */}
-        <div className="absolute top-32 left-[15%] animate-float hidden lg:block">
+        <div className="absolute top-32 left-[15%] animate-float hidden lg:block transform hover:scale-125 transition-transform duration-300">
           <Beaker className="w-6 md:w-8 h-6 md:h-8 text-yellow-500 opacity-60" />
         </div>
-        <div className="absolute top-48 right-[15%] animate-float delay-1000 hidden lg:block">
+        <div className="absolute top-48 right-[15%] animate-float delay-1000 hidden lg:block transform hover:scale-125 transition-transform duration-300">
           <Code className="w-6 md:w-8 h-6 md:h-8 text-yellow-600 opacity-60" />
         </div>
-        <div className="absolute bottom-48 left-[25%] animate-float delay-2000 hidden lg:block">
+        <div className="absolute bottom-48 left-[25%] animate-float delay-2000 hidden lg:block transform hover:scale-125 transition-transform duration-300">
           <Heart className="w-6 md:w-8 h-6 md:h-8 text-yellow-400 opacity-60" />
+        </div>
+        
+        {/* Additional Creative Floating Elements */}
+        <div className="absolute top-60 left-[8%] animate-float delay-3000 hidden lg:block transform hover:rotate-12 transition-transform duration-500">
+          <FileText className="w-5 h-5 text-green-500 opacity-50" />
+        </div>
+        <div className="absolute bottom-32 right-[8%] animate-float delay-4000 hidden lg:block transform hover:-rotate-12 transition-transform duration-500">
+          <Image className="w-5 h-5 text-blue-500 opacity-50" />
+        </div>
+        <div className="absolute top-80 right-[30%] animate-float delay-5000 hidden lg:block transform hover:scale-150 transition-transform duration-400">
+          <Mail className="w-4 h-4 text-purple-500 opacity-40" />
+        </div>
+        <div className="absolute bottom-60 left-[40%] animate-float delay-6000 hidden lg:block transform hover:scale-110 transition-transform duration-600">
+          <User className="w-4 h-4 text-red-500 opacity-40" />
         </div>
       </div>
 
@@ -45,9 +59,6 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
                 className="w-full h-full object-cover object-center scale-110 md:scale-125 translate-y-1 md:translate-y-2"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent"></div>
-            </div>
-            <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-10 h-10 md:w-12 md:h-12 bg-yellow-400 rounded-full flex items-center justify-center animate-spin-slow">
-              <img src="/UoE.png" alt="University of Edinburgh" className="w-5 h-5 md:w-6 md:h-6 rounded-full" />
             </div>
           </div>
 
