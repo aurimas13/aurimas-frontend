@@ -20,6 +20,90 @@ export const isSupabaseConfigured = () => {
   return isConfigured;
 }
 
+// Upload file to Supabase Storage
+export const uploadFile = async (file: File, bucket: string = 'blog-images'): Promise<string | null> => {
+  if (!supabase) {
+    console.log('Supabase not configured, cannot upload file');
+    return null;
+  }
+
+  // Check if bucket exists first to avoid 404 errors
+  try {
+    const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+    if (listError || !buckets?.find(b => b.name === bucket)) {
+      console.log(`Bucket '${bucket}' not found, using local fallback`);
+      return null;
+    }
+  } catch (error) {
+    console.log('Cannot check bucket existence, using local fallback');
+    return null;
+  }
+
+  try {
+    // Generate unique filename
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `uploads/${fileName}`;
+
+    console.log('Uploading file to Supabase Storage:', filePath);
+
+    // Upload file
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) {
+      console.log('Supabase upload failed, using fallback:', error.message);
+      // If bucket doesn't exist or other error, return null to fallback to blob URL
+      if (error.message?.includes('Bucket not found')) {
+        console.log('Bucket "blog-images" not found. Please create it manually in Supabase Dashboard.');
+        return null;
+      }
+      return null;
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+
+    console.log('File uploaded successfully:', publicUrl);
+    return publicUrl;
+  } catch (error) {
+    console.log('Upload to Supabase failed, using local fallback:', error);
+    // Return null to fallback to blob URL instead of throwing
+    return null;
+  }
+};
+
+// Delete file from Supabase Storage
+export const deleteFile = async (filePath: string, bucket: string = 'blog-images'): Promise<boolean> => {
+  if (!supabase) {
+    console.log('Supabase not configured, cannot delete file');
+    return false;
+  }
+
+  try {
+    const { error } = await supabase.storage
+      .from(bucket)
+      .remove([filePath]);
+
+    if (error) {
+      console.error('Supabase delete error:', error);
+      throw error;
+    }
+
+    console.log('File deleted successfully:', filePath);
+    return true;
+  } catch (error) {
+    console.error('Error deleting file:', error);
+    return false;
+  }
+};
+
 // Blog post types for Supabase
 export interface BlogPostDB {
   id: string
