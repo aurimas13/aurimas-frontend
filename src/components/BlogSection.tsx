@@ -27,8 +27,8 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
   // Check if user is authenticated (simple password check)
   const handleAuthentication = () => {
     const password = prompt('Enter admin password to manage blogs:');
-    if (password === 'aurimas2025') {
-      setIsAuthenticated(true);
+    if (password === 'aurimas@is!Vilniaus*96') {
+      console.log('Password correct, calling onManageBlog');
       onManageBlog();
     } else if (password !== null) {
       alert('Incorrect password');

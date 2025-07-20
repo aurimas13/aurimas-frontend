@@ -9,7 +9,7 @@ export interface BlogPost {
   isPremium: boolean;
   tags: string[];
   author: string;
-  status: 'draft' | 'published';
+  status: 'draft' | 'published' | 'scheduled';
 }
 
 export interface User {

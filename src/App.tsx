@@ -14,9 +14,15 @@ function App() {
   const [currentSection, setCurrentSection] = useState('home');
   const [showBlogManager, setShowBlogManager] = useState(false);
 
+  const handleManageBlog = () => {
+    console.log('handleManageBlog called, setting showBlogManager to true');
+    setShowBlogManager(true);
+    setCurrentSection('blogs');
+  };
+
   const renderSection = () => {
     if (showBlogManager) {
-      return <BlogManager />;
+      return <BlogManager onBack={() => setShowBlogManager(false)} />;
     }
 
     switch (currentSection) {
@@ -25,7 +31,7 @@ function App() {
       case 'about':
         return <About />;
       case 'blogs':
-        return <BlogSection onManageBlog={() => setShowBlogManager(true)} />;
+        return <BlogSection onManageBlog={handleManageBlog} />;
       case 'gallery':
         return <Gallery />;
       case 'support':
@@ -40,7 +46,7 @@ function App() {
   return (
     <div className="min-h-screen bg-white relative w-screen min-w-screen max-w-screen overflow-x-hidden">
       <Header 
-        currentSection={showBlogManager ? 'blog-manager' : currentSection} 
+        currentSection={showBlogManager ? 'blogs' : currentSection} 
         onSectionChange={(section) => {
           setShowBlogManager(false);
           setCurrentSection(section);
