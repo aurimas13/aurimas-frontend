@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart, CreditCard, Banknote, Coffee, Star, Shield, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
@@ -13,12 +12,12 @@ export const SupportSection: React.FC = () => {
   // Check for payment success/cancel from URL params
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('success') === 'true') {
+    if (urlParams.get('payment') === 'success') {
       setPaymentSuccess(true);
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-    if (urlParams.get('canceled') === 'true') {
+    if (urlParams.get('payment') === 'cancelled') {
       setPaymentError('Payment was canceled. Please try again.');
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -98,6 +97,28 @@ export const SupportSection: React.FC = () => {
                       id="paypal-custom-amount"
                       placeholder="Enter amount"
                       className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800"
+                     onKeyPress={(e) => {
+                       if (e.key === 'Enter') {
+                         const input = e.target as HTMLInputElement;
+                         const amount = input.value;
+                         if (amount && parseFloat(amount) >= 1) {
+                           window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
+                         } else {
+                           alert('Please enter an amount of €1 or more');
+                         }
+                       }
+                     }}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          const input = e.target as HTMLInputElement;
+                          const amount = input.value;
+                          if (amount && parseFloat(amount) >= 1) {
+                            window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
+                          } else {
+                            alert('Please enter an amount of €1 or more');
+                          }
+                        }
+                      }}
                     />
                   </div>
                   <button
