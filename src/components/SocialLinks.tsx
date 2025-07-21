@@ -1,54 +1,52 @@
-import { SocialLink } from '../types';
+import React from 'react';
+import { 
+  Facebook, 
+  Linkedin, 
+  Github, 
+  Twitter, 
+  Instagram, 
+  Youtube, 
+  Camera, 
+  Music, 
+  Activity, 
+  Coffee,
+  ExternalLink
+} from 'lucide-react';
+import { socialLinks } from '../data/socialLinks';
 
-export const socialLinks: SocialLink[] = [
-  {
-    platform: 'Facebook',
-    url: 'https://www.facebook.com/auris13/',
-    icon: 'facebook'
-  },
-  {
-    platform: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/aurimasnausedas/',
-    icon: 'linkedin'
-  },
-  {
-    platform: 'GitHub',
-    url: 'https://github.com/aurimas13',
-    icon: 'github'
-  },
-  {
-    platform: 'Twitter',
-    url: 'https://x.com/reksas13',
-    icon: 'twitter'
-  },
-  {
-    platform: 'Instagram',
-    url: 'https://www.instagram.com/reksas13/',
-    icon: 'instagram'
-  },
-  {
-    platform: 'YouTube',
-    url: 'https://www.youtube.com/@aurimas13',
-    icon: 'youtube'
-  },
-  {
-    platform: 'Unsplash',
-    url: 'https://unsplash.com/@aurimas13',
-    icon: 'camera'
-  },
-  {
-    platform: 'Spotify',
-    url: 'https://open.spotify.com/user/aurimas.n',
-    icon: 'music'
-  },
-  {
-    platform: 'Strava',
-    url: 'https://www.strava.com/athletes/aurimas13',
-    icon: 'activity'
-  },
-  {
-    platform: 'Ko-fi',
-    url: 'https://ko-fi.com/aurimas13',
-    icon: 'coffee'
-  }
-];
+const iconMap = {
+  facebook: Facebook,
+  linkedin: Linkedin,
+  github: Github,
+  twitter: Twitter,
+  instagram: Instagram,
+  youtube: Youtube,
+  camera: Camera,
+  music: Music,
+  activity: Activity,
+  coffee: Coffee
+};
+
+export const SocialLinks: React.FC = () => {
+  return (
+    <div className="flex justify-center items-center space-x-3 flex-wrap gap-2">
+          {socialLinks.map((link) => {
+            const IconComponent = iconMap[link.icon as keyof typeof iconMap];
+            return (
+              <a
+                key={link.platform}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group hover:bg-yellow-50 rounded-full p-2 transition-all duration-300 transform hover:scale-110 border border-yellow-200 bg-white"
+                title={link.platform}
+              >
+                <div className="inline-flex items-center justify-center w-6 h-6 bg-yellow-500 rounded-full group-hover:bg-yellow-400 transition-colors">
+                  <IconComponent className="w-3 h-3 text-white" />
+                </div>
+              </a>
+            );
+          })}
+    </div>
+  );
+};

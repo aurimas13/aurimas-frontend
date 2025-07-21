@@ -18,12 +18,12 @@ export const socialLinks: SocialLink[] = [
   },
   {
     platform: 'Twitter',
-    url: 'https://x.com/aurulia13',
+    url: 'https://x.com/reksas13',
     icon: 'twitter'
   },
   {
     platform: 'Instagram',
-    url: 'https://www.instagram.com/aurulia13/',
+    url: 'https://www.instagram.com/reksas13/',
     icon: 'instagram'
   },
   {

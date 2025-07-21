@@ -32,7 +32,7 @@ export const SupportSection: React.FC = () => {
   }, []);
 
   const subscriptionAmounts = [1, 3, 5, 10, 30, 50];
-  const oneTimeAmounts = [10, 30, 50, 100, 300, 500];
+  const oneTimeAmounts = [5, 10, 30, 50, 100, 300];
   
   const predefinedAmounts = paymentType === 'subscription' ? subscriptionAmounts : oneTimeAmounts;
 
@@ -42,13 +42,13 @@ export const SupportSection: React.FC = () => {
 
   const handlePaymentStart = async () => {
     const amount = getCurrentAmount();
-    if (paymentType === 'subscription' && (!amount || amount < 1)) {
-      setPaymentError('Minimum monthly amount is €1');
+    if (paymentType === 'subscription' && (!amount || amount < 0.5)) {
+      setPaymentError('Minimum monthly amount is €0.50');
       return;
     }
 
-    if (paymentType === 'one-time' && (!amount || amount < 10)) {
-      setPaymentError('Minimum one-time amount is €10');
+    if (paymentType === 'one-time' && (!amount || amount < 0.5)) {
+      setPaymentError('Minimum one-time amount is €0.50');
       return;
     }
 
@@ -120,192 +120,110 @@ export const SupportSection: React.FC = () => {
               <p className="text-blue-700">Please wait while we prepare your payment...</p>
             </div>
           )}
-          {/* Payment Type Selection */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
-              <button
-                onClick={() => setPaymentType('subscription')}
-                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                  paymentType === 'subscription'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-purple-600'
-                }`}
-              >
-                {t.support.subscription}
-              </button>
-              <button
-                onClick={() => setPaymentType('one-time')}
-                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                  paymentType === 'one-time'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-purple-600'
-                }`}
-              >
-                {t.support.oneTime}
-              </button>
-            </div>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Amount Selection */}
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 relative">
-              <div className="absolute top-4 right-4">
-                <div className="flex items-center space-x-1 text-xs text-gray-500">
-                  <Shield className="w-3 h-3" />
-                  <span>Secured by Stripe</span>
-                </div>
-              </div>
-              
-              <div className="flex items-center mb-6">
-                <Heart className="w-8 h-8 text-red-500 mr-3" />
-                <h3 className="text-2xl font-bold text-gray-800">Choose Your Support</h3>
-              </div>
-
-              <div className="space-y-6">
-                {/* Email Input */}
-
-                {/* Predefined Amounts */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    {paymentType === 'subscription' ? 'Monthly Support' : t.support.sixMonths}
-                  </label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {predefinedAmounts.map((amount) => (
-                      <button
-                        key={amount}
-                        onClick={() => {
-                          setSelectedAmount(amount);
-                          setCustomAmount('');
-                        }}
-                        className={`p-3 rounded-lg border-2 font-medium transition-all duration-300 ${
-                          selectedAmount === amount && !customAmount
-                            ? 'border-purple-600 bg-purple-50 text-purple-600'
-                            : 'border-gray-200 hover:border-purple-300 text-gray-700'
-                        }`}
-                      >
-                        €{amount === 0.1 ? '0.10' : amount}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Custom Amount */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Custom Amount</label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
-                    <input
-                      type="number"
-                      min={paymentType === 'subscription' ? "1" : "10"}
-                      step="0.1"
-                      value={customAmount}
-                      onChange={(e) => {
-                        setCustomAmount(e.target.value);
-                        setSelectedAmount(0);
-                      }}
-                      placeholder={paymentType === 'subscription' ? "Min €1" : "Min €10"}
-                      className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                {/* Benefits */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-                  <h4 className="font-bold text-gray-800 mb-2">What you get:</h4>
-                  <ul className="space-y-1 text-sm text-gray-600">
-                    {paymentType === 'subscription' ? (
-                      <>
-                        <li className="flex items-center">
-                          <Star className="w-4 h-4 text-blue-500 mr-2" />
-                          {t.support.premiumAccess}
-                        </li>
-                        <li className="flex items-center">
-                          <Star className="w-4 h-4 text-blue-500 mr-2" />
-                          {t.support.supportWriting}
-                        </li>
-                        <li className="flex items-center">
-                          <Star className="w-4 h-4 text-blue-500 mr-2" />
-                          {t.support.consultationAI}
-                        </li>
-                      </>
-                    ) : (
-                      <>
-                        <li className="flex items-center">
-                          <Star className="w-4 h-4 text-blue-500 mr-2" />
-                          {t.support.premiumAccess}
-                        </li>
-                        <li className="flex items-center">
-                          <Star className="w-4 h-4 text-blue-500 mr-2" />
-                          {t.support.supportWriting}
-                        </li>
-                        <li className="flex items-center">
-                          <Star className="w-4 h-4 text-blue-500 mr-2" />
-                          {t.support.consultationUsage}
-                        </li>
-                        <li className="flex items-center">
-                          <Star className="w-4 h-4 text-blue-500 mr-2" />
-                          {t.support.sixMonthsAI}
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Payment Methods */}
-            <div className="space-y-6">
-              {/* Stripe Payment */}
-              <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                <div className="flex items-center mb-6">
-                  <Shield className="w-8 h-8 text-blue-600 mr-3" />
-                  <h3 className="text-2xl font-bold text-gray-800">Secure Payment</h3>
-                </div>
-                <p className="text-gray-600 mb-6">
-                  Secure payment processing with credit/debit cards via Stripe
-                </p>
-                
-                {showStripePayment ? (
-                  <StripePayment
-                    amount={getCurrentAmount()}
-                    currency="EUR"
-                    paymentType={paymentType}
-                    onSuccess={handlePaymentSuccess}
-                    onError={handlePaymentError}
-                  />
-                ) : (
-                  <button
-                    onClick={handleStripePayment}
-                    disabled={!getCurrentAmount() || 
-                      (paymentType === 'subscription' && getCurrentAmount() < 1) ||
-                      (paymentType === 'one-time' && getCurrentAmount() < 10) ||
-                      isProcessingPayment}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <CreditCard className="w-5 h-5" />
-                    <span>{isProcessingPayment ? 'Processing...' : 'Pay Securely with Stripe'}</span>
-                  </button>
-                )}
-              </div>
-
+          <div className="max-w-4xl mx-auto space-y-8">
               {/* PayPal Payment */}
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-8 shadow-lg text-white">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 shadow-lg text-white">
                 <div className="flex items-center mb-6">
                   <CreditCard className="w-8 h-8 text-white mr-3" />
                   <h3 className="text-2xl font-bold text-white">{t.support.paypal}</h3>
                 </div>
                 <p className="text-blue-100 mb-6">
-                  {t.support.quickSecure}
+                  Send money directly via PayPal - no PayPal account required! Just use your credit/debit card.
                 </p>
+                
+                {/* Quick Amount Buttons */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                  {[5, 10, 25, 50].map((amount) => (
+                    <a
+                      key={amount}
+                      href={`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-white text-blue-600 py-3 px-4 rounded-lg font-bold text-center hover:bg-gray-100 transition-all duration-300 flex items-center justify-center"
+                    >
+                      €{amount}
+                    </a>
+                  ))}
+                </div>
+                
+                {/* Custom Amount */}
+                <div className="bg-white rounded-lg p-4 mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Custom Amount</label>
+                  <div className="flex space-x-2">
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
+                      <input
+                        type="number"
+                        min="1"
+                        step="1"
+                        id="paypal-custom-amount"
+                        placeholder="Enter amount"
+                        className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800"
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        const input = document.getElementById('paypal-custom-amount') as HTMLInputElement;
+                        const amount = input?.value;
+                        if (amount && parseFloat(amount) >= 1) {
+                          window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
+                        } else {
+                          alert('Please enter an amount of €1 or more');
+                        }
+                      }}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+                
+                {/* General PayPal Link */}
                 <a
-                  href="https://paypal.me/aurimas13"
+                  href="https://www.paypal.com/paypalme/aurimasaleksandras"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full bg-white text-blue-600 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all duration-300 flex items-center justify-center space-x-2"
+                  className="w-full bg-white text-blue-600 py-3 rounded-lg font-bold text-center hover:bg-gray-100 transition-all duration-300 flex items-center justify-center space-x-2"
                 >
                   <CreditCard className="w-5 h-5" />
-                  <span>{t.support.payWithPayPal}</span>
+                  <span>Open PayPal.me</span>
                 </a>
+              </div>
+
+              {/* Bank Transfer - N26 */}
+              <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-8 shadow-lg text-white">
+                <div className="flex items-center mb-6">
+                  <Banknote className="w-8 h-8 text-white mr-3" />
+                  <h3 className="text-2xl font-bold text-white">Bank Transfer</h3>
+                </div>
+                <p className="text-green-100 mb-6">
+                  Direct bank transfer to N26 account
+                </p>
+                <div className="bg-white rounded-lg p-6 text-gray-800">
+                  <div className="space-y-3">
+                    <div>
+                      <span className="font-semibold text-gray-600">Account Holder:</span>
+                      <p className="font-mono text-sm">Aurimas Aleksandras Nausedas</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-600">IBAN:</span>
+                      <p className="font-mono text-sm">DE50100110012072920439</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-600">BIC:</span>
+                      <p className="font-mono text-sm">NTSBDEB1XXX</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-gray-600">Bank:</span>
+                      <p className="text-sm">N26 Bank</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                    <p className="text-xs text-yellow-800">
+                      💡 Please include your email in the transfer reference so I can thank you!
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Ko-fi Link */}
@@ -328,7 +246,6 @@ export const SupportSection: React.FC = () => {
                   Visit Ko-fi
                 </a>
               </div>
-            </div>
           </div>
         </div>
       </div>

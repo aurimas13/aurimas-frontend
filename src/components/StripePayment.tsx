@@ -20,24 +20,22 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
 
   const handlePayment = async () => {
-    if (paymentType === 'subscription' && (!amount || amount < 1)) {
-      onError?.('Minimum monthly amount is €1');
+    if (paymentType === 'subscription' && (!amount || amount < 0.5)) {
+      onError?.('Minimum monthly amount is €0.50');
       return;
     }
 
-    if (paymentType === 'one-time' && (!amount || amount < 10)) {
-      onError?.('Minimum one-time amount is €10');
+    if (paymentType === 'one-time' && (!amount || amount < 0.5)) {
+      onError?.('Minimum one-time amount is €0.50');
       return;
     }
+
     setIsProcessing(true);
     setPaymentStatus('processing');
 
     try {
-      // Determine API URL based on environment
-      const isDevelopment = window.location.hostname === 'localhost';
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       
-      console.log('Environment:', isDevelopment ? 'development' : 'production');
       console.log('Using API URL:', apiUrl);
       
       // Test backend connectivity first
@@ -56,11 +54,7 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
         console.log('Backend health check passed');
       } catch (healthError) {
         console.error('Backend health check failed:', healthError);
-        if (isDevelopment) {
-          throw new Error(`Backend server not running. Please start it by running:\n\ncd backend\nnpm install\nnpm run dev\n\nThen verify it's working at: http://localhost:3001/api/health`);
-        } else {
-          throw new Error('Cannot connect to payment server. Please try again later.');
-        }
+        throw new Error('Cannot connect to payment server. Please try again later.');
       }
       
       const response = await fetch(`${apiUrl}/api/create-payment-intent`, {
@@ -69,10 +63,10 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: Math.round(amount * 100), // Convert to cents
+          amount: Math.round(amount * 100), // Convert euros to cents
           currency: currency.toLowerCase(),
           payment_type: paymentType,
-          customer_email: 'support@aurimas.io',
+          customer_email: 'customer@example.com', // You might want to collect this from user
         }),
       });
 
@@ -82,19 +76,11 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
           const errorData = await response.json();
           errorMessage = errorData.error || errorMessage;
         } catch {
-          const errorText = await response.text();
-          errorMessage = errorText || errorMessage;
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
         }
         
         console.error('API Error:', response.status, errorMessage);
-        
-        if (response.status === 500) {
-          throw new Error('Payment service configuration error. Please contact support.');
-        } else if (response.status === 400) {
-          throw new Error(errorMessage);
-        } else {
-          throw new Error(`Payment failed (${response.status}). Please try again.`);
-        }
+        throw new Error(errorMessage);
       }
 
       const { url } = await response.json();
@@ -103,18 +89,18 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
         throw new Error('No checkout URL received');
       }
 
+      console.log('Redirecting to Stripe Checkout:', url);
       // Redirect to Stripe Checkout
       window.location.href = url;
       
-      setPaymentStatus('success');
-      onSuccess?.();
     } catch (error) {
       console.error('Payment error:', error);
       setPaymentStatus('error');
-      const errorMessage = error instanceof Error ? error.message : 'Payment failed';
+      const errorMessage = error instanceof Error ? error.message : 'Payment failed. Please try again.';
       onError?.(errorMessage);
-    } finally {
       setIsProcessing(false);
+    } finally {
+      // Don't set isProcessing to false here since we're redirecting
     }
   };
 
@@ -162,7 +148,7 @@ export const StripePayment: React.FC<StripePaymentProps> = ({
       <div className="text-xs text-gray-500 text-center">
         <p>Secure payment processing by Stripe</p>
         <p>Your payment information is encrypted and secure</p>
-        <p>Transaction will be tracked for your records</p>
+        <p>You will be redirected to Stripe's secure checkout</p>
       </div>
     </div>
   );

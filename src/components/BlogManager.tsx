@@ -564,21 +564,20 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
          let fileUrl = '';
          let embedCode = '';
 
-         // Try to upload to Supabase first
-         if (isSupabaseConfigured()) {
-           console.log('Uploading file to Supabase Storage...');
-           const uploadedUrl = await uploadFile(file);
-           if (uploadedUrl) {
-             fileUrl = uploadedUrl;
-             console.log('File uploaded to Supabase:', fileUrl);
-           } else {
-            console.log('Supabase upload failed or bucket not found, using local blob URL');
-             fileUrl = URL.createObjectURL(file);
-           }
-         } else {
-           console.log('Supabase not configured, using local blob URL');
-           fileUrl = URL.createObjectURL(file);
-         }
+        // Convert file to base64 data URL for persistent storage
+        const reader = new FileReader();
+        const base64Promise = new Promise<string>((resolve, reject) => {
+          reader.onload = () => {
+            const result = reader.result as string;
+            resolve(result);
+          };
+          reader.onerror = reject;
+        });
+        
+        reader.readAsDataURL(file);
+        fileUrl = await base64Promise;
+        
+        console.log('File converted to base64 data URL');
 
          if (file.type.startsWith('image/')) {
            embedCode = `![${file.name}](${fileUrl})\n`;
@@ -597,24 +596,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
 
        } catch (error) {
          console.error('Error uploading file:', error);
-        // Don't show error, just use blob URL as fallback
-        console.log(`Using blob URL fallback for ${file.name}`);
-        const fileUrl = URL.createObjectURL(file);
-        let embedCode = '';
-        
-        if (file.type.startsWith('image/')) {
-          embedCode = `![${file.name}](${fileUrl})\n`;
-        } else if (file.type.startsWith('video/')) {
-          embedCode = `[VIDEO:${fileUrl}]\n`;
-        } else if (file.type.startsWith('audio/')) {
-          embedCode = `[AUDIO:${fileUrl}]\n`;
-        } else if (file.type === 'application/pdf') {
-          embedCode = `[PDF:${fileUrl}]\n`;
-        } else {
-          embedCode = `[FILE:${fileUrl}](${file.name})\n`;
-        }
-        
-        newContent = newContent + '\n' + embedCode;
+        setError(`Failed to process file: ${file.name}`);
        }
      }
 
