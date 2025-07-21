@@ -45,6 +45,23 @@ body {
   overflow-x: hidden;
 }
 
+/* Ensure Tailwind utilities work */
+.bg-white { background-color: #ffffff !important; }
+.bg-yellow-500 { background-color: #eab308 !important; }
+.bg-yellow-400 { background-color: #facc15 !important; }
+.bg-yellow-300 { background-color: #fde047 !important; }
+.bg-yellow-200 { background-color: #fef08a !important; }
+.bg-yellow-100 { background-color: #fefce8 !important; }
+.bg-yellow-50 { background-color: #fefce8 !important; }
+
+.text-gray-800 { color: #1f2937 !important; }
+.text-gray-700 { color: #374151 !important; }
+.text-gray-600 { color: #4b5563 !important; }
+.text-gray-500 { color: #6b7280 !important; }
+
+.text-yellow-600 { color: #ca8a04 !important; }
+.text-yellow-700 { color: #a16207 !important; }
+
 /* Custom Animations */
 @keyframes fade-in {
   from {
@@ -99,6 +116,22 @@ body {
 
 .animate-float.delay-2000 {
   animation-delay: 2s;
+}
+
+.animate-float.delay-3000 {
+  animation-delay: 3s;
+}
+
+.animate-float.delay-4000 {
+  animation-delay: 4s;
+}
+
+.animate-float.delay-5000 {
+  animation-delay: 5s;
+}
+
+.animate-float.delay-6000 {
+  animation-delay: 6s;
 }
 
 .animate-spin-slow {
