@@ -1,49 +1,81 @@
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "installCommand": "npm install",
-  "headers": [
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
-}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/UoE.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurimas - Chemist, AI Architect & Writer</title>
+    <meta name="description" content="Personal website of Aurimas Aleksandras Nausėdas - Chemist turned AI Architect and Writer. Explore my blogs, journey, and support my work." />
+    <meta name="keywords" content="Aurimas, Chemistry, AI, Machine Learning, Writing, Blog, Lithuania, Edinburgh" />
+    <meta name="author" content="Aurimas Aleksandras Nausėdas" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aurimas.io/" />
+    <meta property="og:title" content="Aurimas - Chemist, AI Architect & Writer" />
+    <meta property="og:description" content="Personal website of Aurimas Aleksandras Nausėdas - Chemist turned AI Architect and Writer." />
+    <meta property="og:image" content="https://aurimas.io/basketball.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://aurimas.io/" />
+    <meta property="twitter:title" content="Aurimas - Chemist, AI Architect & Writer" />
+    <meta property="twitter:description" content="Personal website of Aurimas Aleksandras Nausėdas - Chemist turned AI Architect and Writer." />
+    <meta property="twitter:image" content="https://aurimas.io/basketball.jpg" />
+    
+    <!-- Additional SEO and Performance -->
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#f59e0b" />
+    <link rel="canonical" href="https://aurimas.io/" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS and fallback styles -->
+    <style>
+      /* Critical CSS to prevent FOUC and ensure styling loads */
+      body { 
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        line-height: 1.5;
+      }
+      #root {
+        min-height: 100vh;
+        width: 100%;
+      }
+      /* Ensure Tailwind base styles are applied */
+      *, ::before, ::after {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+        border-color: #e5e7eb;
+      }
+      /* Loading state */
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
+        color: #374151;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: Inter, sans-serif;">
+        Loading...
+      </div>
+    </div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>
