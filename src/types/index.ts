@@ -3,7 +3,7 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   content: string;
-  category: 'molecule-to-machine' | 'grace-to-life' | 'transcend-loneliness' | 'story-time';
+  category: 'molecule-to-machine' | 'grace-to-life' | 'transcend-loneliness' | 'other-story-time';
   publishedAt: string;
   readTime: number;
   isPremium: boolean;
