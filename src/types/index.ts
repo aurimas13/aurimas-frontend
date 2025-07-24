@@ -12,6 +12,23 @@ export interface BlogPost {
   status: 'draft' | 'published' | 'scheduled';
 }
 
+export interface LocalizedText {
+  en: string;
+  lt: string;
+  fr: string;
+}
+
+export interface BlogCategory {
+  title: LocalizedText;
+  description: LocalizedText;
+  originalUrl: string;
+  languages: LocalizedText;
+}
+
+export type BlogCategories = {
+  [key in 'molecule-to-machine' | 'grace-to-life' | 'transcend-loneliness' | 'other-story-time']: BlogCategory;
+};
+
 export interface User {
   id: string;
   email: string;

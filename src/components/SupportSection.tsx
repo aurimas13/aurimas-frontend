@@ -66,7 +66,7 @@ export const SupportSection: React.FC = () => {
                 <h3 className="text-2xl font-bold text-white">{t.support.paypal}</h3>
               </div>
               <p className="text-blue-100 mb-6">
-                Send money directly via PayPal - no PayPal account required! Just use your credit/debit card.
+                {t.support.paypalDirectMessage}
               </p>
               
               {/* Quick Amount Buttons */}
@@ -86,7 +86,7 @@ export const SupportSection: React.FC = () => {
               
               {/* Custom Amount */}
               <div className="bg-white rounded-lg p-4 mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Custom Amount</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.support.customAmount}</label>
                 <div className="flex space-x-2">
                   <div className="relative flex-1">
                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
@@ -95,19 +95,8 @@ export const SupportSection: React.FC = () => {
                       min="1"
                       step="1"
                       id="paypal-custom-amount"
-                      placeholder="Enter amount"
+                      placeholder={t.support.enterAmount}
                       className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800"
-                     onKeyPress={(e) => {
-                       if (e.key === 'Enter') {
-                         const input = e.target as HTMLInputElement;
-                         const amount = input.value;
-                         if (amount && parseFloat(amount) >= 1) {
-                           window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
-                         } else {
-                           alert('Please enter an amount of €1 or more');
-                         }
-                       }
-                     }}
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
                           const input = e.target as HTMLInputElement;
@@ -154,10 +143,10 @@ export const SupportSection: React.FC = () => {
             <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-8 shadow-lg text-white">
               <div className="flex items-center mb-6">
                 <Banknote className="w-8 h-8 text-white mr-3" />
-                <h3 className="text-2xl font-bold text-white">Bank Transfer</h3>
+                <h3 className="text-2xl font-bold text-white">{t.support.bankTransferTitle}</h3>
               </div>
               <p className="text-green-100 mb-6">
-                Direct bank transfer to N26 account
+                {t.support.bankTransferDescription}
               </p>
               <div className="bg-white rounded-lg p-6 text-gray-800">
                 <div className="space-y-3">
@@ -180,7 +169,7 @@ export const SupportSection: React.FC = () => {
                 </div>
                 <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
                   <p className="text-xs text-yellow-800">
-                    💡 Please include your email in the transfer reference so I can thank you!
+                    {t.support.bankTransferNote}
                   </p>
                 </div>
               </div>
@@ -191,10 +180,10 @@ export const SupportSection: React.FC = () => {
               <div className="absolute top-2 right-2 text-xs opacity-75">Alternative</div>
               <div className="flex items-center mb-4">
                 <Coffee className="w-6 h-6 mr-2" />
-                <h4 className="text-lg font-bold">Support on Ko-fi</h4>
+                <h4 className="text-lg font-bold">{t.support.kofiTitle}</h4>
               </div>
               <p className="mb-4 text-orange-100 text-sm">
-                Alternative platform for one-time donations and tips
+                {t.support.kofiAlternativeDescription}
               </p>
               <a
                 href="https://ko-fi.com/aurimas13"
@@ -203,7 +192,7 @@ export const SupportSection: React.FC = () => {
                 className="inline-flex items-center px-6 py-3 bg-white text-orange-600 font-bold rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <Coffee className="w-5 h-5 mr-2" />
-                Visit Ko-fi
+                {t.support.visitKofiBtn}
               </a>
             </div>
           </div>
