@@ -22,11 +22,28 @@ export const subscribeToNewsletter = async (email: string): Promise<{ success: b
     console.log('Supabase not configured, saving to localStorage');
     // Fallback to localStorage
     const subscribers = JSON.parse(localStorage.getItem('newsletter-subscribers') || '[]');
-    if (subscribers.includes(email)) {
+    
+    // Check if email already exists
+    const existingSubscriber = subscribers.find((sub: any) => 
+      typeof sub === 'string' ? sub === email : sub.email === email
+    );
+    
+    if (existingSubscriber) {
       return { success: false, message: 'Email already subscribed' };
     }
-    subscribers.push(email);
+    
+    // Add new subscriber with proper structure
+    const newSubscriber = {
+      id: `local-${Date.now()}`,
+      email: email,
+      subscribed_at: new Date().toISOString(),
+      is_active: true,
+      unsubscribe_token: `token-${Date.now()}`
+    };
+    
+    subscribers.push(newSubscriber);
     localStorage.setItem('newsletter-subscribers', JSON.stringify(subscribers));
+    console.log('Subscriber saved to localStorage:', newSubscriber);
     return { success: true, message: 'Subscribed successfully (local storage)' };
   }
 
@@ -57,13 +74,23 @@ export const getNewsletterSubscribers = async (): Promise<NewsletterSubscriber[]
   if (!isSupabaseConfigured()) {
     console.log('Supabase not configured, loading from localStorage');
     const subscribers = JSON.parse(localStorage.getItem('newsletter-subscribers') || '[]');
-    return subscribers.map((email: string, index: number) => ({
-      id: `local-${index}`,
-      email,
-      subscribed_at: new Date().toISOString(),
-      is_active: true,
-      unsubscribe_token: `token-${index}`
-    }));
+    
+    // Handle both old format (just emails) and new format (objects)
+    return subscribers.map((subscriber: any, index: number) => {
+      if (typeof subscriber === 'string') {
+        // Old format - just email string
+        return {
+          id: `local-${index}`,
+          email: subscriber,
+          subscribed_at: new Date().toISOString(),
+          is_active: true,
+          unsubscribe_token: `token-${index}`
+        };
+      } else {
+        // New format - already an object
+        return subscriber;
+      }
+    });
   }
 
   try {

@@ -1673,14 +1673,15 @@
 // //     </section>
 // //   );
 // // };
-
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 import { BlogPost } from '../types';
+import { subscribeToNewsletter } from '../lib/newsletter';
 import { Calendar, Clock, User, Lock, ExternalLink, ArrowLeft } from 'lucide-react';
 import { blogCategories } from '../data/blogCategories';
 import { LanguageCode } from '../contexts/LanguageContext';
+import { loadSamplePosts } from '../data/samplePosts';
 
 // Title cache for YouTube and Spotify
 const titleCache = new Map<string, string>();
@@ -1749,10 +1750,8 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
 
   // Load posts from localStorage on component mount
   useEffect(() => {
-    const savedPosts = localStorage.getItem('blog-posts');
-    if (savedPosts) {
-      setPosts(JSON.parse(savedPosts));
-    }
+    const savedPosts = loadSamplePosts();
+    setPosts(savedPosts);
   }, []);
 
   // Newsletter submission handler
@@ -1761,26 +1760,30 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
     setNewsletterStatus('loading');
     
     try {
-      // Simulate API call - replace with actual newsletter service
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await subscribeToNewsletter(newsletterEmail);
       
-      // Store email locally for now
-      const existingEmails = JSON.parse(localStorage.getItem('newsletter-emails') || '[]');
-      if (!existingEmails.includes(newsletterEmail)) {
-        existingEmails.push(newsletterEmail);
-        localStorage.setItem('newsletter-emails', JSON.stringify(existingEmails));
+      if (result.success) {
+        setNewsletterStatus('success');
+        setNewsletterMessage(t.blogs.subscribeSuccess);
+        setNewsletterEmail('');
+        
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setNewsletterStatus('idle');
+          setNewsletterMessage('');
+        }, 5000);
+      } else {
+        setNewsletterStatus('error');
+        setNewsletterMessage(result.message);
+        
+        // Clear error message after 5 seconds
+        setTimeout(() => {
+          setNewsletterStatus('idle');
+          setNewsletterMessage('');
+        }, 5000);
       }
-      
-      setNewsletterStatus('success');
-      setNewsletterMessage(t.blogs.subscribeSuccess);
-      setNewsletterEmail('');
-      
-      // Clear success message after 5 seconds
-      setTimeout(() => {
-        setNewsletterStatus('idle');
-        setNewsletterMessage('');
-      }, 5000);
     } catch (error) {
+      console.error('Newsletter subscription error:', error);
       setNewsletterStatus('error');
       setNewsletterMessage(t.blogs.subscribeError);
       
@@ -1834,23 +1837,36 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             }
              
             return (
-              <div key={index} className="my-4 p-4 bg-red-50 border border-red-200 rounded-lg" data-video-id={videoId}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-red-600">
-                    <span className="text-2xl">📺</span>
-                    <div>
-                      <div className="font-bold video-title">{videoTitle}</div>
-                      <div className="text-sm text-gray-600">YouTube</div>
+              <div key={index} className="my-4">
+                {/* Actual YouTube embed iframe */}
+                <div className="relative w-full mb-3" style={{ paddingBottom: '56.25%' /* 16:9 aspect ratio */ }}>
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+                    src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+                    title={videoTitle}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg" data-video-id={videoId}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2 text-red-600">
+                      <span className="text-2xl">📺</span>
+                      <div>
+                        <div className="font-bold video-title">{videoTitle}</div>
+                        <div className="text-sm text-gray-600">YouTube</div>
+                      </div>
                     </div>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm"
+                    >
+                      Watch Video →
+                    </a>
                   </div>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                  >
-                    Watch Video →
-                  </a>
                 </div>
               </div>
             );
@@ -1903,61 +1919,103 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             }
              
             return (
-              <div key={index} className="my-4 p-4 bg-green-50 border border-green-200 rounded-lg" data-spotify-id={itemId}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-green-600">
-                    <span className="text-2xl">🎵</span>
-                    <div>
-                      <div className="font-bold spotify-title">{itemTitle}</div>
-                      <div className="text-sm text-gray-600">Spotify</div>
+              <div key={index} className="my-4">
+                {/* Actual Spotify embed iframe */}
+                <div className="w-full mb-3">
+                  <iframe
+                    className="w-full rounded-lg shadow-lg"
+                    src={`https://open.spotify.com/embed/${itemType}/${itemId}?utm_source=generator&theme=0`}
+                    height={itemType === 'track' ? '152' : itemType === 'album' ? '352' : '352'}
+                    frameBorder="0"
+                    allowFullScreen={false}
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg" data-spotify-id={itemId}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2 text-green-600">
+                      <span className="text-2xl">🎵</span>
+                      <div>
+                        <div className="font-bold spotify-title">{itemTitle}</div>
+                        <div className="text-sm text-gray-600">Spotify</div>
+                      </div>
                     </div>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm"
+                    >
+                      Listen on Spotify →
+                    </a>
                   </div>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    Listen on Spotify →
-                  </a>
                 </div>
               </div>
             );
           }
         }
         
-        // Handle images
+        // Handle images with width options and captions
         if (line.includes('![') && line.includes('](') && line.includes(')')) {
-          const altStart = line.indexOf('![') + 2;
-          const altEnd = line.indexOf('](', altStart);
-          const urlStart = altEnd + 2;
-          const urlEnd = line.indexOf(')', urlStart);
-          
-          if (altEnd > altStart && urlEnd > urlStart) {
-            const alt = line.substring(altStart, altEnd);
-            let url = line.substring(urlStart, urlEnd);
+          const imageMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)(\{width=(wide|full)\})?/);
+          if (imageMatch) {
+            const [, alt, url, , widthValue] = imageMatch;
+            const width = widthValue || 'normal';
             
+            // Check if next line is a caption (italic text)
+            const nextLineIndex = index + 1;
+            const nextLine = lines[nextLineIndex];
+            const captionMatch = nextLine && nextLine.match(/^\*(.+)\*$/);
+            const caption = captionMatch ? captionMatch[1] : null;
+            
+            // Process Unsplash URLs
+            let processedUrl = url;
             if (url.includes('unsplash.com/photos/')) {
               const photoId = url.split('/photos/')[1].split('-').pop();
               if (photoId) {
-                url = `https://images.unsplash.com/${photoId}?w=800&q=80`;
+                processedUrl = `https://images.unsplash.com/${photoId}?w=800&q=80`;
               }
             }
             
+            // Get width classes
+            const getWidthClass = () => {
+              switch (width) {
+                case 'wide': return 'w-4/5 max-w-4xl';
+                case 'full': return 'w-full max-w-none';
+                default: return 'max-w-2xl';
+              }
+            };
+            
             return (
-              <div key={index} className="my-4">
-                <img 
-                  src={url} 
-                  alt={alt} 
-                  className="max-w-full h-auto rounded-lg shadow-md mx-auto block"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=';
-                    target.alt = 'Image not found';
-                  }}
-                />
+              <div key={index} className="my-6">
+                <div className="flex justify-center">
+                  <div className={`${getWidthClass()}`}>
+                    <img 
+                      src={processedUrl} 
+                      alt={alt} 
+                      className="w-full h-auto rounded-lg shadow-md"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=';
+                        target.alt = 'Image not found';
+                      }}
+                    />
+                  </div>
+                </div>
+                {caption && (
+                  <p className="text-sm text-gray-600 text-center italic mt-3">{caption}</p>
+                )}
               </div>
             );
+          }
+        }
+        
+        // Skip caption lines that follow images (italic text starting with *)
+        if (line.match(/^\*(.+)\*$/) && index > 0) {
+          const prevLine = lines[index - 1];
+          if (prevLine && prevLine.match(/!\[([^\]]*)\]\(([^)]+)\)/)) {
+            return null; // Skip this line as it's handled as a caption
           }
         }
         
@@ -1972,27 +2030,47 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           return <h3 key={index} className="text-xl font-bold mt-4 mb-2">{line.substring(4)}</h3>;
         }
         
-        // Handle bold text
-        if (line.includes('**')) {
-          const parts = line.split('**');
-          const elements = parts.map((part, i) => 
-            i % 2 === 1 ? <strong key={i}>{part}</strong> : part
-          );
-          return <p key={index} className="mb-2">{elements}</p>;
-        }
-        
-        // Handle italic text
-        if (line.includes('*') && !line.includes('**')) {
-          const parts = line.split('*');
-          const elements = parts.map((part, i) => 
-            i % 2 === 1 ? <em key={i}>{part}</em> : part
-          );
-          return <p key={index} className="mb-2">{elements}</p>;
-        }
-        
-        // Regular paragraph
+        // Handle text with inline formatting (bold, italic, links)
         if (line.trim()) {
-          return <p key={index} className="mb-2">{line}</p>;
+          const processInlineMarkdown = (text: string) => {
+            let processedText = text;
+            
+            // Handle traditional markdown links [text](url)
+            processedText = processedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+              // Ensure URL has protocol
+              const processedUrl = url.startsWith('http') ? url : `https://${url}`;
+              return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
+            });
+            
+            // Handle simple link syntax [text|url] - easier to type
+            processedText = processedText.replace(/\[([^\]]+)\|([^\]]+)\]/g, (match, linkText, url) => {
+              // Ensure URL has protocol
+              const processedUrl = url.startsWith('http') ? url : `https://${url}`;
+              return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
+            });
+            
+            // Handle direct URLs (make them clickable)
+            processedText = processedText.replace(/(^|[\s])((https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?)/g, (match, prefix, url, protocol, domain, path) => {
+              const fullUrl = protocol ? url : `https://${url}`;
+              return `${prefix}<a href="${fullUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${url}</a>`;
+            });
+            
+            // Handle bold **text**
+            processedText = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Handle italic *text* (but not bold **text**)
+            processedText = processedText.replace(/(?<!\*)\*(?!\*)([^*]+)\*(?!\*)/g, '<em>$1</em>');
+            
+            return processedText;
+          };
+          
+          return (
+            <p 
+              key={index} 
+              className="mb-2" 
+              dangerouslySetInnerHTML={{ __html: processInlineMarkdown(line) }}
+            />
+          );
         }
         
         // Empty line
@@ -2422,127 +2500,249 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
 
         {/* Blog Posts Section */}
         <div className="mb-12">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 relative overflow-hidden">
-            {/* Background decoration - yellow theme */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-full -translate-y-16 translate-x-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-100 rounded-full translate-y-12 -translate-x-12"></div>
-            
-            <div className="relative z-10 text-center text-gray-800">
-              {currentLanguage === 'lt' ? (
-                <>
-                  <h3 className="text-3xl font-bold mb-4 text-gray-800">
-                    🚀 Su laiku!
-                  </h3>
-                  <p className="text-xl mb-6 text-gray-600">
-                    Dirbtinis intelektas, tikėjimas, medicina su chemija ir tikėjimo istorijos
-                  </p>
-                </>
-              ) : currentLanguage === 'fr' ? (
-                <>
-                  <h3 className="text-3xl font-bold mb-4 text-gray-800">
-                    🚀 À venir bientôt !
-                  </h3>
-                  <p className="text-xl mb-6 text-gray-600">
-                    IA, croyances, médecine et chimie, et récits sur les croyances
-                  </p>
-                </>
-              ) : (
-                <>
-                  <h3 className="text-3xl font-bold mb-4 text-gray-800">
-                    🚀 Coming Soon!
-                  </h3>
-                  <p className="text-xl mb-6 text-gray-600">
-                    AI, Belief, Medicine with Chemistry & Belief Stories
-                  </p>
-                </>
-              )}
-              
-              {/* Preview cards */}
-              <div className="grid md:grid-cols-3 gap-4 mb-8">
-                <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                  <div className="text-2xl mb-2">🧪</div>
-                  <h4 className="font-bold text-sm text-gray-800">
-                    {currentLanguage === 'lt' ? 'Dirbtinis intelektas' : 
-                     currentLanguage === 'fr' ? 'Actualités sur l\'intelligence artificielle' : 
-                     'Artificial Intelligence news'}
-                  </h4>
-                  <p className="text-xs text-gray-600">
-                    {currentLanguage === 'lt' ? 'Naujausia visko' : 
-                     currentLanguage === 'fr' ? 'Toutes les dernières nouvelles' : 
-                     'Latest of everything'}
-                  </p>
-                </div>
-                <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                  <div className="text-2xl mb-2">🕊️</div>
-                  <h4 className="font-bold text-sm text-gray-800">
-                    {currentLanguage === 'lt' ? 'Tikėjimas' : 
-                     currentLanguage === 'fr' ? 'Croyances' : 
-                     'Belief'}
-                  </h4>
-                  <p className="text-xs text-gray-600">
-                    {currentLanguage === 'lt' ? 'Savaitės kelionė tikėjime' : 
-                     currentLanguage === 'fr' ? 'Voyage hebdomadaire sur la foi' : 
-                     'Weekly journey on faith'}
-                  </p>
-                </div>
-                <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                  <div className="text-2xl mb-2">📖</div>
-                  <h4 className="font-bold text-sm text-gray-800">
-                    {currentLanguage === 'lt' ? 'Kitos istorijos' : 
-                     currentLanguage === 'fr' ? 'Autres récits' : 
-                     'Other stories'}
-                  </h4>
-                  <p className="text-xs text-gray-600">
-                    {currentLanguage === 'lt' ? 'Tikros isotijos per tikėjimo akis' : 
-                     currentLanguage === 'fr' ? 'Récits réels à travers le prisme des croyances' : 
-                     'Real stories through belief lens'}
-                  </p>
-                </div>
-              </div>
-              
-              {/* Call to action */}
-              <div className="bg-yellow-100 rounded-lg p-6 border border-yellow-300">
-                <h4 className="text-lg font-bold mb-3 text-gray-800">🔔 {t.blogs.beFirstToKnow}</h4>
-                <p className="text-gray-600 mb-4">
-                  {t.blogs.joinWaitlist}
-                </p>
-                
-                {/* Newsletter Status Messages */}
-                {newsletterStatus === 'success' && (
-                  <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
-                    <p className="text-green-800 text-sm font-medium">✅ {newsletterMessage}</p>
-                  </div>
-                )}
-                
-                {newsletterStatus === 'error' && (
-                  <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg">
-                    <p className="text-red-800 text-sm font-medium">❌ {newsletterMessage}</p>
-                  </div>
-                )}
-                
-                <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                  <input 
-                    type="email" 
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    placeholder={t.blogs.enterEmail}
-                    required
-                    disabled={newsletterStatus === 'loading'}
-                    className="px-4 py-2 rounded-lg bg-white text-gray-800 placeholder-gray-500 border border-yellow-300 focus:ring-2 focus:ring-yellow-400 outline-none flex-1 max-w-xs disabled:opacity-50"
-                  />
-                  <button 
-                    type="submit"
-                    disabled={newsletterStatus === 'loading'}
-                    className="bg-yellow-500 hover:bg-yellow-400 text-gray-800 font-bold px-6 py-2 rounded-lg transition-colors transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                  >
-                    {newsletterStatus === 'loading' ? t.blogs.subscribing : t.blogs.joinWaitlistBtn}
-                  </button>
-                </form>
-                <p className="text-xs text-gray-500 mt-2">
-                  {t.blogs.noSpam}
-                </p>
+          {posts.filter(post => post.status === 'published').length > 0 ? (
+            /* Show Latest Published Posts */
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Latest Posts</h3>
+              <div className="space-y-8">
+                {posts
+                  .filter(post => post.status === 'published')
+                  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+                  .slice(0, 3)
+                  .map((post) => (
+                    <article key={post.id} className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 hover:shadow-xl transition-shadow">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-3">
+                            <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                              {blogCategories[post.category]?.title[currentLanguage as LanguageCode] || post.category}
+                            </span>
+                            {post.isPremium && (
+                              <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium flex items-center">
+                                <Lock className="w-3 h-3 mr-1" />
+                                Premium
+                              </span>
+                            )}
+                            {post.language && (
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                                {post.language === 'en' ? '🇺🇸' : post.language === 'lt' ? '🇱🇹' : '🇫🇷'} {post.language.toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          
+                          {/* Featured Image */}
+                          {post.featuredImage && (
+                            <div className="mb-4">
+                              <img 
+                                src={post.featuredImage} 
+                                alt={post.title}
+                                className="w-full h-48 object-cover rounded-lg"
+                              />
+                            </div>
+                          )}
+                          
+                          <h2 className="text-2xl font-bold text-gray-900 mb-2 hover:text-yellow-600 transition-colors">
+                            {post.title}
+                          </h2>
+                          
+                          {post.subtitle && (
+                            <h3 className="text-lg text-gray-600 mb-3 font-medium">
+                              {post.subtitle}
+                            </h3>
+                          )}
+                          
+                          <div className="text-gray-600 mb-4 leading-relaxed">
+                            {post.excerpt ? (
+                              <p>{post.excerpt}</p>
+                            ) : (
+                              <div className="line-clamp-3">
+                                {renderContent(truncateContent(post.content, 300))}
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Insights Section */}
+                          {post.insights?.content && (
+                            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
+                              <div className="flex items-start">
+                                <span className="text-lg mr-2">{post.insights.emoji || '💡'}</span>
+                                <div>
+                                  <p className="font-semibold text-blue-800 text-sm">
+                                    {post.insights.title || 'My Insight:'}
+                                  </p>
+                                  <p className="text-blue-700 text-sm mt-1">{post.insights.content}</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex items-center">
+                            <User className="w-4 h-4 mr-1" />
+                            {post.author}
+                          </div>
+                          <div className="flex items-center">
+                            <Calendar className="w-4 h-4 mr-1" />
+                            {formatDate(post.publishedAt)}
+                          </div>
+                          <div className="flex items-center">
+                            <Clock className="w-4 h-4 mr-1" />
+                            {post.readTime} min read
+                          </div>
+                        </div>
+                      </div>
+
+                      {post.tags && post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {post.tags.map((tag, index) => (
+                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="border-t border-gray-200 pt-4">
+                        <button 
+                          onClick={() => handleReadMore(post)}
+                          className="text-yellow-600 hover:text-yellow-700 font-medium transition-colors"
+                        >
+                          {t.blogs.readMore} →
+                        </button>
+                      </div>
+                    </article>
+                  ))}
               </div>
             </div>
+          ) : (
+            /* Show Coming Soon Preview */
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 relative overflow-hidden">
+              {/* Background decoration - yellow theme */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-100 rounded-full translate-y-12 -translate-x-12"></div>
+              
+              <div className="relative z-10 text-center text-gray-800">
+                {currentLanguage === 'lt' ? (
+                  <>
+                    <h3 className="text-3xl font-bold mb-4 text-gray-800">
+                      � Su laiku!
+                    </h3>
+                    <p className="text-xl mb-6 text-gray-600">
+                      Dirbtinis intelektas, tikėjimas, medicina su chemija ir tikėjimo istorijos
+                    </p>
+                  </>
+                ) : currentLanguage === 'fr' ? (
+                  <>
+                    <h3 className="text-3xl font-bold mb-4 text-gray-800">
+                      🚀 À venir bientôt !
+                    </h3>
+                    <p className="text-xl mb-6 text-gray-600">
+                      IA, croyances, médecine et chimie, et récits sur les croyances
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-3xl font-bold mb-4 text-gray-800">
+                      🚀 Coming Soon!
+                    </h3>
+                    <p className="text-xl mb-6 text-gray-600">
+                      AI, Belief, Medicine with Chemistry & Belief Stories
+                    </p>
+                  </>
+                )}
+                
+                {/* Preview cards */}
+                <div className="grid md:grid-cols-3 gap-4 mb-8">
+                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                    <div className="text-2xl mb-2">🧪</div>
+                    <h4 className="font-bold text-sm text-gray-800">
+                      {currentLanguage === 'lt' ? 'Dirbtinis intelektas' : 
+                       currentLanguage === 'fr' ? 'Actualités sur l\'intelligence artificielle' : 
+                       'Artificial Intelligence news'}
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {currentLanguage === 'lt' ? 'Naujausia visko' : 
+                       currentLanguage === 'fr' ? 'Toutes les dernières nouvelles' : 
+                       'Latest of everything'}
+                    </p>
+                  </div>
+                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                    <div className="text-2xl mb-2">🕊️</div>
+                    <h4 className="font-bold text-sm text-gray-800">
+                      {currentLanguage === 'lt' ? 'Tikėjimas' : 
+                       currentLanguage === 'fr' ? 'Croyances' : 
+                       'Belief'}
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {currentLanguage === 'lt' ? 'Savaitės kelionė tikėjime' : 
+                       currentLanguage === 'fr' ? 'Voyage hebdomadaire sur la foi' : 
+                       'Weekly journey on faith'}
+                    </p>
+                  </div>
+                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                    <div className="text-2xl mb-2">📖</div>
+                    <h4 className="font-bold text-sm text-gray-800">
+                      {currentLanguage === 'lt' ? 'Kitos istorijos' : 
+                       currentLanguage === 'fr' ? 'Autres récits' : 
+                       'Other stories'}
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {currentLanguage === 'lt' ? 'Tikros isotijos per tikėjimo akis' : 
+                       currentLanguage === 'fr' ? 'Récits réels à travers le prisme des croyances' : 
+                       'Real stories through belief lens'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Newsletter Section - Always Show */}
+        <div className="mb-12">
+          <div className="bg-yellow-100 rounded-lg p-6 border border-yellow-300 max-w-2xl mx-auto text-center">
+            <h4 className="text-lg font-bold mb-3 text-gray-800">🔔 {t.blogs.beFirstToKnow}</h4>
+            <p className="text-gray-600 mb-4">
+              {t.blogs.joinWaitlist}
+            </p>
+            
+            {/* Newsletter Status Messages */}
+            {newsletterStatus === 'success' && (
+              <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
+                <p className="text-green-800 text-sm font-medium">✅ {newsletterMessage}</p>
+              </div>
+            )}
+            
+            {newsletterStatus === 'error' && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg">
+                <p className="text-red-800 text-sm font-medium">❌ {newsletterMessage}</p>
+              </div>
+            )}
+            
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <input 
+                type="email" 
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                placeholder={t.blogs.enterEmail}
+                required
+                disabled={newsletterStatus === 'loading'}
+                className="px-4 py-2 rounded-lg bg-white text-gray-800 placeholder-gray-500 border border-yellow-300 focus:ring-2 focus:ring-yellow-400 outline-none flex-1 max-w-xs disabled:opacity-50"
+              />
+              <button 
+                type="submit"
+                disabled={newsletterStatus === 'loading'}
+                className="bg-yellow-500 hover:bg-yellow-400 text-gray-800 font-bold px-6 py-2 rounded-lg transition-colors transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {newsletterStatus === 'loading' ? t.blogs.subscribing : t.blogs.joinWaitlistBtn}
+              </button>
+            </form>
+            <p className="text-xs text-gray-500 mt-2">
+              {t.blogs.noSpam}
+            </p>
           </div>
         </div>
 

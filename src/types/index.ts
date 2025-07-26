@@ -10,6 +10,22 @@ export interface BlogPost {
   tags: string[];
   author: string;
   status: 'draft' | 'published' | 'scheduled';
+  featuredImage?: string;
+  subtitle?: string;
+  language?: 'en' | 'lt' | 'fr';
+  insights?: {
+    title: string;
+    content: string;
+    emoji: string;
+  };
+  uploadedFiles?: {
+    id: string;
+    name: string;
+    originalName: string;
+    url: string;
+    type: string;
+    size: number;
+  }[];
 }
 
 export interface LocalizedText {

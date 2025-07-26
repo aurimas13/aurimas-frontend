@@ -155,7 +155,7 @@ export const ContactSection: React.FC = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-800">{t.contact.location}</h4>
-                      <p className="text-gray-600">Edinburgh, Scotland / Vilnius, Lithuania</p>
+                      <p className="text-gray-600">{t.contact.locationValue}</p>
                     </div>
                   </div>
                   

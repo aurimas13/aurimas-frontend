@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Save, Eye, Trash2, Plus, Edit3, Calendar, Clock, User, Tag, Lock, Unlock } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Save, Eye, Trash2, Plus, Edit3, Calendar, Clock, User, Tag, Lock, Unlock, Mail, Users, Download, Copy, FileText } from 'lucide-react';
 import { BlogPost } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase, isSupabaseConfigured, createBlogPost, updateBlogPost, getBlogPosts, deleteBlogPost, uploadFile } from '../lib/supabase';
+import { getNewsletterSubscribers, type NewsletterSubscriber } from '../lib/newsletter';
+import { getBlogPostTemplates } from '../data/samplePosts';
 
 interface BlogManagerProps {
   onBack: () => void;
@@ -14,13 +16,286 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [templates] = useState(getBlogPostTemplates());
   const [error, setError] = useState<string | null>(null);
-  const [imageMetadata, setImageMetadata] = useState<{[key: string]: {alt: string, keywords: string}}>({});
-  const [showImageMenu, setShowImageMenu] = useState<string | null>(null);
+  const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([]);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  
+  // Poll voting state
+  const [pollVotes, setPollVotes] = useState<{[pollId: string]: {[option: string]: number}}>({});
+  const [userVotes, setUserVotes] = useState<{[pollId: string]: string}>({});
 
-  // Load posts on component mount
+  // Generate a simple user identifier (in production, use proper IP detection)
+  const getUserId = () => {
+    let userId = localStorage.getItem('blog-user-id');
+    if (!userId) {
+      userId = Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('blog-user-id', userId);
+    }
+    return userId;
+  };
+
+  // Helper function to compress images
+  const compressImage = (file: File, quality: number = 0.7): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d')!;
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions (max 1200px width)
+        const maxWidth = 1200;
+        const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
+        canvas.width = img.width * ratio;
+        canvas.height = img.height * ratio;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error('Failed to compress image'));
+          }
+        }, 'image/jpeg', quality);
+      };
+      
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  // Generate very short encrypted filename
+  const generateShortFileName = (extension: string): string => {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return `${result}.${extension}`;
+  };
+
+  // Store compressed images in localStorage with short keys
+  const storeCompressedFile = (shortName: string, dataUrl: string) => {
+    try {
+      const stored = localStorage.getItem('blog-files') || '{}';
+      const files = JSON.parse(stored);
+      files[shortName] = dataUrl;
+      localStorage.setItem('blog-files', JSON.stringify(files));
+    } catch (error) {
+      console.error('Error storing file:', error);
+    }
+  };
+
+  // Retrieve compressed file from localStorage
+  const getStoredFile = (shortName: string): string | null => {
+    try {
+      const stored = localStorage.getItem('blog-files') || '{}';
+      const files = JSON.parse(stored);
+      return files[shortName] || null;
+    } catch (error) {
+      console.error('Error retrieving file:', error);
+      return null;
+    }
+  };
+
+  // Poll component with voting functionality
+  const PollComponent: React.FC<{
+    question: string;
+    options: string[];
+    pollId: string;
+  }> = ({ question, options, pollId }) => {
+    const userId = getUserId();
+    const hasVoted = userVotes[pollId] !== undefined;
+    const currentVotes = pollVotes[pollId] || {};
+    const totalVotes = Object.values(currentVotes).reduce((sum, count) => sum + count, 0);
+    
+    const handleVote = (option: string) => {
+      if (hasVoted) return;
+      
+      // Update poll votes
+      setPollVotes(prev => ({
+        ...prev,
+        [pollId]: {
+          ...prev[pollId],
+          [option]: (prev[pollId]?.[option] || 0) + 1
+        }
+      }));
+      
+      // Mark user as voted
+      setUserVotes(prev => ({
+        ...prev,
+        [pollId]: option
+      }));
+      
+      // Save to localStorage for persistence
+      const savedVotes = JSON.parse(localStorage.getItem('blog-poll-votes') || '{}');
+      const savedUserVotes = JSON.parse(localStorage.getItem('blog-user-votes') || '{}');
+      
+      savedVotes[pollId] = {
+        ...savedVotes[pollId],
+        [option]: (savedVotes[pollId]?.[option] || 0) + 1
+      };
+      savedUserVotes[pollId] = option;
+      
+      localStorage.setItem('blog-poll-votes', JSON.stringify(savedVotes));
+      localStorage.setItem('blog-user-votes', JSON.stringify(savedUserVotes));
+    };
+    
+    // Load saved votes on mount
+    React.useEffect(() => {
+      const savedVotes = JSON.parse(localStorage.getItem('blog-poll-votes') || '{}');
+      const savedUserVotes = JSON.parse(localStorage.getItem('blog-user-votes') || '{}');
+      
+      if (savedVotes[pollId]) {
+        setPollVotes(prev => ({ ...prev, [pollId]: savedVotes[pollId] }));
+      }
+      if (savedUserVotes[pollId]) {
+        setUserVotes(prev => ({ ...prev, [pollId]: savedUserVotes[pollId] }));
+      }
+    }, [pollId]);
+    
+    return (
+      <div className="my-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <h4 className="font-semibold text-gray-800 mb-3">📊 {question}</h4>
+        <div className="space-y-2">
+          {options.map((option, optionIndex) => {
+            const voteCount = currentVotes[option] || 0;
+            const percentage = totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
+            const isSelected = userVotes[pollId] === option;
+            
+            return (
+              <div key={optionIndex} className="relative">
+                <button
+                  onClick={() => handleVote(option)}
+                  disabled={hasVoted}
+                  className={`w-full text-left p-3 rounded border transition-colors ${
+                    hasVoted
+                      ? isSelected
+                        ? 'bg-blue-100 border-blue-300 text-blue-800'
+                        : 'bg-gray-100 border-gray-200 text-gray-600'
+                      : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700 cursor-pointer'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                        isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                      }`}>
+                        {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
+                      </div>
+                      <span className="font-medium">{option.trim()}</span>
+                    </div>
+                    {hasVoted && (
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-500">{voteCount} votes</span>
+                        <span className="text-sm font-medium text-gray-700">{percentage.toFixed(1)}%</span>
+                      </div>
+                    )}
+                  </div>
+                  {hasVoted && (
+                    <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className={`h-2 rounded-full transition-all duration-500 ${
+                          isSelected ? 'bg-blue-500' : 'bg-gray-400'
+                        }`}
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+          <span>{totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}</span>
+          {hasVoted && (
+            <span className="text-green-600 font-medium">✓ You voted for "{userVotes[pollId]}"</span>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // Helper function to check if a line is inside a code block
+  const isInsideCodeBlock = (lineIndex: number, content: string): boolean => {
+    const lines = content.split('\n');
+    let inCodeBlock = false;
+    
+    for (let i = 0; i < lineIndex; i++) {
+      if (lines[i].startsWith('```')) {
+        inCodeBlock = !inCodeBlock;
+      }
+    }
+    
+    return inCodeBlock;
+  };
+
+  // Insert content at cursor position (with fallback to end)
+  const insertAtCursor = (content: string) => {
+    if (!currentPost) {
+      console.error('Cannot insert: currentPost is null');
+      return;
+    }
+
+    let insertPosition = 0;
+    let endPosition = 0;
+    
+    // Try to get cursor position from textarea
+    if (textareaRef.current) {
+      const textarea = textareaRef.current;
+      insertPosition = textarea.selectionStart || 0;
+      endPosition = textarea.selectionEnd || 0;
+      console.log('Using cursor position:', insertPosition, 'to', endPosition);
+    } else {
+      // Fallback: insert at end
+      insertPosition = currentPost.content.length;
+      endPosition = insertPosition;
+      console.log('Textarea ref not available, inserting at end:', insertPosition);
+    }
+    
+    const currentContent = currentPost.content;
+    console.log('Current content length:', currentContent.length);
+    console.log('Content to insert:', content.substring(0, 100) + '...');
+    
+    const newContent = 
+      currentContent.substring(0, insertPosition) + 
+      content + 
+      currentContent.substring(endPosition);
+    
+    console.log('New content length:', newContent.length);
+    console.log('Content change detected:', newContent !== currentContent);
+    
+    // Update the post content
+    updateCurrentPost({ content: newContent });
+    
+    // Try to restore cursor position
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const textarea = textareaRef.current;
+        const newCursorPosition = insertPosition + content.length;
+        textarea.selectionStart = newCursorPosition;
+        textarea.selectionEnd = newCursorPosition;
+        textarea.focus();
+        console.log('Cursor restored to position:', newCursorPosition);
+      }
+    }, 100);
+  };
+
+  // Alternative method to insert at end (for testing)
+  const insertAtEnd = (content: string) => {
+    if (!currentPost) return;
+    
+    const newContent = currentPost.content + '\n' + content;
+    console.log('Inserting at end. Old length:', currentPost.content.length, 'New length:', newContent.length);
+    updateCurrentPost({ content: newContent });
+  };
+
+  // Load posts when component mounts
   useEffect(() => {
     loadPosts();
+    loadSubscribers();
   }, []);
 
   const loadPosts = async () => {
@@ -42,7 +317,16 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
             isPremium: post.is_premium,
             tags: post.tags,
             author: post.author,
-            status: post.status as any
+            status: post.status as any,
+            subtitle: '',
+            featuredImage: '',
+            language: 'en',
+            insights: {
+              title: '',
+              content: '',
+              emoji: ''
+            },
+            uploadedFiles: []
           }));
           setPosts(convertedPosts);
           console.log('Loaded posts from Supabase:', convertedPosts.length);
@@ -64,356 +348,30 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
   };
 
   const loadFromLocalStorage = () => {
-    const savedPosts = localStorage.getItem('blog-posts');
-    if (savedPosts) {
-      setPosts(JSON.parse(savedPosts));
+    try {
+      const savedPosts = localStorage.getItem('blog-posts');
+      if (savedPosts) {
+        setPosts(JSON.parse(savedPosts));
+      }
+    } catch (error) {
+      console.error('Error loading from localStorage:', error);
     }
   };
 
   const saveToLocalStorage = (postsToSave: BlogPost[]) => {
-    localStorage.setItem('blog-posts', JSON.stringify(postsToSave));
+    try {
+      localStorage.setItem('blog-posts', JSON.stringify(postsToSave));
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
   };
 
-  // Simple content renderer without problematic regex
-  const renderContent = (content: string) => {
-    if (!content) return '';
-    
+  const loadSubscribers = async () => {
     try {
-      // Split content into lines for processing
-      const lines = content.split('\n');
-      const processedLines = lines.map((line, index) => {
-        // Handle YouTube embeds
-        if (line.includes('[YOUTUBE:') && line.includes(']')) {
-          const startIndex = line.indexOf('[YOUTUBE:') + 9;
-          const endIndex = line.indexOf(']', startIndex);
-          if (endIndex > startIndex) {
-            const url = line.substring(startIndex, endIndex);
-            
-            // Extract video ID and fetch title
-            let videoId = '';
-            let videoTitle = 'Loading video title...';
-            
-            if (url.includes('youtu.be/')) {
-              videoId = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
-            } else if (url.includes('youtube.com/watch?v=')) {
-              videoId = url.split('v=')[1].split('&')[0].split('#')[0];
-            }
-            
-            if (videoId) {
-              // Fetch video title using YouTube oEmbed API
-              fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
-                .then(response => response.json())
-                .then(data => {
-                  if (data.title) {
-                    // Update the title in the DOM
-                    const titleElement = document.querySelector(`[data-video-id="${videoId}"] .video-title`);
-                    if (titleElement) {
-                      titleElement.textContent = data.title;
-                    }
-                  }
-                })
-                .catch(error => {
-                  console.error('Error fetching YouTube title:', error);
-                  const titleElement = document.querySelector(`[data-video-id="${videoId}"] .video-title`);
-                  if (titleElement) {
-                    titleElement.textContent = 'YouTube Video';
-                  }
-                });
-            }
-             
-            return (
-              <div key={index} className="my-4 p-4 bg-red-50 border border-red-200 rounded-lg" data-video-id={videoId}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-red-600">
-                    <span className="text-2xl">📺</span>
-                    <div>
-                      <div className="font-bold video-title">{videoTitle}</div>
-                      <div className="text-sm text-gray-600">YouTube</div>
-                    </div>
-                  </div>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                  >
-                    Watch Video →
-                  </a>
-                </div>
-              </div>
-            );
-          }
-        }
-        
-        // Handle Spotify embeds
-        if (line.includes('[SPOTIFY:') && line.includes(']')) {
-          const startIndex = line.indexOf('[SPOTIFY:') + 9;
-          const endIndex = line.indexOf(']', startIndex);
-          if (endIndex > startIndex) {
-            const url = line.substring(startIndex, endIndex);
-            
-            // Extract track/album/playlist ID and fetch title
-            let itemId = '';
-            let itemTitle = 'Loading...';
-            let itemType = 'track';
-            
-            if (url.includes('spotify.com/track/')) {
-              itemId = url.split('track/')[1].split('?')[0].split('#')[0];
-              itemType = 'track';
-              itemTitle = 'Loading track...';
-            } else if (url.includes('spotify.com/album/')) {
-              itemId = url.split('album/')[1].split('?')[0].split('#')[0];
-              itemType = 'album';
-              itemTitle = 'Loading album...';
-            } else if (url.includes('spotify.com/playlist/')) {
-              itemId = url.split('playlist/')[1].split('?')[0].split('#')[0];
-              itemType = 'playlist';
-              itemTitle = 'Loading playlist...';
-            }
-            
-            if (itemId) {
-              // Try to fetch title using Spotify oEmbed (limited but works for some content)
-              fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`)
-                .then(response => response.json())
-                .then(data => {
-                  if (data.title) {
-                    const titleElement = document.querySelector(`[data-spotify-id="${itemId}"] .spotify-title`);
-                    if (titleElement) {
-                      titleElement.textContent = data.title;
-                    }
-                  }
-                })
-                .catch(error => {
-                  console.error('Error fetching Spotify title:', error);
-                  const titleElement = document.querySelector(`[data-spotify-id="${itemId}"] .spotify-title`);
-                  if (titleElement) {
-                    titleElement.textContent = `Spotify ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`;
-                  }
-                });
-            }
-             
-            return (
-              <div key={index} className="my-4 p-4 bg-green-50 border border-green-200 rounded-lg" data-spotify-id={itemId}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 text-green-600">
-                    <span className="text-2xl">🎵</span>
-                    <div>
-                      <div className="font-bold spotify-title">{itemTitle}</div>
-                      <div className="text-sm text-gray-600">Spotify</div>
-                    </div>
-                  </div>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    Listen on Spotify →
-                  </a>
-                </div>
-              </div>
-            );
-          }
-        }
-        
-         // Handle Video embeds
-         if (line.includes('[VIDEO:') && line.includes(']')) {
-           const startIndex = line.indexOf('[VIDEO:') + 7;
-           const endIndex = line.indexOf(']', startIndex);
-           if (endIndex > startIndex) {
-             const url = line.substring(startIndex, endIndex);
-             return (
-               <div key={index} className="my-4">
-                 <video 
-                   controls 
-                   className="max-w-full h-auto rounded-lg shadow-md"
-                   src={url}
-                 >
-                   Your browser does not support the video tag.
-                 </video>
-               </div>
-             );
-           }
-         }
-
-         // Handle Audio embeds
-         if (line.includes('[AUDIO:') && line.includes(']')) {
-           const startIndex = line.indexOf('[AUDIO:') + 7;
-           const endIndex = line.indexOf(']', startIndex);
-           if (endIndex > startIndex) {
-             const url = line.substring(startIndex, endIndex);
-             return (
-               <div key={index} className="my-4">
-                 <audio 
-                   controls 
-                   className="w-full"
-                   src={url}
-                 >
-                   Your browser does not support the audio tag.
-                 </audio>
-               </div>
-             );
-           }
-         }
-
-         // Handle PDF embeds
-         if (line.includes('[PDF:') && line.includes(']')) {
-           const startIndex = line.indexOf('[PDF:') + 5;
-           const endIndex = line.indexOf(']', startIndex);
-           if (endIndex > startIndex) {
-             const url = line.substring(startIndex, endIndex);
-             return (
-               <div key={index} className="my-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                 <div className="flex items-center space-x-2 text-gray-600 mb-2">
-                   <span className="font-bold">📄 PDF Document</span>
-                 </div>
-                 <iframe
-                   src={url}
-                   width="100%"
-                   height="600"
-                   className="border rounded"
-                   title="PDF Document"
-                 ></iframe>
-               </div>
-             );
-           }
-         }
-
-        // Handle images
-        if (line.includes('![') && line.includes('](') && line.includes(')')) {
-          const altStart = line.indexOf('![') + 2;
-          const altEnd = line.indexOf('](', altStart);
-          const urlStart = altEnd + 2;
-          const urlEnd = line.indexOf(')', urlStart);
-          
-          if (altEnd > altStart && urlEnd > urlStart) {
-            const alt = line.substring(altStart, altEnd);
-            let url = line.substring(urlStart, urlEnd);
-            
-            // Handle Unsplash URLs - convert to direct image URL
-            if (url.includes('unsplash.com/photos/')) {
-              const photoId = url.split('/photos/')[1].split('-').pop();
-              if (photoId) {
-                url = `https://images.unsplash.com/${photoId}?w=800&q=80`;
-              }
-            }
-            
-            const imageId = `image-${index}`;
-            const currentMetadata = imageMetadata[imageId] || { alt: alt, keywords: '' };
-            
-            return (
-              <div key={index} className="my-4 relative group">
-                <img 
-                  src={url} 
-                  alt={currentMetadata.alt || alt} 
-                  className="max-w-full h-auto rounded-lg shadow-md mx-auto block"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=';
-                    target.alt = 'Image not found';
-                  }}
-                />
-                
-                {/* Three-dot menu button */}
-                <button
-                  onClick={() => setShowImageMenu(showImageMenu === imageId ? null : imageId)}
-                  className="absolute top-2 right-2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
-                >
-                  <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                  </svg>
-                </button>
-                
-                {/* Image metadata menu */}
-                {showImageMenu === imageId && (
-                  <div className="absolute top-12 right-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-64 z-10">
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Alt Text</label>
-                        <input
-                          type="text"
-                          maxLength={100}
-                          value={currentMetadata.alt}
-                          onChange={(e) => setImageMetadata(prev => ({
-                            ...prev,
-                            [imageId]: { ...currentMetadata, alt: e.target.value }
-                          }))}
-                          className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                          placeholder="Describe the image..."
-                        />
-                        <div className="text-xs text-gray-500 mt-1">{currentMetadata.alt.length}/100</div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
-                        <input
-                          type="text"
-                          maxLength={100}
-                          value={currentMetadata.keywords}
-                          onChange={(e) => setImageMetadata(prev => ({
-                            ...prev,
-                            [imageId]: { ...currentMetadata, keywords: e.target.value }
-                          }))}
-                          className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                          placeholder="SEO keywords..."
-                        />
-                        <div className="text-xs text-gray-500 mt-1">{currentMetadata.keywords.length}/100</div>
-                      </div>
-                      <button
-                        onClick={() => setShowImageMenu(null)}
-                        className="w-full bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          }
-        }
-        
-        // Handle headers
-        if (line.startsWith('# ')) {
-          return <h1 key={index} className="text-3xl font-bold mt-6 mb-4">{line.substring(2)}</h1>;
-        }
-        if (line.startsWith('## ')) {
-          return <h2 key={index} className="text-2xl font-bold mt-5 mb-3">{line.substring(3)}</h2>;
-        }
-        if (line.startsWith('### ')) {
-          return <h3 key={index} className="text-xl font-bold mt-4 mb-2">{line.substring(4)}</h3>;
-        }
-        
-        // Handle bold text
-        if (line.includes('**')) {
-          const parts = line.split('**');
-          const elements = parts.map((part, i) => 
-            i % 2 === 1 ? <strong key={i}>{part}</strong> : part
-          );
-          return <p key={index} className="mb-2">{elements}</p>;
-        }
-        
-        // Handle italic text
-        if (line.includes('*') && !line.includes('**')) {
-          const parts = line.split('*');
-          const elements = parts.map((part, i) => 
-            i % 2 === 1 ? <em key={i}>{part}</em> : part
-          );
-          return <p key={index} className="mb-2">{elements}</p>;
-        }
-        
-        // Regular paragraph
-        if (line.trim()) {
-          return <p key={index} className="mb-2">{line}</p>;
-        }
-        
-        // Empty line
-        return <br key={index} />;
-      });
-      
-      return <div className="prose max-w-none">{processedLines}</div>;
+      const subs = await getNewsletterSubscribers();
+      setSubscribers(subs);
     } catch (error) {
-      console.error('Error rendering content:', error);
-      return <div className="text-red-500">Error rendering content</div>;
+      console.error('Error loading subscribers:', error);
     }
   };
 
@@ -429,18 +387,41 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       isPremium: false,
       tags: [],
       author: 'Aurimas',
+      status: 'draft',
+      subtitle: '',
+      featuredImage: '',
+      language: 'en',
+      insights: {
+        title: '',
+        content: '',
+        emoji: ''
+      },
+      uploadedFiles: []
+    };
+    setCurrentPost(newPost);
+    setIsEditing(true);
+    setShowPreview(false);
+    setShowTemplates(true);
+  };
+
+  const createFromTemplate = (template: BlogPost) => {
+    const newPost: BlogPost = {
+      ...template,
+      id: uuidv4(),
+      publishedAt: new Date().toISOString(),
       status: 'draft'
     };
     setCurrentPost(newPost);
     setIsEditing(true);
     setShowPreview(false);
+    setShowTemplates(false);
   };
 
   const savePost = async () => {
     if (!currentPost) return;
 
     setIsLoading(true);
-    setError(null); // Clear any previous errors
+    setError(null);
     try {
       const updatedPost = {
         ...currentPost,
@@ -460,7 +441,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
             excerpt: updatedPost.excerpt,
             content: updatedPost.content,
             category: updatedPost.category,
-            published_at: updatedPost.status === 'published' ? updatedPost.publishedAt : null,
+            published_at: updatedPost.status === 'published' ? updatedPost.publishedAt : undefined,
             read_time: updatedPost.readTime,
             is_premium: updatedPost.isPremium,
             tags: updatedPost.tags,
@@ -474,7 +455,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
             excerpt: updatedPost.excerpt,
             content: updatedPost.content,
             category: updatedPost.category,
-            published_at: updatedPost.status === 'published' ? updatedPost.publishedAt : null,
+            published_at: updatedPost.status === 'published' ? updatedPost.publishedAt : undefined,
             read_time: updatedPost.readTime,
             is_premium: updatedPost.isPremium,
             tags: updatedPost.tags,
@@ -541,10 +522,73 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     setCurrentPost(post);
     setIsEditing(true);
     setShowPreview(false);
+    setShowTemplates(false);
   };
 
   const togglePreview = () => {
     setShowPreview(!showPreview);
+  };
+
+  // Function to clean up content with long base64 strings
+  const cleanupLongDataUrls = () => {
+    if (!currentPost) return;
+    
+    let content = currentPost.content;
+    let hasChanges = false;
+    
+    // Replace long base64 image URLs with short references
+    const imageRegex = /!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{100,}\)/g;
+    
+    content = content.replace(imageRegex, (match, alt) => {
+      hasChanges = true;
+      
+      // Extract the base64 data
+      const dataUrlMatch = match.match(/data:image\/[^;]+;base64,[^)]+/);
+      if (dataUrlMatch && currentPost?.uploadedFiles) {
+        const dataUrl = dataUrlMatch[0];
+        
+        // Find the corresponding uploaded file
+        const uploadedFile = currentPost.uploadedFiles.find(f => f.url === dataUrl);
+        if (uploadedFile) {
+          return `![${alt}](${uploadedFile.name})`;
+        }
+      }
+      
+      // If no match found, generate a new short name and store it
+      const fileExtension = 'jpg'; // Default extension
+      const shortName = generateShortFileName(fileExtension);
+      const dataUrlMatch2 = match.match(/data:[^)]+/);
+      if (dataUrlMatch2) {
+        storeCompressedFile(shortName, dataUrlMatch2[0]);
+        
+        // Add to uploaded files
+        const fileInfo = {
+          id: shortName,
+          name: shortName,
+          originalName: alt || 'image',
+          url: dataUrlMatch2[0],
+          type: 'image/jpeg',
+          size: Math.round(dataUrlMatch2[0].length * 0.75) // Estimate size
+        };
+        
+        if (currentPost.uploadedFiles) {
+          currentPost.uploadedFiles.push(fileInfo);
+        } else {
+          currentPost.uploadedFiles = [fileInfo];
+        }
+        
+        return `![${alt}](${shortName})`;
+      }
+      
+      return match; // Return original if we can't process it
+    });
+    
+    if (hasChanges) {
+      updateCurrentPost({ content });
+      alert('✅ Content cleaned up! Long image URLs have been replaced with short references.');
+    } else {
+      alert('ℹ️ No long image URLs found to clean up.');
+    }
   };
 
   const updateCurrentPost = (updates: Partial<BlogPost>) => {
@@ -553,63 +597,896 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     }
   };
 
-   const handleFileUpload = async (files: File[]) => {
-     if (!currentPost) return;
+  const handleFileUpload = async (files: File[]) => {
+    if (!currentPost) {
+      console.error('No current post selected');
+      return;
+    }
 
-     setIsLoading(true);
-     let newContent = currentPost.content;
+    console.log('Starting file upload for', files.length, 'files');
+    setIsLoading(true);
+    const newUploadedFiles = [...(currentPost.uploadedFiles || [])];
+    let allEmbedCodes = ''; // Collect all embed codes to insert at once
 
-     for (const file of files) {
-       try {
-         let fileUrl = '';
-         let embedCode = '';
+    for (const file of files) {
+      try {
+        console.log('Processing file:', file.name, 'Type:', file.type, 'Size:', file.size);
+        
+        const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
+        const shortName = generateShortFileName(fileExtension);
+        console.log('Generated short name:', shortName);
+        
+        let processedFile: File | Blob = file;
+        let embedCode = '';
+        
+        // Compress images for better performance
+        if (file.type.startsWith('image/')) {
+          console.log('Compressing image...');
+          processedFile = await compressImage(file);
+          console.log(`Image compressed: ${file.size} -> ${processedFile.size} bytes`);
+        }
 
-        // Convert file to base64 data URL for persistent storage
+        // Convert to base64 data URL
+        console.log('Converting to base64...');
         const reader = new FileReader();
         const base64Promise = new Promise<string>((resolve, reject) => {
           reader.onload = () => {
-            const result = reader.result as string;
-            resolve(result);
+            console.log('File conversion completed');
+            resolve(reader.result as string);
           };
-          reader.onerror = reject;
+          reader.onerror = () => {
+            console.error('File conversion failed');
+            reject(new Error('Failed to read file'));
+          };
         });
         
-        reader.readAsDataURL(file);
-        fileUrl = await base64Promise;
+        reader.readAsDataURL(processedFile);
+        const dataUrl = await base64Promise;
+        console.log('Data URL created, length:', dataUrl.length);
         
-        console.log('File converted to base64 data URL');
+        // Store compressed file with short name
+        storeCompressedFile(shortName, dataUrl);
+        console.log('File stored in localStorage with key:', shortName);
+        
+        // Store file info for persistence
+        const fileInfo = {
+          id: shortName,
+          name: shortName,
+          originalName: file.name,
+          url: dataUrl, // Store the full data URL for preview
+          type: file.type,
+          size: processedFile.size
+        };
+        newUploadedFiles.push(fileInfo);
 
-         if (file.type.startsWith('image/')) {
-           embedCode = `![${file.name}](${fileUrl})\n`;
-         } else if (file.type.startsWith('video/')) {
-           embedCode = `[VIDEO:${fileUrl}]\n`;
-         } else if (file.type.startsWith('audio/')) {
-           embedCode = `[AUDIO:${fileUrl}]\n`;
-         } else if (file.type === 'application/pdf') {
-           embedCode = `[PDF:${fileUrl}]\n`;
-         } else {
-           embedCode = `[FILE:${fileUrl}](${file.name})\n`;
-         }
+        // Generate embed code based on file type - USE SHORT REFERENCE, NOT FULL DATA URL
+        if (file.type.startsWith('image/')) {
+          embedCode = `![${file.name}](${shortName})\n`; // Use short name instead of data URL
+          console.log('Generated image embed code with short reference');
+        } else if (file.type.startsWith('video/')) {
+          embedCode = `[VIDEO:${shortName}]\n`;
+          console.log('Generated video embed code with short reference');
+        } else if (file.type.startsWith('audio/')) {
+          embedCode = `[AUDIO:${shortName}]\n`;
+          console.log('Generated audio embed code with short reference');
+        } else if (file.type === 'application/pdf') {
+          embedCode = `[PDF:${shortName}]\n`;
+          console.log('Generated PDF embed code with short reference');
+        } else {
+          embedCode = `[FILE:${shortName}](${file.name})\n`;
+          console.log('Generated file embed code with short reference');
+        }
 
-         // Add to content
-         newContent = newContent + '\n' + embedCode;
+        console.log('Embed code:', embedCode);
+        allEmbedCodes += embedCode; // Collect all embed codes
+        
+        console.log(`File processed successfully with short name: ${shortName}`);
 
-       } catch (error) {
-         console.error('Error uploading file:', error);
+      } catch (error) {
+        console.error('Error uploading file:', error);
         setError(`Failed to process file: ${file.name}`);
-       }
-     }
+      }
+    }
 
-     // Update content with all uploaded files
-     updateCurrentPost({ content: newContent });
-     setIsLoading(false);
-   };
+    // Insert all embed codes at once and update uploaded files
+    if (allEmbedCodes && currentPost) {
+      console.log('Inserting all embed codes at cursor position:', allEmbedCodes.length, 'characters');
+      
+      let insertPosition = 0;
+      let endPosition = 0;
+      
+      // Try to get cursor position from textarea
+      if (textareaRef.current) {
+        const textarea = textareaRef.current;
+        insertPosition = textarea.selectionStart || 0;
+        endPosition = textarea.selectionEnd || 0;
+        console.log('Using cursor position:', insertPosition, 'to', endPosition);
+      } else {
+        // Fallback: insert at end
+        insertPosition = currentPost.content.length;
+        endPosition = insertPosition;
+        console.log('Textarea ref not available, inserting at end:', insertPosition);
+      }
+      
+      const currentContent = currentPost.content;
+      const newContent = 
+        currentContent.substring(0, insertPosition) + 
+        allEmbedCodes + 
+        currentContent.substring(endPosition);
+      
+      console.log('Final content update with both content and files');
+      
+      // Update both content and uploaded files in a single call
+      updateCurrentPost({ 
+        content: newContent,
+        uploadedFiles: newUploadedFiles 
+      });
+      
+      // Try to restore cursor position
+      setTimeout(() => {
+        if (textareaRef.current) {
+          const textarea = textareaRef.current;
+          const newCursorPosition = insertPosition + allEmbedCodes.length;
+          textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+          console.log('Cursor repositioned to:', newCursorPosition);
+        }
+      }, 10);
+    }
+    setIsLoading(false);
+    console.log('File upload process completed');
+  };
+
+  const exportSubscribers = () => {
+    const csvContent = [
+      ['Email', 'Subscribed Date', 'Status'],
+      ...subscribers.map(sub => [
+        sub.email,
+        new Date(sub.subscribed_at).toLocaleDateString(),
+        sub.is_active ? 'Active' : 'Inactive'
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `newsletter-subscribers-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Title cache for YouTube and Spotify
+  const titleCache = useRef(new Map<string, string>());
+
+  // Function to fetch YouTube title
+  const fetchYouTubeTitle = async (videoId: string): Promise<string> => {
+    const cacheKey = `youtube-${videoId}`;
+    if (titleCache.current.has(cacheKey)) {
+      return titleCache.current.get(cacheKey)!;
+    }
+
+    try {
+      const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+      if (response.ok) {
+        const data = await response.json();
+        const title = data.title || `Video ID: ${videoId}`;
+        titleCache.current.set(cacheKey, title);
+        return title;
+      }
+    } catch (error) {
+      console.error('Error fetching YouTube title:', error);
+    }
+    
+    const fallbackTitle = `Video ID: ${videoId}`;
+    titleCache.current.set(cacheKey, fallbackTitle);
+    return fallbackTitle;
+  };
+
+  // Function to fetch Spotify title
+  const fetchSpotifyTitle = async (url: string, itemType: string, itemId: string): Promise<string> => {
+    const cacheKey = `spotify-${itemId}`;
+    if (titleCache.current.has(cacheKey)) {
+      return titleCache.current.get(cacheKey)!;
+    }
+
+    try {
+      const response = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`);
+      if (response.ok) {
+        const data = await response.json();
+        const title = data.title || `${itemType.charAt(0).toUpperCase() + itemType.slice(1)} ID: ${itemId}`;
+        titleCache.current.set(cacheKey, title);
+        return title;
+      }
+    } catch (error) {
+      console.error('Error fetching Spotify title:', error);
+    }
+    
+    const fallbackTitle = `${itemType.charAt(0).toUpperCase() + itemType.slice(1)} ID: ${itemId}`;
+    titleCache.current.set(cacheKey, fallbackTitle);
+    return fallbackTitle;
+  };
+
+  // YouTube Embed Component
+  const YouTubeEmbed: React.FC<{ url: string; videoId: string }> = ({ url, videoId }) => {
+    const [videoTitle, setVideoTitle] = useState('Loading video title...');
+
+    useEffect(() => {
+      fetchYouTubeTitle(videoId).then(setVideoTitle);
+    }, [videoId]);
+
+    return (
+      <div className="my-4">
+        {/* Actual YouTube embed iframe */}
+        <div className="relative w-full mb-2" style={{ paddingBottom: '56.25%' /* 16:9 aspect ratio */ }}>
+          <iframe
+            className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+            src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+            title={videoTitle}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-red-600">
+              <span className="text-2xl">📺</span>
+              <div>
+                <div className="font-bold">{videoTitle}</div>
+                <div className="text-sm text-gray-600">YouTube</div>
+              </div>
+            </div>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm"
+            >
+              Watch Video →
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  };  const SpotifyEmbed: React.FC<{ url: string; itemType: string; itemId: string }> = ({ url, itemType, itemId }) => {
+    const [itemTitle, setItemTitle] = useState('Loading...');
+
+    useEffect(() => {
+      fetchSpotifyTitle(url, itemType, itemId).then(setItemTitle);
+    }, [url, itemType, itemId]);
+
+    return (
+      <div className="my-4">
+        {/* Actual Spotify embed iframe */}
+        <div className="w-full mb-2">
+          <iframe
+            className="w-full rounded-lg shadow-lg"
+            src={`https://open.spotify.com/embed/${itemType}/${itemId}?utm_source=generator&theme=0`}
+            height={itemType === 'track' ? '152' : itemType === 'album' ? '352' : '352'}
+            frameBorder="0"
+            allowFullScreen={false}
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          />
+        </div>
+        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-green-600">
+              <span className="text-2xl">🎵</span>
+              <div>
+                <div className="font-bold">{itemTitle}</div>
+                <div className="text-sm text-gray-600">Spotify</div>
+              </div>
+            </div>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm"
+            >
+              Listen on Spotify →
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  };  // Enhanced Image Component with Context Menu
+  const EnhancedImage: React.FC<{ 
+    src: string; 
+    alt: string; 
+    caption?: string;
+    width?: 'normal' | 'wide' | 'full';
+    originalLine: string;
+    onUpdate: (newLine: string) => void;
+  }> = ({ src, alt, caption, width = 'normal', originalLine, onUpdate }) => {
+    const [showContextMenu, setShowContextMenu] = useState(false);
+    const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editType, setEditType] = useState<'caption' | 'alt' | null>(null);
+    const [editValue, setEditValue] = useState('');
+
+    // Resolve short filename to actual data URL if needed
+    let actualSrc = src;
+    if (!src.startsWith('data:') && !src.startsWith('http')) {
+      const storedFile = getStoredFile(src);
+      if (storedFile) {
+        actualSrc = storedFile;
+      } else {
+        const uploadedFile = currentPost?.uploadedFiles?.find(f => f.name === src || f.id === src);
+        if (uploadedFile?.url) {
+          actualSrc = uploadedFile.url;
+        }
+      }
+    }
+
+    const handleContextMenu = (e: React.MouseEvent) => {
+      e.preventDefault();
+      setContextMenuPosition({ x: e.clientX, y: e.clientY });
+      setShowContextMenu(true);
+    };
+
+    const closeContextMenu = () => {
+      setShowContextMenu(false);
+    };
+
+    const handleEdit = (type: 'caption' | 'alt') => {
+      setEditType(type);
+      setEditValue(type === 'caption' ? caption || '' : alt);
+      setShowEditModal(true);
+      closeContextMenu();
+    };
+
+    const handleWidthChange = (newWidth: 'normal' | 'wide' | 'full') => {
+      let newLine = originalLine;
+      if (newWidth !== 'normal') {
+        // Add width attribute to the image markdown
+        const match = newLine.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+        if (match) {
+          const [, altText, url] = match;
+          newLine = `![${altText}](${url}){width=${newWidth}}`;
+        }
+      } else {
+        // Remove width attribute
+        newLine = newLine.replace(/\{width=(wide|full)\}/, '');
+      }
+      onUpdate(newLine);
+      closeContextMenu();
+    };
+
+    const handleSaveEdit = () => {
+      let newLine = originalLine;
+      const match = newLine.match(/!\[([^\]]*)\]\(([^)]+)\)(\{width=(wide|full)\})?/);
+      
+      if (match && editType) {
+        const [, currentAlt, url, widthPart] = match;
+        if (editType === 'alt') {
+          newLine = `![${editValue}](${url})${widthPart || ''}`;
+        } else if (editType === 'caption') {
+          // For caption, we'll add it as a separate line after the image
+          const baseImage = `![${currentAlt}](${url})${widthPart || ''}`;
+          newLine = editValue ? `${baseImage}\n*${editValue}*` : baseImage;
+        }
+        onUpdate(newLine);
+      }
+      setShowEditModal(false);
+      setEditType(null);
+      setEditValue('');
+    };
+
+    const handleDelete = () => {
+      onUpdate('');
+      closeContextMenu();
+    };
+
+    const handleAddWatermark = () => {
+      // For now, we'll add a simple text overlay. In a real implementation,
+      // you might want to process the image with a watermark
+      alert('Watermark functionality would be implemented here. This would require image processing capabilities.');
+      closeContextMenu();
+    };
+
+    const getWidthClass = () => {
+      switch (width) {
+        case 'wide': return 'w-4/5 max-w-4xl';
+        case 'full': return 'w-full max-w-none';
+        default: return 'max-w-2xl';
+      }
+    };
+
+    return (
+      <>
+        <div className="mb-4 flex justify-center">
+          <div className={`relative ${getWidthClass()}`}>
+            <img 
+              src={actualSrc} 
+              alt={alt} 
+              className="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+              onContextMenu={handleContextMenu}
+              onLoad={() => console.log('Image loaded:', actualSrc.substring(0, 50) + '...')}
+              onError={(e) => {
+                console.error('Image failed to load:', actualSrc.substring(0, 50) + '...');
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            
+            {/* Context Menu Trigger Icon */}
+            <button
+              onClick={handleContextMenu}
+              className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all"
+              title="Image options"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        {caption && (
+          <p className="text-sm text-gray-600 text-center italic mb-4">{caption}</p>
+        )}
+
+        {/* Context Menu */}
+        {showContextMenu && (
+          <>
+            <div 
+              className="fixed inset-0 z-40" 
+              onClick={closeContextMenu}
+            />
+            <div 
+              className="fixed bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 min-w-[180px]"
+              style={{ 
+                left: Math.min(contextMenuPosition.x, window.innerWidth - 200),
+                top: Math.min(contextMenuPosition.y, window.innerHeight - 300)
+              }}
+            >
+              <button
+                onClick={() => handleEdit('caption')}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+              >
+                <span>📝</span><span>Edit caption</span>
+              </button>
+              <button
+                onClick={() => handleEdit('alt')}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+              >
+                <span>🏷️</span><span>Edit alt text</span>
+              </button>
+              <button
+                onClick={handleAddWatermark}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+              >
+                <span>💧</span><span>Add watermark</span>
+              </button>
+              <hr className="my-1"/>
+              <button
+                onClick={() => handleWidthChange('normal')}
+                className={`w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 ${width === 'normal' ? 'bg-blue-50 text-blue-600' : ''}`}
+              >
+                <span>📱</span><span>Normal width</span>
+              </button>
+              <button
+                onClick={() => handleWidthChange('wide')}
+                className={`w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 ${width === 'wide' ? 'bg-blue-50 text-blue-600' : ''}`}
+              >
+                <span>📐</span><span>Wide width</span>
+              </button>
+              <button
+                onClick={() => handleWidthChange('full')}
+                className={`w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 ${width === 'full' ? 'bg-blue-50 text-blue-600' : ''}`}
+              >
+                <span>🖼️</span><span>Full width</span>
+              </button>
+              <hr className="my-1"/>
+              <button
+                onClick={handleDelete}
+                className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 flex items-center space-x-2"
+              >
+                <span>🗑️</span><span>Delete image</span>
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* Edit Modal */}
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold mb-4">
+                Edit {editType === 'caption' ? 'Caption' : 'Alt Text'}
+              </h3>
+              <textarea
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                placeholder={editType === 'caption' ? 'Enter image caption...' : 'Enter alt text for accessibility...'}
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none h-24 focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <div className="flex space-x-3 mt-4">
+                <button
+                  onClick={handleSaveEdit}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setShowEditModal(false)}
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  // Process inline markdown
+  const processInlineMarkdown = (text: string) => {
+    let processedText = text;
+    
+    // Handle traditional markdown links [text](url)
+    processedText = processedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+      // Ensure URL has protocol
+      const processedUrl = url.startsWith('http') ? url : `https://${url}`;
+      return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
+    });
+    
+    // Handle simple link syntax [text|url] - easier to type
+    processedText = processedText.replace(/\[([^\]]+)\|([^\]]+)\]/g, (match, linkText, url) => {
+      // Ensure URL has protocol
+      const processedUrl = url.startsWith('http') ? url : `https://${url}`;
+      return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
+    });
+    
+    // Handle direct URLs (make them clickable)
+    processedText = processedText.replace(/(^|[\s])((https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?)/g, (match, prefix, url, protocol, domain, path) => {
+      const fullUrl = protocol ? url : `https://${url}`;
+      return `${prefix}<a href="${fullUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${url}</a>`;
+    });
+    
+    // Handle bold **text**
+    processedText = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Handle italic *text*
+    processedText = processedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    return processedText;
+  };
+
   const ContentPreview: React.FC<{ content: string }> = ({ content }) => {
+    const updateContentLine = (oldLine: string, newLine: string) => {
+      if (!currentPost) return;
+      
+      const updatedContent = content.replace(oldLine, newLine);
+      updateCurrentPost({ content: updatedContent });
+    };
+
+    const renderLine = (line: string, index: number) => {
+      if (line.trim() === '') return <br key={index} />;
+      
+      // Skip caption lines that are already handled by images
+      if (line.match(/^\*(.+)\*$/) && index > 0) {
+        const lines = content.split('\n');
+        const prevLine = lines[index - 1];
+        if (prevLine && prevLine.match(/!\[([^\]]*)\]\(([^)]+)\)/)) {
+          return null; // Skip this line as it's handled as a caption
+        }
+      }
+      
+      // Handle headers with inline markdown support
+      if (line.startsWith('# ')) {
+        const headerText = line.substring(2);
+        const processedText = processInlineMarkdown(headerText);
+        return <h1 key={index} className="text-2xl font-bold mb-4" dangerouslySetInnerHTML={{ __html: processedText }} />;
+      }
+      if (line.startsWith('## ')) {
+        const headerText = line.substring(3);
+        const processedText = processInlineMarkdown(headerText);
+        return <h2 key={index} className="text-xl font-semibold mb-3" dangerouslySetInnerHTML={{ __html: processedText }} />;
+      }
+      if (line.startsWith('### ')) {
+        const headerText = line.substring(4);
+        const processedText = processInlineMarkdown(headerText);
+        return <h3 key={index} className="text-lg font-medium mb-2" dangerouslySetInnerHTML={{ __html: processedText }} />;
+      }
+
+      // Handle dividers
+      if (line.trim() === '---' || line.trim() === '___') {
+        return <hr key={index} className="my-8 border-gray-300" />;
+      }
+
+      // Handle polls - [POLL:Question|Option1|Option2|Option3]
+      if (line.includes('[POLL:') && line.includes(']')) {
+        const startIndex = line.indexOf('[POLL:') + 6;
+        const endIndex = line.indexOf(']', startIndex);
+        if (endIndex > startIndex) {
+          const pollData = line.substring(startIndex, endIndex);
+          const parts = pollData.split('|');
+          if (parts.length >= 3) {
+            const question = parts[0];
+            const options = parts.slice(1);
+            const pollId = `poll-${index}-${question.slice(0, 10).replace(/\s+/g, '-')}`;
+            
+            return (
+              <PollComponent
+                key={index}
+                pollId={pollId}
+                question={question}
+                options={options}
+              />
+            );
+          }
+        }
+      }
+
+      // Handle code blocks - ```language\ncode\n```
+      if (line.startsWith('```')) {
+        const language = line.substring(3).trim();
+        const lines = content.split('\n');
+        let codeLines = [];
+        let endIndex = index + 1;
+        
+        // Find the closing ```
+        for (let i = index + 1; i < lines.length; i++) {
+          if (lines[i].trim() === '```') {
+            endIndex = i;
+            break;
+          }
+          codeLines.push(lines[i]);
+        }
+        
+        if (endIndex > index) {
+          const codeContent = codeLines.join('\n');
+          return (
+            <div key={index} className="my-4">
+              <div className="bg-gray-900 rounded-lg overflow-hidden">
+                {language && (
+                  <div className="bg-gray-800 px-4 py-2 text-sm text-gray-300 font-mono">
+                    {language}
+                  </div>
+                )}
+                <pre className="p-4 text-green-400 font-mono text-sm overflow-x-auto">
+                  <code>{codeContent}</code>
+                </pre>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      // Skip lines that are part of code blocks
+      if (isInsideCodeBlock(index, content)) {
+        return null;
+      }
+      
+      // Handle YouTube embeds
+      if (line.includes('[YOUTUBE:') && line.includes(']')) {
+        const startIndex = line.indexOf('[YOUTUBE:') + 9;
+        const endIndex = line.indexOf(']', startIndex);
+        if (endIndex > startIndex) {
+          const url = line.substring(startIndex, endIndex);
+          
+          let videoId = '';
+          if (url.includes('youtu.be/')) {
+            videoId = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
+          } else if (url.includes('youtube.com/watch?v=')) {
+            videoId = url.split('v=')[1].split('&')[0].split('#')[0];
+          }
+          
+          if (videoId) {
+            return <YouTubeEmbed key={index} url={url} videoId={videoId} />;
+          }
+        }
+      }
+      
+      // Handle Spotify embeds
+      if (line.includes('[SPOTIFY:') && line.includes(']')) {
+        const startIndex = line.indexOf('[SPOTIFY:') + 9;
+        const endIndex = line.indexOf(']', startIndex);
+        if (endIndex > startIndex) {
+          const url = line.substring(startIndex, endIndex);
+          
+          let itemType = 'track';
+          let itemId = '';
+          
+          if (url.includes('open.spotify.com/track/')) {
+            itemType = 'track';
+            itemId = url.split('/track/')[1].split('?')[0];
+          } else if (url.includes('open.spotify.com/album/')) {
+            itemType = 'album';
+            itemId = url.split('/album/')[1].split('?')[0];
+          } else if (url.includes('open.spotify.com/playlist/')) {
+            itemType = 'playlist';
+            itemId = url.split('/playlist/')[1].split('?')[0];
+          }
+          
+          if (itemId) {
+            return <SpotifyEmbed key={index} url={url} itemType={itemType} itemId={itemId} />;
+          }
+        }
+      }
+      
+      // Handle images - ![alt](url) with optional width and caption
+      const imageMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)(\{width=(wide|full)\})?/);
+      if (imageMatch) {
+        const [, alt, src, , widthValue] = imageMatch;
+        const width = widthValue as 'normal' | 'wide' | 'full' || 'normal';
+        
+        // Check if next line is a caption (italic text)
+        const lines = content.split('\n');
+        const nextLine = lines[index + 1];
+        const caption = nextLine && nextLine.match(/^\*(.+)\*$/) ? nextLine.match(/^\*(.+)\*$/)![1] : undefined;
+        
+        return (
+          <EnhancedImage
+            key={index}
+            src={src}
+            alt={alt}
+            caption={caption}
+            width={width}
+            originalLine={line}
+            onUpdate={(newLine) => updateContentLine(line, newLine)}
+          />
+        );
+      }
+      
+      // Handle videos - [VIDEO:url]
+      const videoMatch = line.match(/\[VIDEO:([^}]+)\]/);
+      if (videoMatch) {
+        const [, src] = videoMatch;
+        
+        // Resolve short filename to actual data URL if needed
+        let actualSrc = src;
+        if (!src.startsWith('data:') && !src.startsWith('http')) {
+          const storedFile = getStoredFile(src);
+          if (storedFile) {
+            actualSrc = storedFile;
+          } else {
+            const uploadedFile = currentPost?.uploadedFiles?.find(f => f.name === src || f.id === src);
+            if (uploadedFile?.url) {
+              actualSrc = uploadedFile.url;
+            }
+          }
+        }
+        
+        return (
+          <div key={index} className="mb-4">
+            <video 
+              controls 
+              className="max-w-full h-auto rounded-lg shadow-md"
+              style={{ maxHeight: '400px' }}
+            >
+              <source src={actualSrc} />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        );
+      }
+      
+      // Handle audio - [AUDIO:url]
+      const audioMatch = line.match(/\[AUDIO:([^}]+)\]/);
+      if (audioMatch) {
+        const [, src] = audioMatch;
+        
+        // Resolve short filename to actual data URL if needed
+        let actualSrc = src;
+        if (!src.startsWith('data:') && !src.startsWith('http')) {
+          const storedFile = getStoredFile(src);
+          if (storedFile) {
+            actualSrc = storedFile;
+          } else {
+            const uploadedFile = currentPost?.uploadedFiles?.find(f => f.name === src || f.id === src);
+            if (uploadedFile?.url) {
+              actualSrc = uploadedFile.url;
+            }
+          }
+        }
+        
+        return (
+          <div key={index} className="mb-4">
+            <audio 
+              controls 
+              className="w-full rounded-lg shadow-md"
+            >
+              <source src={actualSrc} />
+              Your browser does not support the audio tag.
+            </audio>
+          </div>
+        );
+      }
+      
+      // Handle PDFs - [PDF:url]
+      const pdfMatch = line.match(/\[PDF:([^}]+)\]/);
+      if (pdfMatch) {
+        const [, src] = pdfMatch;
+        
+        // Resolve short filename to actual data URL if needed
+        let actualSrc = src;
+        if (!src.startsWith('data:') && !src.startsWith('http')) {
+          const storedFile = getStoredFile(src);
+          if (storedFile) {
+            actualSrc = storedFile;
+          } else {
+            const uploadedFile = currentPost?.uploadedFiles?.find(f => f.name === src || f.id === src);
+            if (uploadedFile?.url) {
+              actualSrc = uploadedFile.url;
+            }
+          }
+        }
+        
+        return (
+          <div key={index} className="mb-4 p-4 border rounded-lg bg-gray-50">
+            <p className="text-sm text-gray-600 mb-2">📄 PDF Document</p>
+            <a 
+              href={actualSrc} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              Open PDF in new tab
+            </a>
+          </div>
+        );
+      }
+      
+      // Handle other files - [FILE:url](name)
+      const fileMatch = line.match(/\[FILE:([^}]+)\]\(([^)]+)\)/);
+      if (fileMatch) {
+        const [, src, name] = fileMatch;
+        
+        // Resolve short filename to actual data URL if needed
+        let actualSrc = src;
+        if (!src.startsWith('data:') && !src.startsWith('http')) {
+          const storedFile = getStoredFile(src);
+          if (storedFile) {
+            actualSrc = storedFile;
+          } else {
+            const uploadedFile = currentPost?.uploadedFiles?.find(f => f.name === src || f.id === src);
+            if (uploadedFile?.url) {
+              actualSrc = uploadedFile.url;
+            }
+          }
+        }
+        return (
+          <div key={index} className="mb-4 p-4 border rounded-lg bg-gray-50">
+            <p className="text-sm text-gray-600 mb-2">📎 File Attachment</p>
+            <a 
+              href={actualSrc} 
+              download={name}
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              Download {name}
+            </a>
+          </div>
+        );
+      }
+      
+      // Handle bold text
+      if (line.startsWith('**') && line.endsWith('**')) {
+        return <p key={index} className="font-bold mb-2">{line.slice(2, -2)}</p>;
+      }
+      
+      // Handle regular paragraphs with inline markdown
+      return (
+        <p 
+          key={index} 
+          className="mb-2" 
+          dangerouslySetInnerHTML={{ __html: processInlineMarkdown(line) }}
+        />
+      );
+    };
+
     return (
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <h3 className="text-lg font-semibold mb-4 text-gray-800">Preview</h3>
-        <div className="prose prose-gray max-w-none">
-          {renderContent(content)}
+        <div className="prose max-w-none">
+          {content.split('\n').map((line, index) => renderLine(line, index))}
         </div>
       </div>
     );
@@ -617,20 +1494,18 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-lime-25 to-yellow-25 py-20">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading...</p>
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-yellow-25 to-orange-25 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading blog manager...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-lime-25 to-yellow-25 py-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-25 to-orange-25">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
@@ -653,18 +1528,69 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
           </button>
         </div>
 
+        {/* Error Message */}
         {error && (
           <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-lg">
             <p className="text-red-800">{error}</p>
-            <button 
+            <button
               onClick={() => setError(null)}
-              className="text-red-600 hover:text-red-800 text-sm mt-2"
+              className="text-red-600 hover:text-red-800 text-sm underline ml-2"
             >
               Dismiss
             </button>
           </div>
         )}
 
+        {/* Newsletter Subscribers Section */}
+        <div className="mb-8 bg-white rounded-2xl p-6 shadow-lg border border-yellow-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <Mail className="w-6 h-6 text-blue-600" />
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">Newsletter Subscribers</h2>
+                <p className="text-gray-600">Manage your email subscriber list</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 text-gray-600">
+                <Users className="w-5 h-5" />
+                <span className="font-semibold">{subscribers.length}</span>
+                <span>subscribers</span>
+              </div>
+              
+              {subscribers.length > 0 && (
+                <button
+                  onClick={exportSubscribers}
+                  className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Export CSV</span>
+                </button>
+              )}
+            </div>
+          </div>
+          
+          {subscribers.length === 0 ? (
+            <p className="text-gray-500 text-center py-4">No subscribers yet. Newsletter signup will appear here.</p>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-32 overflow-y-auto">
+              {subscribers.slice(0, 6).map((subscriber) => (
+                <div key={subscriber.id} className="flex items-center space-x-2 text-sm">
+                  <div className={`w-2 h-2 rounded-full ${subscriber.is_active ? 'bg-green-400' : 'bg-gray-400'}`}></div>
+                  <span className="text-gray-700 truncate">{subscriber.email}</span>
+                </div>
+              ))}
+              {subscribers.length > 6 && (
+                <div className="text-sm text-gray-500">
+                  +{subscribers.length - 6} more...
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Posts List */}
           <div className="lg:col-span-1">
@@ -728,6 +1654,62 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
             </div>
           </div>
 
+          {/* Template Selection Modal */}
+          {showTemplates && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-2xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Choose a Template</h2>
+                
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <button
+                    onClick={() => {
+                      setShowTemplates(false);
+                      setIsEditing(true);
+                    }}
+                    className="p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-yellow-400 transition-colors text-center"
+                  >
+                    <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <h3 className="font-semibold text-gray-800 mb-2">Start Blank</h3>
+                    <p className="text-gray-600 text-sm">Begin with an empty post</p>
+                  </button>
+                  
+                  {templates.map((template) => (
+                    <div key={template.id} className="border border-gray-200 rounded-lg p-4 hover:border-yellow-300 transition-colors">
+                      <h3 className="font-semibold text-gray-800 mb-2">{template.title}</h3>
+                      <p className="text-gray-600 text-sm mb-3">{template.excerpt}</p>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => createFromTemplate(template)}
+                          className="flex-1 bg-yellow-600 text-white px-3 py-2 rounded text-sm hover:bg-yellow-700 transition-colors"
+                        >
+                          Use Template
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(template.content);
+                            alert('Template copied to clipboard!');
+                          }}
+                          className="px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition-colors"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowTemplates(false)}
+                    className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Editor/Preview */}
           <div className="lg:col-span-2">
             {currentPost ? (
@@ -771,101 +1753,343 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                   </div>
 
                   {isEditing && (
-                    <div className="grid md:grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                        <input
-                          type="text"
-                          value={currentPost.title}
-                          onChange={(e) => updateCurrentPost({ title: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                        <select
-                          value={currentPost.category}
-                          onChange={(e) => updateCurrentPost({ category: e.target.value as any })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                        >
-                          <option value="molecule-to-machine">Molecule To Machine</option>
-                          <option value="grace-to-life">From Grace To Life</option>
-                          <option value="transcend-loneliness">Transcend Loneliness</option>
-                          <option value="story-time">Story Time</option>
-                        </select>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select
-                          value={currentPost.status}
-                          onChange={(e) => updateCurrentPost({ status: e.target.value as any })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                        >
-                          <option value="draft">Draft</option>
-                          <option value="published">Published</option>
-                          <option value="scheduled">Scheduled</option>
-                        </select>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Premium</label>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => updateCurrentPost({ isPremium: false })}
-                            className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                              !currentPost.isPremium
-                                ? 'bg-green-100 text-green-700 border-2 border-green-300'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                          >
-                            <Unlock className="w-4 h-4" />
-                            <span>Free</span>
-                          </button>
-                          <button
-                            onClick={() => updateCurrentPost({ isPremium: true })}
-                            className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                              currentPost.isPremium
-                                ? 'bg-purple-100 text-purple-700 border-2 border-purple-300'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                          >
-                            <Lock className="w-4 h-4" />
-                            <span>Premium</span>
-                          </button>
+                    <div className="space-y-6 mb-6">
+                      {/* Main Post Fields */}
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                          <input
+                            type="text"
+                            value={currentPost.title}
+                            onChange={(e) => updateCurrentPost({ title: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                            placeholder="Enter post title..."
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Subtitle</label>
+                          <input
+                            type="text"
+                            value={currentPost.subtitle || ''}
+                            onChange={(e) => updateCurrentPost({ subtitle: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                            placeholder="Enter subtitle..."
+                          />
                         </div>
                       </div>
-                    </div>
-                  )}
 
-                  {/* Excerpt */}
-                  {isEditing && (
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Excerpt</label>
-                      <textarea
-                        value={currentPost.excerpt}
-                        onChange={(e) => updateCurrentPost({ excerpt: e.target.value })}
-                        rows={2}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                        placeholder="Brief description of the post..."
-                      />
-                    </div>
-                  )}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Excerpt</label>
+                        <textarea
+                          value={currentPost.excerpt}
+                          onChange={(e) => updateCurrentPost({ excerpt: e.target.value })}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                          placeholder="Brief excerpt or summary..."
+                        />
+                      </div>
 
-                  {/* Tags */}
-                  {isEditing && (
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Tags (comma-separated)</label>
-                      <input
-                        type="text"
-                        value={currentPost.tags.join(', ')}
-                        onChange={(e) => updateCurrentPost({ 
-                          tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag) 
-                        })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                        placeholder="ai, chemistry, writing"
-                      />
+                      {/* Post Settings Row */}
+                      <div className="grid md:grid-cols-4 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                          <select
+                            value={currentPost.category}
+                            onChange={(e) => updateCurrentPost({ category: e.target.value as any })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                          >
+                            <option value="molecule-to-machine">Molecule to Machine</option>
+                            <option value="grace-to-life">Grace to Life</option>
+                            <option value="transcend-loneliness">Transcend Loneliness</option>
+                            <option value="other-story-time">Other Story Time</option>
+                          </select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
+                          <select
+                            value={currentPost.language || 'en'}
+                            onChange={(e) => updateCurrentPost({ language: e.target.value as any })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                          >
+                            <option value="en">🇺🇸 English</option>
+                            <option value="lt">🇱🇹 Lithuanian</option>
+                            <option value="fr">🇫🇷 French</option>
+                          </select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                          <select
+                            value={currentPost.status}
+                            onChange={(e) => updateCurrentPost({ status: e.target.value as any })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                          >
+                            <option value="draft">📝 Draft</option>
+                            <option value="published">🌟 Published</option>
+                            <option value="scheduled">⏰ Scheduled</option>
+                          </select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Premium</label>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => updateCurrentPost({ isPremium: false })}
+                              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                                !currentPost.isPremium
+                                  ? 'bg-green-100 text-green-800 border border-green-300'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              }`}
+                            >
+                              <Unlock className="w-4 h-4" />
+                              <span>Free</span>
+                            </button>
+                            <button
+                              onClick={() => updateCurrentPost({ isPremium: true })}
+                              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                                currentPost.isPremium
+                                  ? 'bg-purple-100 text-purple-800 border border-purple-300'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              }`}
+                            >
+                              <Lock className="w-4 h-4" />
+                              <span>Premium</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Tags and Featured Image */}
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                          <input
+                            type="text"
+                            value={currentPost.tags.join(', ')}
+                            onChange={(e) => updateCurrentPost({ 
+                              tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                            placeholder="tag1, tag2, tag3..."
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Featured Image URL</label>
+                          <input
+                            type="url"
+                            value={currentPost.featuredImage || ''}
+                            onChange={(e) => updateCurrentPost({ featuredImage: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                            placeholder="https://example.com/image.jpg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Insights Section */}
+                      <div className="border border-gray-200 rounded-lg p-4">
+                        <h4 className="text-sm font-medium text-gray-700 mb-3">📝 My Insights Section</h4>
+                        <div className="grid md:grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Emoji</label>
+                            <input
+                              type="text"
+                              value={currentPost.insights?.emoji || ''}
+                              onChange={(e) => updateCurrentPost({ 
+                                insights: { ...currentPost.insights, emoji: e.target.value } as any
+                              })}
+                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-yellow-500"
+                              placeholder="💡"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Insight Title</label>
+                            <input
+                              type="text"
+                              value={currentPost.insights?.title || ''}
+                              onChange={(e) => updateCurrentPost({ 
+                                insights: { ...currentPost.insights, title: e.target.value } as any
+                              })}
+                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-yellow-500"
+                              placeholder="My Insight:"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">Insight Content</label>
+                            <textarea
+                              value={currentPost.insights?.content || ''}
+                              onChange={(e) => updateCurrentPost({ 
+                                insights: { ...currentPost.insights, content: e.target.value } as any
+                              })}
+                              rows={2}
+                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-yellow-500"
+                              placeholder="Your insight here..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* File Upload Section */}
+                      <div className="border border-gray-200 rounded-lg p-4">
+                        <h4 className="text-sm font-medium text-gray-700 mb-3">📎 File Uploads (Insert at Cursor)</h4>
+                        
+                        {/* How to Add Media & Format Content Instructions */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                          <h5 className="text-sm font-semibold text-blue-800 mb-3">📝 How to Add Media & Format Content:</h5>
+                          <div className="space-y-2 text-sm text-blue-700">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">📺</span>
+                              <span><strong>YouTube:</strong> <code className="bg-blue-100 px-1 rounded">[YOUTUBE:https://youtu.be/VIDEO_ID]</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">🎵</span>
+                              <span><strong>Spotify:</strong> <code className="bg-blue-100 px-1 rounded">[SPOTIFY:https://open.spotify.com/track/TRACK_ID]</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">🖼️</span>
+                              <span><strong>Images:</strong> <code className="bg-blue-100 px-1 rounded">![description](https://image-url.com/image.jpg)</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">🔗</span>
+                              <span><strong>Links:</strong> <code className="bg-blue-100 px-1 rounded">[link text](https://url.com)</code> or <code className="bg-blue-100 px-1 rounded">[text|url.com]</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">🔗</span>
+                              <span><strong>Files:</strong> Drag & drop files below or use upload button</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">📊</span>
+                              <span><strong>Polls:</strong> <code className="bg-blue-100 px-1 rounded">[POLL:Question?|Option 1|Option 2|Option 3]</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">💻</span>
+                              <span><strong>Code:</strong> <code className="bg-blue-100 px-1 rounded">```javascript<br/>code here<br/>```</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">➖</span>
+                              <span><strong>Divider:</strong> <code className="bg-blue-100 px-1 rounded">---</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">✍️</span>
+                              <span><strong>Text:</strong> <code className="bg-blue-100 px-1 rounded"># Heading, ## Subheading, **bold**, *italic*</code></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-3">
+                            <input
+                              type="file"
+                              multiple
+                              onChange={(e) => {
+                                const files = Array.from(e.target.files || []);
+                                if (files.length > 0) {
+                                  handleFileUpload(files);
+                                }
+                              }}
+                              className="hidden"
+                              id="file-upload"
+                              accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
+                            />
+                            <label
+                              htmlFor="file-upload"
+                              className={`cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium transition-colors ${
+                                isLoading
+                                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+                              }`}
+                            >
+                              {isLoading ? '⏳ Processing...' : '📁 Upload & Insert'}
+                            </label>
+                            
+                            {/* Cleanup button for fixing existing posts with long data URLs */}
+                            <button
+                              onClick={cleanupLongDataUrls}
+                              className="inline-flex items-center px-4 py-2 border border-orange-300 rounded-lg text-sm font-medium bg-orange-50 hover:bg-orange-100 text-orange-700 transition-colors"
+                              title="Clean up existing posts that have very long image URLs"
+                            >
+                              🧹 Clean Content
+                            </button>
+                            
+                            {/* Test button for debugging */}
+                            <button
+                              onClick={() => {
+                                console.log('Test button clicked');
+                                console.log('Current post:', currentPost?.title);
+                                console.log('TextareaRef current:', !!textareaRef.current);
+                                if (textareaRef.current) {
+                                  console.log('Cursor position:', textareaRef.current.selectionStart);
+                                }
+                                insertAtCursor('🧪 Test insertion at cursor!\n');
+                              }}
+                              className="px-3 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700"
+                              disabled={!currentPost}
+                            >
+                              🧪 Test Insert
+                            </button>
+                            
+                            {/* Debug content button */}
+                            <button
+                              onClick={() => {
+                                if (currentPost) {
+                                  console.log('=== CONTENT DEBUG ===');
+                                  console.log('Content length:', currentPost.content.length);
+                                  console.log('Content preview (first 200 chars):', currentPost.content.substring(0, 200));
+                                  console.log('Content preview (last 200 chars):', currentPost.content.substring(-200));
+                                  console.log('Contains images:', currentPost.content.includes('!['));
+                                  console.log('All image matches:', currentPost.content.match(/!\[.*?\]\(.*?\)/g));
+                                  console.log('Uploaded files count:', currentPost.uploadedFiles?.length || 0);
+                                  alert(`Content length: ${currentPost.content.length}\nContains images: ${currentPost.content.includes('![')}\nCheck console for details`);
+                                } else {
+                                  alert('No post selected');
+                                }
+                              }}
+                              className="px-3 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700"
+                              disabled={!currentPost}
+                            >
+                              🔍 Debug Content
+                            </button>
+                            
+                            <span className="text-xs text-gray-500">
+                              Images compressed • Short filenames • Persistent storage
+                            </span>
+                          </div>
+                          
+                          {/* Instructions */}
+                          <div className="bg-blue-50 rounded p-2">
+                            <p className="text-xs text-blue-700">
+                              💡 <strong>Tip:</strong> Click in the content area where you want to insert the image, then upload your file. 
+                              Images are automatically compressed and given short names like "a1b2c3.jpg" for better performance.<br/>
+                              📝 <strong>Caption:</strong> Add a caption by writing italic text on the next line after your image: *Your caption here*
+                            </p>
+                          </div>
+                          
+                          {/* Show uploaded files */}
+                          {currentPost.uploadedFiles && currentPost.uploadedFiles.length > 0 && (
+                            <div className="bg-gray-50 rounded p-3">
+                              <p className="text-xs font-medium text-gray-600 mb-2">
+                                📚 Uploaded Files ({currentPost.uploadedFiles.length}):
+                              </p>
+                              <div className="space-y-1 max-h-24 overflow-y-auto">
+                                {currentPost.uploadedFiles.map((file) => (
+                                  <div key={file.id} className="flex items-center justify-between text-xs">
+                                    <span className="text-gray-700 flex items-center space-x-2">
+                                      <span className="font-mono bg-gray-200 px-1 rounded">{file.name}</span>
+                                      <span>({(file.size / 1024).toFixed(1)}KB)</span>
+                                      {file.type.startsWith('image/') && <span className="text-green-600">📷 compressed</span>}
+                                    </span>
+                                    <span className="text-gray-500 truncate max-w-32" title={file.originalName}>
+                                      {file.originalName}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -876,78 +2100,9 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                     <ContentPreview content={currentPost.content} />
                   ) : isEditing ? (
                     <div>
-                     {/* Instructions */}
-                     <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                       <h4 className="font-semibold text-blue-800 mb-2">📝 How to Add Media & Format Content:</h4>
-                       <div className="text-sm text-blue-700 space-y-1">
-                         <p><strong>📺 YouTube:</strong> <code>[YOUTUBE:https://youtu.be/VIDEO_ID]</code></p>
-                         <p><strong>🎵 Spotify:</strong> <code>[SPOTIFY:https://open.spotify.com/track/TRACK_ID]</code></p>
-                         <p><strong>🖼️ Images:</strong> <code>![description](https://image-url.com/image.jpg)</code></p>
-                         <p><strong>📄 Files:</strong> Drag & drop files below or use upload button</p>
-                         <p><strong>✍️ Text:</strong> # Heading, ## Subheading, **bold**, *italic*</p>
-                       </div>
-                     </div>
-
-                     {/* Media Upload Area */}
-                     <div className="mb-4">
-                       <div 
-                         className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-                           isLoading 
-                             ? 'border-blue-400 bg-blue-50' 
-                             : 'border-gray-300 hover:border-blue-400'
-                         }`}
-                         onDragOver={(e) => {
-                           e.preventDefault();
-                           e.currentTarget.classList.add('border-blue-400', 'bg-blue-50');
-                         }}
-                         onDragLeave={(e) => {
-                           e.preventDefault();
-                           e.currentTarget.classList.remove('border-blue-400', 'bg-blue-50');
-                         }}
-                         onDrop={(e) => {
-                           e.preventDefault();
-                           e.currentTarget.classList.remove('border-blue-400', 'bg-blue-50');
-                           const files = Array.from(e.dataTransfer.files);
-                           handleFileUpload(files);
-                         }}
-                       >
-                         <div className="space-y-2">
-                           <div className="text-4xl">📎</div>
-                           <p className="text-gray-600">
-                             {isLoading 
-                               ? 'Uploading files to Supabase...' 
-                               : 'Drag & drop files here or click to upload'
-                             }
-                           </p>
-                           <p className="text-sm text-gray-500">Supports: Images, Videos, PDFs, Audio files</p>
-                           <input
-                             type="file"
-                             multiple
-                             accept="image/*,video/*,audio/*,.pdf,.doc,.docx"
-                             onChange={(e) => {
-                               if (e.target.files) {
-                                 handleFileUpload(Array.from(e.target.files));
-                               }
-                             }}
-                             className="hidden"
-                             id="file-upload"
-                           />
-                           <label
-                             htmlFor="file-upload"
-                             className={`inline-block px-4 py-2 rounded-lg cursor-pointer transition-colors ${
-                               isLoading
-                                 ? 'bg-gray-400 cursor-not-allowed'
-                                 : 'bg-blue-600 hover:bg-blue-700 text-white'
-                             }`}
-                           >
-                             {isLoading ? 'Uploading...' : 'Choose Files'}
-                           </label>
-                         </div>
-                       </div>
-                     </div>
-
                       <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
                       <textarea
+                        ref={textareaRef}
                         value={currentPost.content}
                         onChange={(e) => updateCurrentPost({ content: e.target.value })}
                         rows={20}
