@@ -1700,6 +1700,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [newsletterMessage, setNewsletterMessage] = useState('');
+  const [showMorePosts, setShowMorePosts] = useState(false);
 
   // Function to fetch YouTube title
   const fetchYouTubeTitle = async (videoId: string): Promise<string> => {
@@ -2205,6 +2206,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
         document.body.removeChild(passwordDialog);
         // Clear failed attempts on success
         localStorage.removeItem(attemptsKey);
+        setIsAuthenticated(true);
         onManageBlog();
       } else if (password !== '') {
         const newAttempts = attempts + 1;
@@ -2363,12 +2365,23 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             >
               ← Back to Preview
             </button>
-            <button 
-              onClick={handleAuthentication}
-              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              {t.blogs.manageBlog}
-            </button>
+            
+            {/* Show "All Blogs" for visitors, "Manage Posts" for authenticated users */}
+            {isAuthenticated ? (
+              <button 
+                onClick={handleAuthentication}
+                className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                {t.blogs.manageBlog}
+              </button>
+            ) : (
+              <button 
+                onClick={() => setShowAllBlogs(true)}
+                className="px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+              >
+                {t.blogs.allBlogs}
+              </button>
+            )}
           </div>
 
           {/* Blog Posts List */}
@@ -2392,10 +2405,15 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               </div>
             ) : (
               <div className="space-y-8">
-                {posts
-                  .filter(post => post.status === 'published')
-                  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-                  .map((post) => (
+                {(() => {
+                  const publishedPosts = posts
+                    .filter(post => post.status === 'published')
+                    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+                  
+                  // Show only 3 posts initially for visitors, all for authenticated users
+                  const postsToShow = isAuthenticated || showMorePosts ? publishedPosts : publishedPosts.slice(0, 3);
+                  
+                  return postsToShow.map((post) => (
                     <article key={post.id} className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 hover:shadow-xl transition-shadow">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">

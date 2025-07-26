@@ -1150,11 +1150,17 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       return `${prefix}<a href="${fullUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${url}</a>`;
     });
     
+    // Handle bold+italic ***text*** (must come before **text** and *text*)
+    processedText = processedText.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    
     // Handle bold **text**
     processedText = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     // Handle italic *text*
     processedText = processedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Handle underline _text_
+    processedText = processedText.replace(/_(.*?)_/g, '<u>$1</u>');
     
     return processedText;
   };
@@ -1470,6 +1476,28 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       // Handle bold text
       if (line.startsWith('**') && line.endsWith('**')) {
         return <p key={index} className="font-bold mb-2">{line.slice(2, -2)}</p>;
+      }
+      
+      // Handle bullet points
+      if (line.startsWith('- ')) {
+        const content = line.substring(2);
+        return (
+          <div key={index} className="flex items-start mb-2">
+            <span className="inline-block w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            <span dangerouslySetInnerHTML={{ __html: processInlineMarkdown(content) }} />
+          </div>
+        );
+      }
+      
+      // Handle empty bullet points
+      if (line.startsWith('-- ')) {
+        const content = line.substring(3);
+        return (
+          <div key={index} className="flex items-start mb-2">
+            <span className="inline-block w-2 h-2 border border-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            <span dangerouslySetInnerHTML={{ __html: processInlineMarkdown(content) }} />
+          </div>
+        );
       }
       
       // Handle regular paragraphs with inline markdown
@@ -1973,7 +2001,11 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                             </div>
                             <div className="flex items-center space-x-2">
                               <span className="text-lg">✍️</span>
-                              <span><strong>Text:</strong> <code className="bg-blue-100 px-1 rounded"># Heading, ## Subheading, **bold**, *italic*</code></span>
+                              <span><strong>Text:</strong> <code className="bg-blue-100 px-1 rounded"># Heading, ## Subheading, **bold**, *italic*, ***bold+italic***, _underline_</code></span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg">•</span>
+                              <span><strong>Lists:</strong> <code className="bg-blue-100 px-1 rounded">- filled bullet, -- empty bullet</code></span>
                             </div>
                           </div>
                         </div>
