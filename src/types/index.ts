@@ -12,7 +12,7 @@ export interface BlogPost {
   status: 'draft' | 'published' | 'scheduled';
   featuredImage?: string;
   subtitle?: string;
-  language?: 'en' | 'lt' | 'fr';
+  language?: 'en' | 'lt' | 'fr' | 'en,lt' | 'en,fr' | 'lt,fr' | 'en,lt,fr';
   insights?: {
     title: string;
     content: string;

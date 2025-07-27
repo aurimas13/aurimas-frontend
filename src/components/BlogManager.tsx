@@ -360,9 +360,16 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
 
   const saveToLocalStorage = (postsToSave: BlogPost[]) => {
     try {
+      console.log('🔄 Saving posts to localStorage:', postsToSave.length, 'posts');
+      postsToSave.forEach((post, index) => {
+        if (post.uploadedFiles && post.uploadedFiles.length > 0) {
+          console.log(`💾 Post ${index} (${post.title}) saving with ${post.uploadedFiles.length} files:`, post.uploadedFiles);
+        }
+      });
       localStorage.setItem('blog-posts', JSON.stringify(postsToSave));
+      console.log('✅ Posts saved successfully to localStorage');
     } catch (error) {
-      console.error('Error saving to localStorage:', error);
+      console.error('❌ Error saving posts:', error);
     }
   };
 
@@ -1835,16 +1842,45 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
-                          <select
-                            value={currentPost.language || 'en'}
-                            onChange={(e) => updateCurrentPost({ language: e.target.value as any })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                          >
-                            <option value="en">🇺🇸 English</option>
-                            <option value="lt">🇱🇹 Lithuanian</option>
-                            <option value="fr">🇫🇷 French</option>
-                          </select>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Languages</label>
+                          <div className="space-y-2">
+                            {[
+                              { code: 'en', label: '🇺🇸 English' },
+                              { code: 'lt', label: '🇱🇹 Lithuanian' },
+                              { code: 'fr', label: '🇫🇷 French' }
+                            ].map((lang) => {
+                              const currentLanguages = currentPost.language ? currentPost.language.split(',') : ['en'];
+                              const isSelected = currentLanguages.includes(lang.code);
+                              
+                              return (
+                                <label key={lang.code} className="flex items-center space-x-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={(e) => {
+                                      const currentLanguages = currentPost.language ? currentPost.language.split(',') : ['en'];
+                                      let newLanguages;
+                                      
+                                      if (e.target.checked) {
+                                        newLanguages = [...currentLanguages, lang.code];
+                                      } else {
+                                        newLanguages = currentLanguages.filter(l => l !== lang.code);
+                                      }
+                                      
+                                      // Ensure at least one language is selected
+                                      if (newLanguages.length === 0) {
+                                        newLanguages = ['en'];
+                                      }
+                                      
+                                      updateCurrentPost({ language: newLanguages.join(',') as any });
+                                    }}
+                                    className="rounded border-gray-300 text-yellow-600 focus:ring-yellow-500"
+                                  />
+                                  <span className="text-sm">{lang.label}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
                         </div>
                         
                         <div>
@@ -1859,6 +1895,22 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                             <option value="scheduled">⏰ Scheduled</option>
                           </select>
                         </div>
+                        
+                        {/* Scheduled Date/Time Input */}
+                        {currentPost.status === 'scheduled' && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Schedule for</label>
+                            <input
+                              type="datetime-local"
+                              value={currentPost.publishedAt ? new Date(currentPost.publishedAt).toISOString().slice(0, 16) : ''}
+                              onChange={(e) => updateCurrentPost({ 
+                                publishedAt: e.target.value ? new Date(e.target.value).toISOString() : new Date().toISOString()
+                              })}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                              min={new Date().toISOString().slice(0, 16)}
+                            />
+                          </div>
+                        )}
                         
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">Premium</label>
@@ -1899,6 +1951,12 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                             onChange={(e) => updateCurrentPost({ 
                               tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
                             })}
+                            onKeyDown={(e) => {
+                              // Allow comma to be typed
+                              if (e.key === ',') {
+                                e.stopPropagation();
+                              }
+                            }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                             placeholder="tag1, tag2, tag3..."
                           />

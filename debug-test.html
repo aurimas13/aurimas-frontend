@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Debug Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .debug-output { background: #f5f5f5; padding: 10px; border-radius: 4px; margin: 10px 0; }
+        .error { color: red; }
+        .success { color: green; }
+        .warning { color: orange; }
+        button { padding: 10px 20px; margin: 5px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #005a87; }
+        .test-results { background: #f9f9f9; border-left: 4px solid #007cba; padding: 15px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Image System Debug Tool</h1>
+    <p>Use this tool to test your image storage and retrieval system.</p>
+
+    <div class="debug-section">
+        <h2>📊 Current Storage Status</h2>
+        <button onclick="checkStorage()">Check localStorage</button>
+        <div id="storage-results" class="debug-output"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🖼️ Test Image Upload</h2>
+        <input type="file" id="test-image" accept="image/*">
+        <button onclick="testImageUpload()">Upload & Store Test Image</button>
+        <div id="upload-results" class="debug-output"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🧪 Create Test Post</h2>
+        <button onclick="createTestPost()">Create Test Post with Image</button>
+        <div id="post-results" class="debug-output"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🔍 Image Resolution Test</h2>
+        <input type="text" id="image-filename" placeholder="Enter image filename (e.g., test123.jpg)">
+        <button onclick="testImageResolution()">Test Image Resolution</button>
+        <div id="resolution-results" class="debug-output"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🗑️ Clear All Data</h2>
+        <button onclick="clearAllData()" style="background: #dc3545;">Clear All Test Data</button>
+        <div id="clear-results" class="debug-output"></div>
+    </div>
+
+    <script>
+        // Helper functions
+        function log(message, type = 'info') {
+            console.log(message);
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : '';
+            return `<div class="${className}">${message}</div>`;
+        }
+
+        function getStoredFile(shortName) {
+            try {
+                const stored = localStorage.getItem('blog-files') || '{}';
+                const files = JSON.parse(stored);
+                return files[shortName] || null;
+            } catch (error) {
+                console.error('Error retrieving stored file:', error);
+                return null;
+            }
+        }
+
+        function storeCompressedFile(file, shortName) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    const maxWidth = 1200;
+                    const maxHeight = 800;
+                    let { width, height } = img;
+                    
+                    // Calculate new dimensions
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    // Store in localStorage
+                    try {
+                        const stored = JSON.parse(localStorage.getItem('blog-files') || '{}');
+                        stored[shortName] = compressedDataUrl;
+                        localStorage.setItem('blog-files', JSON.stringify(stored));
+                        resolve(compressedDataUrl);
+                    } catch (error) {
+                        console.error('Error storing file:', error);
+                        resolve(null);
+                    }
+                };
+                
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function generateShortName() {
+            return Math.random().toString(36).substring(2, 8) + '.jpg';
+        }
+
+        // Main functions
+        function checkStorage() {
+            const results = document.getElementById('storage-results');
+            let output = '';
+            
+            try {
+                const posts = JSON.parse(localStorage.getItem('blog-posts') || '[]');
+                const files = JSON.parse(localStorage.getItem('blog-files') || '{}');
+                
+                output += log(`📝 Posts found: ${posts.length}`, 'info');
+                output += log(`🗂️ Files found: ${Object.keys(files).length}`, 'info');
+                
+                if (posts.length > 0) {
+                    output += log('\\n📄 Posts details:', 'info');
+                    posts.forEach((post, index) => {
+                        output += log(`  ${index + 1}. "${post.title}" (${post.id})`, 'info');
+                        if (post.uploadedFiles && post.uploadedFiles.length > 0) {
+                            output += log(`     📎 Has ${post.uploadedFiles.length} uploaded files`, 'success');
+                        }
+                        
+                        // Check for images in content
+                        const imageMatches = post.content.match(/!\\[.*?\\]\\((.*?)\\)/g) || [];
+                        if (imageMatches.length > 0) {
+                            output += log(`     🖼️ Images in content: ${imageMatches.length}`, 'info');
+                            imageMatches.forEach((match, imgIndex) => {
+                                const src = match.match(/!\\[.*?\\]\\((.*?)\\)/)?.[1];
+                                const storedFile = getStoredFile(src);
+                                if (storedFile) {
+                                    output += log(`       ✅ ${src} - Found in storage`, 'success');
+                                } else {
+                                    output += log(`       ❌ ${src} - NOT found in storage`, 'error');
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                if (Object.keys(files).length > 0) {
+                    output += log('\\n🗂️ Files in storage:', 'info');
+                    Object.keys(files).forEach(filename => {
+                        const dataUrl = files[filename];
+                        const sizeKB = Math.round((dataUrl.length * 3/4) / 1024);
+                        output += log(`  📄 ${filename} (${sizeKB} KB)`, 'info');
+                    });
+                }
+                
+                if (posts.length === 0 && Object.keys(files).length === 0) {
+                    output += log('⚠️ No data found. Create a test post to begin debugging.', 'warning');
+                }
+                
+            } catch (error) {
+                output += log(`❌ Error checking storage: ${error.message}`, 'error');
+            }
+            
+            results.innerHTML = output;
+        }
+
+        function testImageUpload() {
+            const fileInput = document.getElementById('test-image');
+            const results = document.getElementById('upload-results');
+            
+            if (!fileInput.files[0]) {
+                results.innerHTML = log('⚠️ Please select an image file first.', 'warning');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const shortName = generateShortName();
+            
+            results.innerHTML = log('📤 Uploading and compressing image...', 'info');
+            
+            storeCompressedFile(file, shortName).then((dataUrl) => {
+                if (dataUrl) {
+                    results.innerHTML = log(`✅ Image stored successfully as: ${shortName}`, 'success') +
+                                     log(`📊 Size: ${Math.round((dataUrl.length * 3/4) / 1024)} KB`, 'info') +
+                                     log(`🔗 You can now use this filename in posts: ![Alt text](${shortName})`, 'info');
+                } else {
+                    results.innerHTML = log('❌ Failed to store image.', 'error');
+                }
+            });
+        }
+
+        function createTestPost() {
+            const results = document.getElementById('post-results');
+            
+            // Create a simple test image (1x1 red pixel)
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 100;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(0, 0, 100, 100);
+            const testImageData = canvas.toDataURL('image/png');
+            
+            const testFilename = 'test-' + Date.now() + '.png';
+            
+            // Store the test image
+            try {
+                const files = JSON.parse(localStorage.getItem('blog-files') || '{}');
+                files[testFilename] = testImageData;
+                localStorage.setItem('blog-files', JSON.stringify(files));
+                
+                // Create test post
+                const testPost = {
+                    id: 'test-post-' + Date.now(),
+                    title: 'Test Post with Image',
+                    content: `This is a test post to verify image functionality.\\n\\n![Test Image](${testFilename})\\n\\nThe image above should display properly in BlogSection.`,
+                    excerpt: 'A test post to verify image display functionality',
+                    author: 'Test Author',
+                    category: 'test',
+                    status: 'published',
+                    publishedAt: new Date().toISOString(),
+                    readTime: 1,
+                    uploadedFiles: [
+                        {
+                            id: testFilename,
+                            name: testFilename,
+                            url: testImageData,
+                            size: testImageData.length
+                        }
+                    ]
+                };
+                
+                // Save post
+                const posts = JSON.parse(localStorage.getItem('blog-posts') || '[]');
+                posts.push(testPost);
+                localStorage.setItem('blog-posts', JSON.stringify(posts));
+                
+                results.innerHTML = log('✅ Test post created successfully!', 'success') +
+                                 log(`📄 Post ID: ${testPost.id}`, 'info') +
+                                 log(`🖼️ Image filename: ${testFilename}`, 'info') +
+                                 log('🔄 Refresh your website and check the Blog section to see the test post.', 'info');
+                
+            } catch (error) {
+                results.innerHTML = log(`❌ Error creating test post: ${error.message}`, 'error');
+            }
+        }
+
+        function testImageResolution() {
+            const filename = document.getElementById('image-filename').value.trim();
+            const results = document.getElementById('resolution-results');
+            
+            if (!filename) {
+                results.innerHTML = log('⚠️ Please enter an image filename.', 'warning');
+                return;
+            }
+            
+            let output = log(`🔍 Testing resolution for: ${filename}`, 'info');
+            
+            // Test getStoredFile function
+            const storedFile = getStoredFile(filename);
+            if (storedFile) {
+                output += log('✅ Found in localStorage blog-files', 'success');
+                output += log(`📊 Data URL length: ${storedFile.length} characters`, 'info');
+                
+                // Create preview
+                const img = document.createElement('img');
+                img.src = storedFile;
+                img.style.maxWidth = '200px';
+                img.style.maxHeight = '200px';
+                img.style.border = '1px solid #ddd';
+                img.style.borderRadius = '4px';
+                img.style.margin = '10px 0';
+                
+                results.innerHTML = output + '<div>📸 Preview:</div>';
+                results.appendChild(img);
+            } else {
+                output += log('❌ NOT found in localStorage blog-files', 'error');
+                
+                // Check if it exists in any post
+                try {
+                    const posts = JSON.parse(localStorage.getItem('blog-posts') || '[]');
+                    let foundInPost = false;
+                    
+                    for (const post of posts) {
+                        if (post.uploadedFiles) {
+                            const found = post.uploadedFiles.find(f => 
+                                f.name === filename || f.id === filename
+                            );
+                            if (found) {
+                                output += log(`🔍 Found in post: "${post.title}"`, 'success');
+                                foundInPost = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!foundInPost) {
+                        output += log('❌ NOT found in any post uploadedFiles', 'error');
+                        output += log('💡 Suggestion: Upload a test image or create a test post first.', 'warning');
+                    }
+                } catch (error) {
+                    output += log(`❌ Error searching posts: ${error.message}`, 'error');
+                }
+                
+                results.innerHTML = output;
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all test data? This will remove all blog posts and images.')) {
+                localStorage.removeItem('blog-posts');
+                localStorage.removeItem('blog-files');
+                localStorage.removeItem('blog-poll-votes');
+                localStorage.removeItem('blog-user-votes');
+                
+                const results = document.getElementById('clear-results');
+                results.innerHTML = log('✅ All test data cleared.', 'success') +
+                                 log('🔄 Refresh your website to see the changes.', 'info');
+            }
+        }
+
+        // Auto-run storage check on page load
+        window.onload = function() {
+            checkStorage();
+        };
+    </script>
+</body>
+</html>

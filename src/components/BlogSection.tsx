@@ -1702,6 +1702,151 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
   const [newsletterMessage, setNewsletterMessage] = useState('');
   const [showMorePosts, setShowMorePosts] = useState(false);
 
+  // Poll voting state (same as BlogManager)
+  const [pollVotes, setPollVotes] = useState<{[pollId: string]: {[option: string]: number}}>({});
+  const [userVotes, setUserVotes] = useState<{[pollId: string]: string}>({});
+
+  // Helper function to generate user ID for voting
+  const getUserId = () => {
+    let userId = localStorage.getItem('blog-user-id');
+    if (!userId) {
+      userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('blog-user-id', userId);
+    }
+    return userId;
+  };
+
+  // Retrieve compressed file from localStorage (same as BlogManager)
+  const getStoredFile = (shortName: string): string | null => {
+    try {
+      const stored = localStorage.getItem('blog-files') || '{}';
+      const files = JSON.parse(stored);
+      return files[shortName] || null;
+    } catch (error) {
+      console.error('Error retrieving stored file:', error);
+      return null;
+    }
+  };
+
+  // Poll component with voting functionality (same as BlogManager)
+  const PollComponent: React.FC<{
+    question: string;
+    options: string[];
+    pollId: string;
+  }> = ({ question, options, pollId }) => {
+    const userId = getUserId();
+    const hasVoted = userVotes[pollId] !== undefined;
+    const currentVotes = pollVotes[pollId] || {};
+    const totalVotes = Object.values(currentVotes).reduce((sum, count) => sum + count, 0);
+    
+    const handleVote = (option: string) => {
+      if (hasVoted) return;
+      
+      // Update poll votes
+      setPollVotes(prev => ({
+        ...prev,
+        [pollId]: {
+          ...prev[pollId],
+          [option]: (prev[pollId]?.[option] || 0) + 1
+        }
+      }));
+      
+      // Mark user as voted
+      setUserVotes(prev => ({
+        ...prev,
+        [pollId]: option
+      }));
+      
+      // Save to localStorage for persistence
+      const savedVotes = JSON.parse(localStorage.getItem('blog-poll-votes') || '{}');
+      const savedUserVotes = JSON.parse(localStorage.getItem('blog-user-votes') || '{}');
+      
+      savedVotes[pollId] = {
+        ...savedVotes[pollId],
+        [option]: (savedVotes[pollId]?.[option] || 0) + 1
+      };
+      savedUserVotes[pollId] = option;
+      
+      localStorage.setItem('blog-poll-votes', JSON.stringify(savedVotes));
+      localStorage.setItem('blog-user-votes', JSON.stringify(savedUserVotes));
+    };
+    
+    // Load saved votes on mount
+    React.useEffect(() => {
+      const savedVotes = JSON.parse(localStorage.getItem('blog-poll-votes') || '{}');
+      const savedUserVotes = JSON.parse(localStorage.getItem('blog-user-votes') || '{}');
+      
+      if (savedVotes[pollId]) {
+        setPollVotes(prev => ({ ...prev, [pollId]: savedVotes[pollId] }));
+      }
+      if (savedUserVotes[pollId]) {
+        setUserVotes(prev => ({ ...prev, [pollId]: savedUserVotes[pollId] }));
+      }
+    }, [pollId]);
+    
+    return (
+      <div className="my-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <h4 className="font-semibold text-gray-800 mb-3">📊 {question}</h4>
+        <div className="space-y-2">
+          {options.map((option, optionIndex) => {
+            const voteCount = currentVotes[option] || 0;
+            const percentage = totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
+            const isSelected = userVotes[pollId] === option;
+            
+            return (
+              <div key={optionIndex} className="relative">
+                <button
+                  onClick={() => handleVote(option)}
+                  disabled={hasVoted}
+                  className={`w-full text-left p-3 rounded border transition-colors ${
+                    hasVoted
+                      ? isSelected
+                        ? 'bg-blue-100 border-blue-300 text-blue-800'
+                        : 'bg-gray-100 border-gray-200 text-gray-600'
+                      : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700 cursor-pointer'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                        isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                      }`}>
+                        {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
+                      </div>
+                      <span className="font-medium">{option.trim()}</span>
+                    </div>
+                    {hasVoted && (
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-500">{voteCount} votes</span>
+                        <span className="text-sm font-medium text-gray-700">{percentage.toFixed(1)}%</span>
+                      </div>
+                    )}
+                  </div>
+                  {hasVoted && (
+                    <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className={`h-2 rounded-full transition-all duration-500 ${
+                          isSelected ? 'bg-blue-500' : 'bg-gray-400'
+                        }`}
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+          <span>{totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}</span>
+          {hasVoted && (
+            <span className="text-green-600 font-medium">✓ You voted for "{userVotes[pollId]}"</span>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   // Function to fetch YouTube title
   const fetchYouTubeTitle = async (videoId: string): Promise<string> => {
     if (titleCache.has(`youtube-${videoId}`)) {
@@ -1751,7 +1896,31 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
 
   // Load posts from localStorage on component mount
   useEffect(() => {
-    const savedPosts = loadSamplePosts();
+    // Load actual saved posts from localStorage (not sample posts)
+    const loadSavedPosts = (): BlogPost[] => {
+      try {
+        const savedPosts = localStorage.getItem('blog-posts');
+        if (savedPosts) {
+          const parsedPosts = JSON.parse(savedPosts);
+          console.log('Loaded posts from localStorage:', parsedPosts.length, 'posts');
+          // Log uploaded files for debugging
+          parsedPosts.forEach((post: BlogPost, index: number) => {
+            if (post.uploadedFiles && post.uploadedFiles.length > 0) {
+              console.log(`Post ${index} (${post.title}) has ${post.uploadedFiles.length} uploaded files:`, post.uploadedFiles);
+            }
+          });
+          return parsedPosts;
+        }
+      } catch (error) {
+        console.error('Error loading posts from localStorage:', error);
+      }
+      
+      // Fallback to sample posts if no saved posts
+      console.log('No saved posts found, loading sample posts');
+      return loadSamplePosts();
+    };
+    
+    const savedPosts = loadSavedPosts();
     setPosts(savedPosts);
   }, []);
 
@@ -1957,7 +2126,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           }
         }
         
-        // Handle images with width options and captions
+        // Handle images with width options and captions (early processing)
         if (line.includes('![') && line.includes('](') && line.includes(')')) {
           const imageMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)(\{width=(wide|full)\})?/);
           if (imageMatch) {
@@ -1970,12 +2139,48 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             const captionMatch = nextLine && nextLine.match(/^\*(.+)\*$/);
             const caption = captionMatch ? captionMatch[1] : null;
             
-            // Process Unsplash URLs
+            // Resolve image source with enhanced logic
             let processedUrl = url;
+            
+            // Process Unsplash URLs
             if (url.includes('unsplash.com/photos/')) {
               const photoId = url.split('/photos/')[1].split('-').pop();
               if (photoId) {
                 processedUrl = `https://images.unsplash.com/${photoId}?w=800&q=80`;
+              }
+            } else if (!url.startsWith('data:image/') && !url.startsWith('http') && !url.startsWith('/')) {
+              // For short filenames, try to get from localStorage first
+              const storedFile = getStoredFile(url);
+              if (storedFile) {
+                console.log('✅ Found image in localStorage with key:', url);
+                processedUrl = storedFile;
+              } else {
+                console.log('❌ Image not found in localStorage for key:', url);
+                
+                // Try to find in uploaded files
+                if (selectedPost?.uploadedFiles) {
+                  const uploadedFile = selectedPost.uploadedFiles.find(f => 
+                    f.name === url || f.id === url || 
+                    (f.name && url.includes(f.name)) || (f.id && url.includes(f.id))
+                  );
+                  if (uploadedFile?.url) {
+                    processedUrl = uploadedFile.url;
+                  }
+                } else {
+                  // Search all posts for the image
+                  for (const post of posts) {
+                    if (post.uploadedFiles) {
+                      const uploadedFile = post.uploadedFiles.find(f => 
+                        f.name === url || f.id === url || 
+                        (f.name && url.includes(f.name)) || (f.id && url.includes(f.id))
+                      );
+                      if (uploadedFile?.url) {
+                        processedUrl = uploadedFile.url;
+                        break;
+                      }
+                    }
+                  }
+                }
               }
             }
             
@@ -2020,50 +2225,267 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           }
         }
         
-        // Handle headers
+        // Define enhanced processInlineMarkdown function
+        const processInlineMarkdown = (text: string) => {
+          let processedText = text;
+          
+          // Handle traditional markdown links [text](url)
+          processedText = processedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+            // Ensure URL has protocol
+            const processedUrl = url.startsWith('http') ? url : `https://${url}`;
+            return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
+          });
+          
+          // Handle simple link syntax [text|url] - easier to type
+          processedText = processedText.replace(/\[([^\]]+)\|([^\]]+)\]/g, (match, linkText, url) => {
+            // Ensure URL has protocol
+            const processedUrl = url.startsWith('http') ? url : `https://${url}`;
+            return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
+          });
+          
+          // Handle direct URLs (make them clickable)
+          processedText = processedText.replace(/(^|[\s])((https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?)/g, (match, prefix, url, protocol, domain, path) => {
+            const fullUrl = protocol ? url : `https://${url}`;
+            return `${prefix}<a href="${fullUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${url}</a>`;
+          });
+          
+          // Handle bold+italic ***text*** (must come before **text** and *text*)
+          processedText = processedText.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+          
+          // Handle bold **text**
+          processedText = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          
+          // Handle italic *text*
+          processedText = processedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+          
+          // Handle underline _text_
+          processedText = processedText.replace(/_(.*?)_/g, '<u>$1</u>');
+          
+          return processedText;
+        };
+
+        // Handle headers with enhanced markdown support (including links)
         if (line.startsWith('# ')) {
-          return <h1 key={index} className="text-3xl font-bold mt-6 mb-4">{line.substring(2)}</h1>;
+          const headerText = line.substring(2);
+          const processedText = processInlineMarkdown(headerText);
+          return <h1 key={index} className="text-3xl font-bold mt-6 mb-4" dangerouslySetInnerHTML={{ __html: processedText }} />;
         }
         if (line.startsWith('## ')) {
-          return <h2 key={index} className="text-2xl font-bold mt-5 mb-3">{line.substring(3)}</h2>;
+          const headerText = line.substring(3);
+          const processedText = processInlineMarkdown(headerText);
+          return <h2 key={index} className="text-2xl font-bold mt-5 mb-3" dangerouslySetInnerHTML={{ __html: processedText }} />;
         }
         if (line.startsWith('### ')) {
-          return <h3 key={index} className="text-xl font-bold mt-4 mb-2">{line.substring(4)}</h3>;
+          const headerText = line.substring(4);
+          const processedText = processInlineMarkdown(headerText);
+          return <h3 key={index} className="text-xl font-bold mt-4 mb-2" dangerouslySetInnerHTML={{ __html: processedText }} />;
+        }
+
+        // Handle bullet points
+        if (line.startsWith('- ')) {
+          const bulletText = line.substring(2);
+          const processedText = processInlineMarkdown(bulletText);
+          return (
+            <div key={index} className="flex items-start mb-2">
+              <span className="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span dangerouslySetInnerHTML={{ __html: processedText }} />
+            </div>
+          );
+        }
+        
+        if (line.startsWith('-- ')) {
+          const bulletText = line.substring(3);
+          const processedText = processInlineMarkdown(bulletText);
+          return (
+            <div key={index} className="flex items-start mb-2">
+              <span className="inline-block w-2 h-2 border border-gray-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span dangerouslySetInnerHTML={{ __html: processedText }} />
+            </div>
+          );
+        }
+
+        // Handle polls - [POLL:Question|Option1|Option2|Option3] (same as BlogManager)
+        if (line.includes('[POLL:') && line.includes(']')) {
+          const startIndex = line.indexOf('[POLL:') + 6;
+          const endIndex = line.indexOf(']', startIndex);
+          if (endIndex > startIndex) {
+            const pollData = line.substring(startIndex, endIndex);
+            const parts = pollData.split('|');
+            if (parts.length >= 3) {
+              const question = parts[0];
+              const options = parts.slice(1);
+              const pollId = `poll-${index}-${question.slice(0, 10).replace(/\s+/g, '-')}`;
+              
+              return (
+                <PollComponent
+                  key={index}
+                  pollId={pollId}
+                  question={question}
+                  options={options}
+                />
+              );
+            }
+          }
+        }
+
+        // Handle images - ![alt](url) with optional width and caption
+        const imageMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)(\{width=(wide|full)\})?/);
+        if (imageMatch) {
+          const [, alt, src, , widthValue] = imageMatch;
+          const width = widthValue as 'normal' | 'wide' | 'full' || 'normal';
+          
+          // Check if next line is a caption (italic text)
+          const lines = content.split('\n');
+          const nextLine = lines[index + 1];
+          const caption = nextLine && nextLine.match(/^\*(.+)\*$/) ? nextLine.match(/^\*(.+)\*$/)![1] : undefined;
+          
+          // Resolve image source (check for uploaded files)
+          let actualSrc = src;
+          console.log('🖼️ Processing image:', { src, alt, hasSelectedPost: !!selectedPost });
+          
+          // If it's already a data URL, use it directly
+          if (src.startsWith('data:image/')) {
+            console.log('✅ Using data URL directly');
+            actualSrc = src;
+          } else if (!src.startsWith('http') && !src.startsWith('/')) {
+            // For short filenames, try multiple resolution strategies
+            console.log('🔍 Resolving short filename:', src);
+            
+            // Strategy 1: Check localStorage 'blog-files'
+            const storedFile = getStoredFile(src);
+            if (storedFile) {
+              console.log('✅ Found image in localStorage blog-files with key:', src);
+              actualSrc = storedFile;
+            } else {
+              console.log('❌ Image not found in localStorage blog-files for key:', src);
+              
+              // Strategy 2: Check selectedPost uploadedFiles
+              if (selectedPost?.uploadedFiles) {
+                console.log('🔍 Checking selectedPost uploadedFiles:', selectedPost.uploadedFiles.length, 'files');
+                const uploadedFile = selectedPost.uploadedFiles.find(f => 
+                  f.name === src || f.id === src || 
+                  (f.name && src.includes(f.name)) || (f.id && src.includes(f.id))
+                );
+                if (uploadedFile?.url) {
+                  console.log('✅ Found image in selectedPost uploadedFiles:', uploadedFile.name);
+                  actualSrc = uploadedFile.url;
+                } else {
+                  console.log('❌ Image not found in selectedPost uploadedFiles');
+                }
+              } else {
+                console.log('❌ No selectedPost or uploadedFiles available');
+              }
+              
+              // Strategy 3: Search all posts for the image
+              if (actualSrc === src) {
+                console.log('🔍 Searching all posts for image:', src);
+                for (const post of posts) {
+                  if (post.uploadedFiles) {
+                    const uploadedFile = post.uploadedFiles.find(f => 
+                      f.name === src || f.id === src || 
+                      (f.name && src.includes(f.name)) || (f.id && src.includes(f.id))
+                    );
+                    if (uploadedFile?.url) {
+                      console.log('✅ Found image in post:', post.title, 'file:', uploadedFile.name);
+                      actualSrc = uploadedFile.url;
+                      break;
+                    }
+                  }
+                }
+                
+                if (actualSrc === src) {
+                  console.log('❌ Image not found in any post uploadedFiles');
+                }
+              }
+            }
+          }
+          
+          console.log('🎯 Final image resolution:', { 
+            original: src, 
+            resolved: actualSrc !== src ? '✅ RESOLVED' : '❌ NOT_RESOLVED',
+            isDataUrl: actualSrc.startsWith('data:image/')
+          });
+          
+          // Get width classes (matching BlogManager exactly)
+          const getWidthClass = () => {
+            switch (width) {
+              case 'wide': return 'w-4/5 max-w-4xl';
+              case 'full': return 'w-full max-w-none';
+              default: return 'max-w-2xl';
+            }
+          };
+          
+          return (
+            <div key={index} className="my-6">
+              <div className="flex justify-center">
+                <div className={`${getWidthClass()}`}>
+                  <img 
+                    src={actualSrc}
+                    alt={alt}
+                    className="w-full h-auto rounded-lg shadow-md"
+                    onError={(e) => {
+                      console.error('❌ Image failed to load:', { src, actualSrc, alt });
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=';
+                      target.alt = 'Image not found';
+                    }}
+                  />
+                </div>
+              </div>
+              {caption && (
+                <p className="text-sm text-gray-600 text-center italic mt-3">{caption}</p>
+              )}
+            </div>
+          );
+        }
+
+        // Handle horizontal dividers
+        if (line.trim() === '---') {
+          return <hr key={index} className="my-6 border-gray-300" />;
+        }
+
+        // Handle code blocks
+        if (line.startsWith('```')) {
+          const language = line.slice(3).trim();
+          const lines = content.split('\n');
+          let codeContent = '';
+          let endIndex = index + 1;
+          
+          // Find the closing ```
+          for (let i = index + 1; i < lines.length; i++) {
+            if (lines[i].trim() === '```') {
+              endIndex = i;
+              break;
+            }
+            if (i > index + 1) codeContent += '\n';
+            codeContent += lines[i];
+          }
+          
+          return (
+            <div key={index} className="mb-4">
+              <div className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+                {language && (
+                  <div className="text-xs text-gray-400 mb-2 uppercase font-mono">{language}</div>
+                )}
+                <pre className="text-sm font-mono whitespace-pre-wrap">{codeContent}</pre>
+              </div>
+            </div>
+          );
+        }
+
+        // Handle blockquotes
+        if (line.startsWith('> ')) {
+          const quoteText = line.substring(2);
+          const processedText = processInlineMarkdown(quoteText);
+          return (
+            <blockquote key={index} className="border-l-4 border-gray-300 pl-4 italic text-gray-700 mb-4">
+              <div dangerouslySetInnerHTML={{ __html: processedText }} />
+            </blockquote>
+          );
         }
         
         // Handle text with inline formatting (bold, italic, links)
         if (line.trim()) {
-          const processInlineMarkdown = (text: string) => {
-            let processedText = text;
-            
-            // Handle traditional markdown links [text](url)
-            processedText = processedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
-              // Ensure URL has protocol
-              const processedUrl = url.startsWith('http') ? url : `https://${url}`;
-              return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
-            });
-            
-            // Handle simple link syntax [text|url] - easier to type
-            processedText = processedText.replace(/\[([^\]]+)\|([^\]]+)\]/g, (match, linkText, url) => {
-              // Ensure URL has protocol
-              const processedUrl = url.startsWith('http') ? url : `https://${url}`;
-              return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
-            });
-            
-            // Handle direct URLs (make them clickable)
-            processedText = processedText.replace(/(^|[\s])((https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?)/g, (match, prefix, url, protocol, domain, path) => {
-              const fullUrl = protocol ? url : `https://${url}`;
-              return `${prefix}<a href="${fullUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${url}</a>`;
-            });
-            
-            // Handle bold **text**
-            processedText = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            // Handle italic *text* (but not bold **text**)
-            processedText = processedText.replace(/(?<!\*)\*(?!\*)([^*]+)\*(?!\*)/g, '<em>$1</em>');
-            
-            return processedText;
-          };
           
           return (
             <p 
@@ -2405,15 +2827,11 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               </div>
             ) : (
               <div className="space-y-8">
-                {(() => {
-                  const publishedPosts = posts
-                    .filter(post => post.status === 'published')
-                    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-                  
-                  // Show only 3 posts initially for visitors, all for authenticated users
-                  const postsToShow = isAuthenticated || showMorePosts ? publishedPosts : publishedPosts.slice(0, 3);
-                  
-                  return postsToShow.map((post) => (
+                {posts
+                  .filter(post => post.status === 'published')
+                  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+                  .slice(0, isAuthenticated || showMorePosts ? undefined : 3)
+                  .map((post) => (
                     <article key={post.id} className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 hover:shadow-xl transition-shadow">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
@@ -2633,6 +3051,18 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
                       </div>
                     </article>
                   ))}
+                
+                {/* Show "See More" button for visitors when there are more than 3 published posts */}
+                {!isAuthenticated && !showMorePosts && posts.filter(post => post.status === 'published').length > 3 && (
+                  <div className="text-center mt-8">
+                    <button 
+                      onClick={() => setShowMorePosts(true)}
+                      className="px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+                    >
+                      See More Posts
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
