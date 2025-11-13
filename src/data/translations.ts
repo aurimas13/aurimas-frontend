@@ -126,7 +126,7 @@ export const translations = {
     navigation: {
       home: "Home",
       about: "About",
-      blog: "All Blogs",
+      blog: "Blogs",
       gallery: "Gallery",
       support: "Support",
       contact: "Contact"

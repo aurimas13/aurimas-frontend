@@ -122,12 +122,23 @@ export function Header() {
   };
 
   const handleNavigation = (sectionId: string) => {
-    if (sectionId === 'blog') {
-      setIsMenuOpen(false);
-      if (typeof window !== 'undefined') {
-        window.location.href = '/blogs';
-      }
+    setIsMenuOpen(false);
+
+    if (typeof window === 'undefined') {
+      scrollToSection(sectionId);
       return;
+    }
+
+    const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+    const targetHash = `#${sectionId}`;
+
+    if (!isHomePage) {
+      window.location.href = `/${targetHash}`;
+      return;
+    }
+
+    if (window.location.hash !== targetHash) {
+      window.history.replaceState(null, '', targetHash);
     }
 
     scrollToSection(sectionId);
