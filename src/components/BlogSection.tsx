@@ -2750,25 +2750,30 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
         {t.blogs.originalSubstack}
       </h4>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="max-w-3xl mx-auto grid gap-6 grid-cols-1">
         {Object.entries(blogCategories).map(([key, category]) => (
-          <div key={key} className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow border border-gray-100">
-            <h5 className="text-sm font-semibold text-gray-800 mb-2">
+          <div
+            key={key}
+            className="w-full bg-white rounded-xl shadow-sm p-8 text-center hover:shadow-md transition-shadow border border-yellow-300"
+          >
+            <h5 className="text-base font-semibold text-gray-800 mb-2">
               {category.title[currentLanguage as LanguageCode]}
             </h5>
-            <p className="text-gray-600 mb-3 text-xs">
+            <p className="text-gray-600 mb-4 text-sm leading-relaxed">
               {category.description[currentLanguage as LanguageCode]}
             </p>
-            <div className="mb-3">
-              <p className="text-xs text-gray-500">{category.languages[currentLanguage as LanguageCode]}</p>
+            <div className="mb-4">
+              <p className="text-xs uppercase tracking-wide text-gray-500">
+                {category.languages[currentLanguage as LanguageCode]}
+              </p>
             </div>
             <a
               href={category.originalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors"
+              className="inline-flex items-center justify-center px-6 py-2 bg-orange-600 text-white text-sm font-bold rounded-lg hover:bg-orange-700 transition-colors mx-auto"
             >
-              <ExternalLink className="w-3 h-3 mr-1" />
+              <ExternalLink className="w-4 h-4 mr-2" />
               {t.blogs.visitSubstack}
             </a>
           </div>
