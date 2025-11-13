@@ -151,7 +151,7 @@ export const translations = {
       download: "Atsisiųsti CV"
     },
     blogs: {
-      title: "Tinklaraščiai",
+      title: "Tinkliaraščiai",
       subtitle: "Mintys apie DI, chemiją, gyvenimą ir viską, kas tarp jų",
       readMore: "Skaityti daugiau",
       allBlogs: "Peržiūrėti visus įrašus",
@@ -259,7 +259,7 @@ export const translations = {
     navigation: {
       home: "Pradžia",
       about: "Apie",
-      blog: "Visi tinklaraščiai",
+      blog: "Tinkliaraščiai",
       gallery: "Galerija",
       support: "Parama",
       contact: "Kontaktai"
@@ -392,7 +392,7 @@ export const translations = {
     navigation: {
       home: "Accueil",
       about: "À propos",
-      blog: "Tous les blogs",
+      blog: "Blogs",
       gallery: "Galerie",
       support: "Soutien",
       contact: "Contact"
