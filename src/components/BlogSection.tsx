@@ -1700,7 +1700,6 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [newsletterMessage, setNewsletterMessage] = useState('');
-  const [showMorePosts, setShowMorePosts] = useState(false);
 
   // Poll voting state (same as BlogManager)
   const [pollVotes, setPollVotes] = useState<{[pollId: string]: {[option: string]: number}}>({});
@@ -2674,10 +2673,12 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
   };
 
   const handleShowAllBlogs = () => {
+    setSelectedPost(null);
     setShowAllBlogs(true);
   };
 
   const handleBackToPreview = () => {
+    setSelectedPost(null);
     setShowAllBlogs(false);
   };
 
@@ -2698,6 +2699,84 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
     return content.substring(0, maxLength) + '...';
   };
 
+  const renderNewsletterSection = () => (
+    <div className="mb-12">
+      <div className="bg-yellow-100 rounded-lg p-6 border border-yellow-300 max-w-2xl mx-auto text-center">
+        <h4 className="text-lg font-bold mb-3 text-gray-800">🔔 {t.blogs.beFirstToKnow}</h4>
+        <p className="text-gray-600 mb-4">
+          {t.blogs.joinWaitlist}
+        </p>
+
+        {newsletterStatus === 'success' && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
+            <p className="text-green-800 text-sm font-medium">✅ {newsletterMessage}</p>
+          </div>
+        )}
+
+        {newsletterStatus === 'error' && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg">
+            <p className="text-red-800 text-sm font-medium">❌ {newsletterMessage}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <input 
+            type="email" 
+            value={newsletterEmail}
+            onChange={(e) => setNewsletterEmail(e.target.value)}
+            placeholder={t.blogs.enterEmail}
+            required
+            disabled={newsletterStatus === 'loading'}
+            className="px-4 py-2 rounded-lg bg-white text-gray-800 placeholder-gray-500 border border-yellow-300 focus:ring-2 focus:ring-yellow-400 outline-none flex-1 max-w-xs disabled:opacity-50"
+          />
+          <button 
+            type="submit"
+            disabled={newsletterStatus === 'loading'}
+            className="bg-yellow-500 hover:bg-yellow-400 text-gray-800 font-bold px-6 py-2 rounded-lg transition-colors transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            {newsletterStatus === 'loading' ? t.blogs.subscribing : t.blogs.joinWaitlistBtn}
+          </button>
+        </form>
+        <p className="text-xs text-gray-500 mt-2">
+          {t.blogs.noSpam}
+        </p>
+      </div>
+    </div>
+  );
+
+  const renderSubstackSection = () => (
+    <div className="mb-12">
+      <h4 className="text-lg font-semibold text-gray-700 mb-4 text-center">
+        {t.blogs.originalSubstack}
+      </h4>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {Object.entries(blogCategories).map(([key, category]) => (
+          <div key={key} className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow border border-gray-100">
+            <h5 className="text-sm font-semibold text-gray-800 mb-2">
+              {category.title[currentLanguage as LanguageCode]}
+            </h5>
+            <p className="text-gray-600 mb-3 text-xs">
+              {category.description[currentLanguage as LanguageCode]}
+            </p>
+            <div className="mb-3">
+              <p className="text-xs text-gray-500">{category.languages[currentLanguage as LanguageCode]}</p>
+            </div>
+            <a
+              href={category.originalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors"
+            >
+              <ExternalLink className="w-3 h-3 mr-1" />
+              {t.blogs.visitSubstack}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   // Individual post view
   if (selectedPost) {
     return (
@@ -2709,7 +2788,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors mb-6"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to All Blogs</span>
+              <span>Back to Blogs</span>
             </button>
           </div>
 
@@ -2780,127 +2859,23 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4 justify-center mb-8">
+          <div className="flex flex-wrap gap-4 justify-center mb-12">
             <button 
               onClick={handleBackToPreview}
               className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             >
-              ← Back to Preview
+              ← Back to Home
             </button>
-            
-            {/* Show "All Blogs" for visitors, "Manage Posts" for authenticated users */}
-            {isAuthenticated ? (
-              <button 
-                onClick={handleAuthentication}
-                className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                {t.blogs.manageBlog}
-              </button>
-            ) : (
-              <button 
-                onClick={() => setShowAllBlogs(true)}
-                className="px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
-              >
-                {t.blogs.allBlogs}
-              </button>
-            )}
+            <button 
+              onClick={handleAuthentication}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              {t.blogs.manageBlog}
+            </button>
           </div>
 
-          {/* Blog Posts List */}
-          <div className="max-w-4xl mx-auto">
-            {posts.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                    {t.blogs.noPosts}
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    {t.blogs.checkBack}
-                  </p>
-                  <button 
-                    onClick={handleAuthentication}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Create First Post
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {posts
-                  .filter(post => post.status === 'published')
-                  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-                  .slice(0, isAuthenticated || showMorePosts ? undefined : 3)
-                  .map((post) => (
-                    <article key={post.id} className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 hover:shadow-xl transition-shadow">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-3">
-                            <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                              {blogCategories[post.category]?.title[currentLanguage as LanguageCode] || post.category}
-                            </span>
-                            {post.isPremium && (
-                              <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium flex items-center">
-                                <Lock className="w-3 h-3 mr-1" />
-                                Premium
-                              </span>
-                            )}
-                          </div>
-                          <h2 className="text-2xl font-bold text-gray-900 mb-3 hover:text-yellow-600 transition-colors">
-                            {post.title}
-                          </h2>
-                          <div className="text-gray-600 mb-4 leading-relaxed">
-                            {post.excerpt ? (
-                              <p>{post.excerpt}</p>
-                            ) : (
-                              <div className="line-clamp-3">
-                                {renderContent(truncateContent(post.content, 300))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center">
-                            <User className="w-4 h-4 mr-1" />
-                            {post.author}
-                          </div>
-                          <div className="flex items-center">
-                            <Calendar className="w-4 h-4 mr-1" />
-                            {formatDate(post.publishedAt)}
-                          </div>
-                          <div className="flex items-center">
-                            <Clock className="w-4 h-4 mr-1" />
-                            {post.readTime} min read
-                          </div>
-                        </div>
-                      </div>
-
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {post.tags.map((tag, index) => (
-                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      <div className="border-t border-gray-200 pt-4">
-                        <button 
-                          onClick={() => handleReadMore(post)}
-                          className="text-yellow-600 hover:text-yellow-700 font-medium transition-colors"
-                        >
-                          {t.blogs.readMore} →
-                        </button>
-                      </div>
-                    </article>
-                  ))}
-              </div>
-            )}
-          </div>
+          {renderNewsletterSection()}
+          {renderSubstackSection()}
         </div>
       </section>
     );
@@ -2919,7 +2894,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-4 justify-center mb-8">
+        <div className="flex flex-wrap gap-4 justify-center mb-12">
           <button 
             onClick={handleShowAllBlogs}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -2933,298 +2908,8 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             {t.blogs.manageBlog}
           </button>
         </div>
-
-        {/* Blog Posts Section */}
-        <div className="mb-12">
-          {posts.filter(post => post.status === 'published').length > 0 ? (
-            /* Show Latest Published Posts */
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Latest Posts</h3>
-              <div className="space-y-8">
-                {posts
-                  .filter(post => post.status === 'published')
-                  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-                  .slice(0, 3)
-                  .map((post) => (
-                    <article key={post.id} className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 hover:shadow-xl transition-shadow">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-3">
-                            <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                              {blogCategories[post.category]?.title[currentLanguage as LanguageCode] || post.category}
-                            </span>
-                            {post.isPremium && (
-                              <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium flex items-center">
-                                <Lock className="w-3 h-3 mr-1" />
-                                Premium
-                              </span>
-                            )}
-                            {post.language && (
-                              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
-                                {post.language === 'en' ? '🇺🇸' : post.language === 'lt' ? '🇱🇹' : '🇫🇷'} {post.language.toUpperCase()}
-                              </span>
-                            )}
-                          </div>
-                          
-                          {/* Featured Image */}
-                          {post.featuredImage && (
-                            <div className="mb-4">
-                              <img 
-                                src={post.featuredImage} 
-                                alt={post.title}
-                                className="w-full h-48 object-cover rounded-lg"
-                              />
-                            </div>
-                          )}
-                          
-                          <h2 className="text-2xl font-bold text-gray-900 mb-2 hover:text-yellow-600 transition-colors">
-                            {post.title}
-                          </h2>
-                          
-                          {post.subtitle && (
-                            <h3 className="text-lg text-gray-600 mb-3 font-medium">
-                              {post.subtitle}
-                            </h3>
-                          )}
-                          
-                          <div className="text-gray-600 mb-4 leading-relaxed">
-                            {post.excerpt ? (
-                              <p>{post.excerpt}</p>
-                            ) : (
-                              <div className="line-clamp-3">
-                                {renderContent(truncateContent(post.content, 300))}
-                              </div>
-                            )}
-                          </div>
-                          
-                          {/* Insights Section */}
-                          {post.insights?.content && (
-                            <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
-                              <div className="flex items-start">
-                                <span className="text-lg mr-2">{post.insights.emoji || '💡'}</span>
-                                <div>
-                                  <p className="font-semibold text-blue-800 text-sm">
-                                    {post.insights.title || 'My Insight:'}
-                                  </p>
-                                  <p className="text-blue-700 text-sm mt-1">{post.insights.content}</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center">
-                            <User className="w-4 h-4 mr-1" />
-                            {post.author}
-                          </div>
-                          <div className="flex items-center">
-                            <Calendar className="w-4 h-4 mr-1" />
-                            {formatDate(post.publishedAt)}
-                          </div>
-                          <div className="flex items-center">
-                            <Clock className="w-4 h-4 mr-1" />
-                            {post.readTime} min read
-                          </div>
-                        </div>
-                      </div>
-
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {post.tags.map((tag, index) => (
-                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      <div className="border-t border-gray-200 pt-4">
-                        <button 
-                          onClick={() => handleReadMore(post)}
-                          className="text-yellow-600 hover:text-yellow-700 font-medium transition-colors"
-                        >
-                          {t.blogs.readMore} →
-                        </button>
-                      </div>
-                    </article>
-                  ))}
-                
-                {/* Show "See More" button for visitors when there are more than 3 published posts */}
-                {!isAuthenticated && !showMorePosts && posts.filter(post => post.status === 'published').length > 3 && (
-                  <div className="text-center mt-8">
-                    <button 
-                      onClick={() => setShowMorePosts(true)}
-                      className="px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
-                    >
-                      See More Posts
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            /* Show Coming Soon Preview */
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 relative overflow-hidden">
-              {/* Background decoration - yellow theme */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-full -translate-y-16 translate-x-16"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-100 rounded-full translate-y-12 -translate-x-12"></div>
-              
-              <div className="relative z-10 text-center text-gray-800">
-                {currentLanguage === 'lt' ? (
-                  <>
-                    <h3 className="text-3xl font-bold mb-4 text-gray-800">
-                      � Su laiku!
-                    </h3>
-                    <p className="text-xl mb-6 text-gray-600">
-                      Dirbtinis intelektas, tikėjimas, medicina su chemija ir tikėjimo istorijos
-                    </p>
-                  </>
-                ) : currentLanguage === 'fr' ? (
-                  <>
-                    <h3 className="text-3xl font-bold mb-4 text-gray-800">
-                      🚀 À venir bientôt !
-                    </h3>
-                    <p className="text-xl mb-6 text-gray-600">
-                      IA, croyances, médecine et chimie, et récits sur les croyances
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <h3 className="text-3xl font-bold mb-4 text-gray-800">
-                      🚀 Coming Soon!
-                    </h3>
-                    <p className="text-xl mb-6 text-gray-600">
-                      AI, Belief, Medicine with Chemistry & Belief Stories
-                    </p>
-                  </>
-                )}
-                
-                {/* Preview cards */}
-                <div className="grid md:grid-cols-3 gap-4 mb-8">
-                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                    <div className="text-2xl mb-2">🧪</div>
-                    <h4 className="font-bold text-sm text-gray-800">
-                      {currentLanguage === 'lt' ? 'Dirbtinis intelektas' : 
-                       currentLanguage === 'fr' ? 'Actualités sur l\'intelligence artificielle' : 
-                       'Artificial Intelligence news'}
-                    </h4>
-                    <p className="text-xs text-gray-600">
-                      {currentLanguage === 'lt' ? 'Naujausia visko' : 
-                       currentLanguage === 'fr' ? 'Toutes les dernières nouvelles' : 
-                       'Latest of everything'}
-                    </p>
-                  </div>
-                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                    <div className="text-2xl mb-2">🕊️</div>
-                    <h4 className="font-bold text-sm text-gray-800">
-                      {currentLanguage === 'lt' ? 'Tikėjimas' : 
-                       currentLanguage === 'fr' ? 'Croyances' : 
-                       'Belief'}
-                    </h4>
-                    <p className="text-xs text-gray-600">
-                      {currentLanguage === 'lt' ? 'Savaitės kelionė tikėjime' : 
-                       currentLanguage === 'fr' ? 'Voyage hebdomadaire sur la foi' : 
-                       'Weekly journey on faith'}
-                    </p>
-                  </div>
-                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                    <div className="text-2xl mb-2">📖</div>
-                    <h4 className="font-bold text-sm text-gray-800">
-                      {currentLanguage === 'lt' ? 'Kitos istorijos' : 
-                       currentLanguage === 'fr' ? 'Autres récits' : 
-                       'Other stories'}
-                    </h4>
-                    <p className="text-xs text-gray-600">
-                      {currentLanguage === 'lt' ? 'Tikros isotijos per tikėjimo akis' : 
-                       currentLanguage === 'fr' ? 'Récits réels à travers le prisme des croyances' : 
-                       'Real stories through belief lens'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Newsletter Section - Always Show */}
-        <div className="mb-12">
-          <div className="bg-yellow-100 rounded-lg p-6 border border-yellow-300 max-w-2xl mx-auto text-center">
-            <h4 className="text-lg font-bold mb-3 text-gray-800">🔔 {t.blogs.beFirstToKnow}</h4>
-            <p className="text-gray-600 mb-4">
-              {t.blogs.joinWaitlist}
-            </p>
-            
-            {/* Newsletter Status Messages */}
-            {newsletterStatus === 'success' && (
-              <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
-                <p className="text-green-800 text-sm font-medium">✅ {newsletterMessage}</p>
-              </div>
-            )}
-            
-            {newsletterStatus === 'error' && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg">
-                <p className="text-red-800 text-sm font-medium">❌ {newsletterMessage}</p>
-              </div>
-            )}
-            
-            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <input 
-                type="email" 
-                value={newsletterEmail}
-                onChange={(e) => setNewsletterEmail(e.target.value)}
-                placeholder={t.blogs.enterEmail}
-                required
-                disabled={newsletterStatus === 'loading'}
-                className="px-4 py-2 rounded-lg bg-white text-gray-800 placeholder-gray-500 border border-yellow-300 focus:ring-2 focus:ring-yellow-400 outline-none flex-1 max-w-xs disabled:opacity-50"
-              />
-              <button 
-                type="submit"
-                disabled={newsletterStatus === 'loading'}
-                className="bg-yellow-500 hover:bg-yellow-400 text-gray-800 font-bold px-6 py-2 rounded-lg transition-colors transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {newsletterStatus === 'loading' ? t.blogs.subscribing : t.blogs.joinWaitlistBtn}
-              </button>
-            </form>
-            <p className="text-xs text-gray-500 mt-2">
-              {t.blogs.noSpam}
-            </p>
-          </div>
-        </div>
-
-        {/* Substack Publications - Smaller Section */}
-        <div className="mb-12">
-          <h4 className="text-lg font-semibold text-gray-700 mb-4 text-center">
-            {t.blogs.originalSubstack}
-          </h4>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {Object.entries(blogCategories).map(([key, category]) => (
-              <div key={key} className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow border border-gray-100">
-                <h5 className="text-sm font-semibold text-gray-800 mb-2">
-                  {category.title[currentLanguage as LanguageCode]}
-                </h5>
-                <p className="text-gray-600 mb-3 text-xs">
-                  {category.description[currentLanguage as LanguageCode]}
-                </p>
-                <div className="mb-3">
-                  <p className="text-xs text-gray-500">{category.languages[currentLanguage as LanguageCode]}</p>
-                </div>
-                <a
-                  href={category.originalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors"
-                >
-                  <ExternalLink className="w-3 h-3 mr-1" />
-                  {t.blogs.visitSubstack}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
+        {renderNewsletterSection()}
+        {renderSubstackSection()}
       </div>
     </section>
   );

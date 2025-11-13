@@ -3,7 +3,7 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   content: string;
-  category: 'molecule-to-machine' | 'grace-to-life' | 'transcend-loneliness' | 'other-story-time';
+  category: BlogCategoryKey;
   publishedAt: string;
   readTime: number;
   isPremium: boolean;
@@ -41,9 +41,9 @@ export interface BlogCategory {
   languages: LocalizedText;
 }
 
-export type BlogCategories = {
-  [key in 'molecule-to-machine' | 'grace-to-life' | 'transcend-loneliness' | 'other-story-time']: BlogCategory;
-};
+export type BlogCategoryKey = 'molecule-to-machine';
+
+export type BlogCategories = Record<BlogCategoryKey, BlogCategory>;
 
 export interface User {
   id: string;

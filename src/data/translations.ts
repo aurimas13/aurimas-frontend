@@ -18,7 +18,7 @@ export const translations = {
       download: "Download CV"
     },
     blogs: {
-      title: "Blogs & Stories",
+      title: "Blogs",
       subtitle: "Thoughts on AI, chemistry, life, and everything in between",
       readMore: "Read More",
       allBlogs: "View All Posts",
@@ -126,7 +126,7 @@ export const translations = {
     navigation: {
       home: "Home",
       about: "About",
-      blog: "Blog",
+      blog: "All Blogs",
       gallery: "Gallery",
       support: "Support",
       contact: "Contact"
@@ -151,7 +151,7 @@ export const translations = {
       download: "Atsisiųsti CV"
     },
     blogs: {
-      title: "Tinkliaraščiai ir istorijos",
+      title: "Tinklaraščiai",
       subtitle: "Mintys apie DI, chemiją, gyvenimą ir viską, kas tarp jų",
       readMore: "Skaityti daugiau",
       allBlogs: "Peržiūrėti visus įrašus",
@@ -259,7 +259,7 @@ export const translations = {
     navigation: {
       home: "Pradžia",
       about: "Apie",
-      blog: "Tinkliaraštis",
+      blog: "Visi tinklaraščiai",
       gallery: "Galerija",
       support: "Parama",
       contact: "Kontaktai"
@@ -284,7 +284,7 @@ export const translations = {
       download: "Télécharger CV"
     },
     blogs: {
-      title: "Blogs et histoires",
+      title: "Blogs",
       subtitle: "Réflexions sur l'IA, la chimie, la vie et tout ce qui se trouve entre les deux",
       readMore: "Lire la suite",
       allBlogs: "Voir tous les articles",
@@ -392,7 +392,7 @@ export const translations = {
     navigation: {
       home: "Accueil",
       about: "À propos",
-      blog: "Blog",
+      blog: "Tous les blogs",
       gallery: "Galerie",
       support: "Soutien",
       contact: "Contact"
