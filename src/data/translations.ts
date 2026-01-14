@@ -153,7 +153,7 @@ export const translations = {
       fillAllFields: "Please fill in all fields"
     },
     footer: {
-      description: "I'm a chemist turned AI architect and writer, passionate about the intersection of science, technology, and creativity.",
+      description: "I'm a chemist turned AI architect, leader and writer, passionate about the intersection of science, technology, creativity and business.",
       quickLinks: "Quick Links",
       connect: "Connect",
       madeWith: "Made with",
@@ -325,7 +325,7 @@ export const translations = {
       fillAllFields: "Prašome užpildyti visus laukus"
     },
     footer: {
-      description: "Esu chemikas, tapęs DI architektu ir rašytoju, aistringas mokslo, technologijų ir kūrybos sankirtose.",
+      description: "Esu chemikas, tapęs DI architektu, lyderiu ir rašytoju, aistringas mokslo, technologijų, verslo ir kūrybos sankirtose.",
       quickLinks: "Greitos nuorodos",
       connect: "Susisiekti",
       madeWith: "Sukurta su",
@@ -497,7 +497,7 @@ export const translations = {
       fillAllFields: "Veuillez remplir tous les champs"
     },
     footer: {
-      description: "Je suis un chimiste devenu architecte IA et écrivain, passionné par l'intersection de la science, de la technologie et de la créativité.",
+      description: "Je suis un chimiste devenu architecte IA, leader et écrivain, passionné par l'intersection de la science, de la technologie, de la créativité et des affaires.",
       quickLinks: "Liens rapides",
       connect: "Se connecter",
       madeWith: "Fait avec",
