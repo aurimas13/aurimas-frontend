@@ -12,7 +12,7 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
   const t = translations[currentLanguage];
 
   return (
-    <section className="min-h-screen relative overflow-hidden pt-20 bg-white">
+    <section className="relative overflow-hidden pt-16 pb-12 bg-white">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden w-full">
         <div className="absolute top-20 left-4 md:left-[8%] w-16 md:w-20 h-16 md:h-20 bg-yellow-200 rounded-full opacity-30 animate-bounce"></div>
@@ -46,7 +46,7 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
         </div>
       </div>
 
-      <div className="w-screen px-4 sm:px-6 lg:px-8 xl:px-12 min-h-screen flex items-center relative z-10 pt-8">
+      <div className="w-screen px-4 sm:px-6 lg:px-8 xl:px-12 flex items-center relative z-10 pt-8">
 
         {/* Main Content */}
         <div className="text-center w-full max-w-7xl mx-auto">
