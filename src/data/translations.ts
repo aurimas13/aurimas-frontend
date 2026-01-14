@@ -18,13 +18,8 @@ export const translations = {
       download: "Download CV"
     },
     blogs: {
-<<<<<<< HEAD
       title: "Blog",
       subtitle: "Thoughts, stories, scribbles and insights from my journey in tech and life.",
-=======
-      title: "Blogs",
-      subtitle: "Thoughts on AI, chemistry, life, and everything in between",
->>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
       readMore: "Read More",
       allBlogs: "All Blogs",
       manageBlog: "Manage Blog",
@@ -194,13 +189,8 @@ export const translations = {
       download: "Atsisiųsti CV"
     },
     blogs: {
-<<<<<<< HEAD
       title: "Tinkliaraštis",
       subtitle: "Idėjos, istorijos, keverziojimai ir pastebėjimai mano technologijų ir gyvenimo kelionėje.",
-=======
-      title: "Tinkliaraščiai",
-      subtitle: "Mintys apie DI, chemiją, gyvenimą ir viską, kas tarp jų",
->>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
       readMore: "Skaityti daugiau",
       allBlogs: "Visi tinkliaraščiai",
       manageBlog: "Valdyti tinkliaraštį",
@@ -370,13 +360,8 @@ export const translations = {
       download: "Télécharger CV"
     },
     blogs: {
-<<<<<<< HEAD
       title: "Blog",
       subtitle: "Réflexions, histoires, griffonnages et réflexions sur mon parcours dans la technologie et la vie.",
-=======
-      title: "Blogs",
-      subtitle: "Réflexions sur l'IA, la chimie, la vie et tout ce qui se trouve entre les deux",
->>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
       readMore: "Lire la suite",
       allBlogs: "Tous les blogs",
       manageBlog: "Gérer le blog",

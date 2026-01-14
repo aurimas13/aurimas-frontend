@@ -1,6 +1,5 @@
 export interface BlogPost {
   id: string;
-<<<<<<< HEAD
   title: LocalizedText | string;
   excerpt: LocalizedText | string;
   content: LocalizedText | string;
@@ -10,15 +9,6 @@ export interface BlogPost {
   readTime: LocalizedText | string | number;
   isPremium?: boolean;
   published?: boolean;
-=======
-  title: string;
-  excerpt: string;
-  content: string;
-  category: BlogCategoryKey;
-  publishedAt: string;
-  readTime: number;
-  isPremium: boolean;
->>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
   tags: string[];
   author: LocalizedText | string;
   status?: 'draft' | 'published' | 'scheduled';

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Save, Eye, Trash2, Plus, Edit3, Calendar, Clock, User, Tag, Lock, Unlock, Mail, Users, Download, Copy, FileText } from 'lucide-react';
 import { BlogPost } from '../types';
@@ -903,4 +901,4 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     </div>
   );
 };
->>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
+

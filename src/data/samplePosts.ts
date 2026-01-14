@@ -62,7 +62,6 @@ export const loadSamplePosts = () => {
       console.error('Error parsing stored posts:', error);
     }
   }
-<<<<<<< HEAD
   
   // If no posts exist, restore the user's published posts that were lost
   const restoredPosts: BlogPost[] = [
@@ -149,7 +148,4 @@ May this edition bring you moments of peace and inspiration in your own spiritua
   }
 
   return restoredPosts;
-=======
-  return [];
->>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
 };
