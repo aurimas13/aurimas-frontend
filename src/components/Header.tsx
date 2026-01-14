@@ -187,12 +187,6 @@ export function Header() {
             >
               {t.navigation.blog}
             </button>
-            <Link
-              to="/blogs"
-              className="text-gray-700 hover:text-amber-600 transition-colors"
-            >
-              All Blogs
-            </Link>
             <button
               onClick={() => handleNavigation('gallery')}
               className="text-gray-700 hover:text-amber-600 transition-colors"

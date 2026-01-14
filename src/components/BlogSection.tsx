@@ -1034,7 +1034,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors mb-6"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to All Blogs</span>
+              <span>Back to Blog</span>
             </button>
           </div>
 

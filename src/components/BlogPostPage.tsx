@@ -610,23 +610,19 @@ export const BlogPostPage: React.FC = () => {
         {/* Navigation */}
         <div className="mb-8">
           <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
-            <Link to="/blogs" className="hover:text-blue-600 transition-colors">
-              All Blogs
-            </Link>
-            <span>/</span>
-            <Link to={`/blogs/${category}`} className="hover:text-blue-600 transition-colors">
-              {categoryData.title[currentLanguage as LanguageCode]}
+            <Link to="/#blogs" className="hover:text-blue-600 transition-colors">
+              Blog
             </Link>
             <span>/</span>
             <span className="text-gray-900">{getLocalizedText(post?.title)}</span>
           </nav>
           
           <Link 
-            to={`/blogs/${category}`}
+            to="/#blogs"
             className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to {categoryData.title[currentLanguage as LanguageCode]}
+            Back to Blog
           </Link>
         </div>
 
