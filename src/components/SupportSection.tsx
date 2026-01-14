@@ -174,27 +174,6 @@ export const SupportSection: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Ko-fi Link */}
-            <div className="bg-gradient-to-r from-orange-400 to-red-500 rounded-2xl p-6 text-white relative">
-              <div className="absolute top-2 right-2 text-xs opacity-75">Alternative</div>
-              <div className="flex items-center mb-4">
-                <Coffee className="w-6 h-6 mr-2" />
-                <h4 className="text-lg font-bold">{t.support.kofiTitle}</h4>
-              </div>
-              <p className="mb-4 text-orange-100 text-sm">
-                {t.support.kofiAlternativeDescription}
-              </p>
-              <a
-                href="https://ko-fi.com/aurimas13"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-white text-orange-600 font-bold rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <Coffee className="w-5 h-5 mr-2" />
-                {t.support.visitKofiBtn}
-              </a>
-            </div>
           </div>
         </div>
       </div>
