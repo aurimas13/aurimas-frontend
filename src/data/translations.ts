@@ -164,7 +164,7 @@ export const translations = {
     navigation: {
       home: "Home",
       about: "About",
-      blog: "Blogs",
+      blog: "Blog",
       gallery: "Gallery",
       support: "Support",
       contact: "Contact"
@@ -335,7 +335,7 @@ export const translations = {
     navigation: {
       home: "Pradžia",
       about: "Apie",
-      blog: "Tinkliaraščiai",
+      blog: "Tinkliaraštis",
       gallery: "Galerija",
       support: "Parama",
       contact: "Kontaktai"
@@ -506,7 +506,7 @@ export const translations = {
     navigation: {
       home: "Accueil",
       about: "À propos",
-      blog: "Blogs",
+      blog: "Blog",
       gallery: "Galerie",
       support: "Soutien",
       contact: "Contact"
