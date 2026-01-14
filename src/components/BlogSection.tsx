@@ -1105,32 +1105,6 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4 justify-center mb-8">
-            <button 
-              onClick={handleBackToPreview}
-              className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              ← Back to Preview
-            </button>
-            
-            {/* Show "All Blogs" for visitors, "Manage Posts" for authenticated users */}
-            {isAuthenticated ? (
-              <button 
-                onClick={handleAuthentication}
-                className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                {t.blogs.manageBlog}
-              </button>
-            ) : (
-              <button 
-                onClick={() => setShowAllBlogs(true)}
-                className="px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
-              >
-                {t.blogs.allBlogs}
-              </button>
-            )}
-          </div>
-
           {/* Blog Posts List */}
           <div className="max-w-4xl mx-auto">
             {posts.length === 0 ? (
@@ -1242,21 +1216,6 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {t.blogs.subtitle}
           </p>
-        </div>
-
-        <div className="flex flex-wrap gap-4 justify-center mb-8">
-          <button 
-            onClick={handleShowAllBlogs}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            {t.blogs.allBlogs}
-          </button>
-          <button 
-            onClick={handleAuthentication}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            {t.blogs.manageBlog}
-          </button>
         </div>
 
         {/* Blog Posts Section */}
