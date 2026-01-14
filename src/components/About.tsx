@@ -110,21 +110,21 @@ export const About: React.FC = () => {
               <p className="mb-4 text-sm sm:text-base">{t.about.downloadDescription}</p>
               <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-3">
                 <button
-                  onClick={() => handlePDFDownload('/Aurimas_Nausedas_Resume_2025_July.pdf', 'Aurimas_Nausedas_CV_English.pdf')}
+                  onClick={() => handlePDFDownload('/Aurimas_Nausedas_Resume_2026_January_One_Page.pdf', 'Aurimas_Nausedas_CV_English.pdf')}
                   className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
                 >
                   <Download className="w-4 h-4" />
                   <span>{t.about.download} (EN)</span>
                 </button>
                 <button
-                  onClick={() => handlePDFDownload('/CV_Aurimas_Liepa.pdf', 'Aurimas_Nausedas_CV_Lithuanian.pdf')}
+                  onClick={() => handlePDFDownload('/CV_Aurimas_Sausis_2026_vienas_lapas.pdf', 'Aurimas_Nausedas_CV_Lithuanian.pdf')}
                   className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
                 >
                   <Download className="w-4 h-4" />
                   <span>{t.about.download} (LT)</span>
                 </button>
                 <button
-                  onClick={() => handlePDFDownload('/CV_Aurimas_Juillet.pdf', 'Aurimas_Nausedas_CV_French.pdf')}
+                  onClick={() => handlePDFDownload('/CV_Aurimas_2026_janvier_une_feuille.pdf', 'Aurimas_Nausedas_CV_French.pdf')}
                   className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
                 >
                   <Download className="w-4 h-4" />
