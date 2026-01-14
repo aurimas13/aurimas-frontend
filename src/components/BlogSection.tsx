@@ -1519,35 +1519,31 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           </div>
         </div>
 
-        {/* Substack Publications - Smaller Section */}
+        {/* Molecule To Machine Newsletter Link */}
         <div className="mb-12">
-          <h4 className="text-lg font-semibold text-gray-700 mb-4 text-center">
-            {t.blogs.originalSubstack}
-          </h4>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {Object.entries(blogCategories).map(([key, category]) => (
-              <div key={key} className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow border border-gray-100">
-                <h5 className="text-sm font-semibold text-gray-800 mb-2">
-                  {category.title[currentLanguage as LanguageCode]}
-                </h5>
-                <p className="text-gray-600 mb-3 text-xs">
-                  {category.description[currentLanguage as LanguageCode]}
-                </p>
-                <div className="mb-3">
-                  <p className="text-xs text-gray-500">{category.languages[currentLanguage as LanguageCode]}</p>
-                </div>
-                <a
-                  href={category.originalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors"
-                >
-                  <ExternalLink className="w-3 h-3 mr-1" />
-                  {t.blogs.visitSubstack}
-                </a>
-              </div>
-            ))}
+          <div className="bg-white rounded-lg shadow-sm p-6 max-w-md mx-auto text-center border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="text-3xl mb-3">🧪</div>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">
+              {currentLanguage === 'lt' ? 'Molekulė į Mašiną' : 
+               currentLanguage === 'fr' ? 'De la Molécule à la Machine' : 
+               'Molecule To Machine'}
+            </h4>
+            <p className="text-gray-600 mb-4 text-sm">
+              {currentLanguage === 'lt' ? 'Chemija susitinka su dirbtiniu intelektu ir technologijomis' : 
+               currentLanguage === 'fr' ? 'La chimie rencontre l\'IA et la technologie' : 
+               'Chemistry meets AI and technology'}
+            </p>
+            <a
+              href="https://moleculetomachine.substack.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700 transition-colors"
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              {currentLanguage === 'lt' ? 'Skaityti originalioje platformoje' : 
+               currentLanguage === 'fr' ? 'Lire sur la plateforme d\'origine' : 
+               'Read on Original Platform'}
+            </a>
           </div>
         </div>
       </div>
