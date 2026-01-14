@@ -1487,10 +1487,13 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
                currentLanguage === 'fr' ? 'De la Molécule à la Machine' : 
                'Molecule To Machine'}
             </h4>
-            <p className="text-gray-600 mb-4 text-sm">
+            <p className="text-gray-600 mb-2 text-sm">
               {currentLanguage === 'lt' ? 'Chemija susitinka su dirbtiniu intelektu ir technologijomis' : 
                currentLanguage === 'fr' ? 'La chimie rencontre l\'IA et la technologie' : 
                'Chemistry meets AI and technology'}
+            </p>
+            <p className="text-gray-500 mb-4 text-xs italic">
+              {t.blogs.inLanguage}
             </p>
             <a
               href="https://moleculetomachine.substack.com"
