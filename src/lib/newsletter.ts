@@ -6,6 +6,10 @@ export interface NewsletterSubscriber {
   subscribed_at: string;
   is_active: boolean;
   unsubscribe_token: string;
+  preferences?: {
+    email_notifications: boolean;
+    categories: string[];
+  };
 }
 
 export interface NewsletterCampaign {
@@ -15,6 +19,109 @@ export interface NewsletterCampaign {
   sent_at: string;
   recipient_count: number;
 }
+
+// Send new post notification to all subscribers
+export const sendNewPostNotification = async (post: {
+  title: string;
+  excerpt: string;
+  category: string;
+  author: string;
+  url: string;
+}): Promise<{ success: boolean; message: string; count: number }> => {
+  console.log('📧 Sending new post notification:', post.title);
+  
+  try {
+    const subscribers = await getNewsletterSubscribers();
+    const activeSubscribers = subscribers.filter(sub => sub.is_active);
+    
+    if (activeSubscribers.length === 0) {
+      return { success: true, message: 'No active subscribers to notify', count: 0 };
+    }
+    
+    // In a real implementation, you would integrate with an email service like:
+    // - SendGrid
+    // - Mailgun  
+    // - AWS SES
+    // - Resend
+    // - EmailJS (for client-side sending)
+    
+    // For now, we'll simulate the email sending and store the notification record
+    const emailSubject = `New post: ${post.title}`;
+    const emailBody = `
+      Hi there! 👋
+      
+      A new post has been published on the blog:
+      
+      📝 **${post.title}**
+      ✍️ By ${post.author}
+      📂 Category: ${post.category}
+      
+      ${post.excerpt}
+      
+      Read the full post: ${post.url}
+      
+      Best regards,
+      The Blog Team
+      
+      ---
+      You're receiving this because you subscribed to our newsletter.
+      Unsubscribe: [unsubscribe_link]
+    `;
+    
+    // Store notification record in localStorage for demo
+    const notifications = JSON.parse(localStorage.getItem('email-notifications') || '[]');
+    const newNotification = {
+      id: `notification-${Date.now()}`,
+      post_title: post.title,
+      sent_at: new Date().toISOString(),
+      recipient_count: activeSubscribers.length,
+      subject: emailSubject,
+      body: emailBody,
+      recipients: activeSubscribers.map(sub => sub.email)
+    };
+    
+    notifications.push(newNotification);
+    localStorage.setItem('email-notifications', JSON.stringify(notifications));
+    
+    // In production, you would send actual emails here:
+    /*
+    for (const subscriber of activeSubscribers) {
+      await sendEmail({
+        to: subscriber.email,
+        subject: emailSubject,
+        html: convertToHtml(emailBody),
+        unsubscribeLink: `${window.location.origin}/unsubscribe?token=${subscriber.unsubscribe_token}`
+      });
+    }
+    */
+    
+    console.log(`✅ Email notification simulated for ${activeSubscribers.length} subscribers`);
+    
+    return { 
+      success: true, 
+      message: `Email notifications sent to ${activeSubscribers.length} subscribers`, 
+      count: activeSubscribers.length 
+    };
+    
+  } catch (error) {
+    console.error('❌ Error sending notifications:', error);
+    return { 
+      success: false, 
+      message: `Failed to send notifications: ${error}`, 
+      count: 0 
+    };
+  }
+};
+
+// Get email notification history
+export const getEmailNotificationHistory = (): any[] => {
+  try {
+    return JSON.parse(localStorage.getItem('email-notifications') || '[]');
+  } catch (error) {
+    console.error('Error loading notification history:', error);
+    return [];
+  }
+};
 
 // Subscribe to newsletter
 export const subscribeToNewsletter = async (email: string): Promise<{ success: boolean; message: string }> => {

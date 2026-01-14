@@ -48,6 +48,74 @@ body {
 /* Ensure Tailwind utilities work */
 .bg-white { background-color: #ffffff !important; }
 .bg-yellow-500 { background-color: #eab308 !important; }
+
+/* Enhanced styles for published blog content */
+.prose .text-gray-700 a,
+.text-gray-700 a {
+  color: #16a34a !important;
+  text-decoration: underline !important;
+  font-weight: 500 !important;
+  transition: color 0.2s ease;
+}
+
+.prose .text-gray-700 a:hover,
+.text-gray-700 a:hover {
+  color: #15803d !important;
+}
+
+.prose .text-gray-700 strong,
+.text-gray-700 strong {
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+}
+
+.prose .text-gray-700 em,
+.text-gray-700 em {
+  font-style: italic !important;
+  color: #374151 !important;
+}
+
+.prose .text-gray-700 u,
+.text-gray-700 u {
+  text-decoration: underline !important;
+}
+
+/* Blog post content specific styling - ENHANCED GREEN LINKS */
+.blog-content a {
+  color: #16a34a !important;
+  text-decoration: underline !important;
+  font-weight: 500 !important;
+}
+
+.blog-content a:hover {
+  color: #15803d !important;
+}
+
+/* Ensure all markdown links in blog content are green */
+.prose a,
+.blog-content a,
+.text-gray-700 a {
+  color: #16a34a !important;
+  text-decoration: underline !important;
+  font-weight: 500 !important;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover,
+.blog-content a:hover,  
+.text-gray-700 a:hover {
+  color: #15803d !important;
+}
+
+.blog-content strong {
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+}
+
+.blog-content em {
+  font-style: italic !important;
+  color: #374151 !important;
+}
 .bg-yellow-400 { background-color: #facc15 !important; }
 .bg-yellow-300 { background-color: #fde047 !important; }
 .bg-yellow-200 { background-color: #fef08a !important; }
@@ -172,4 +240,34 @@ body {
   .no-print {
     display: none !important;
   }
+}
+
+/* Video Embed Styles - Ensure proper sizing */
+.blog-content iframe[src*="youtube.com"],
+.blog-content iframe[src*="youtu.be"] {
+  width: 100% !important;
+  height: 500px !important;
+  min-height: 500px !important;
+  max-width: 100% !important;
+  border-radius: 8px !important;
+}
+
+.blog-content iframe[src*="spotify.com"] {
+  width: 100% !important;
+  height: 152px !important;
+  min-height: 152px !important;
+  max-width: 100% !important;
+  border-radius: 12px !important;
+}
+
+/* Ensure video containers maintain size */
+.blog-content div[style*="youtube.com"] iframe,
+.blog-content div[style*="youtu.be"] iframe {
+  width: 100% !important;
+  height: 500px !important;
+}
+
+.blog-content div[style*="spotify.com"] iframe {
+  width: 100% !important;
+  height: 152px !important;
 }

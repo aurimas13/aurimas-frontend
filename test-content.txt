@@ -1,0 +1,28 @@
+# 1. 🏆 Top Story: [Claude may have someone on par](https://qwenlm.github.io/blog/qwen3-coder/)?
+
+<div style="text-align: center;">*Source: Qwen Team.*</div>
+  ○ **Synopsis**: Coding and Agentic performance comparable to Claude Sonnet. Qwen3-Coder is an open-source framework that achieves state-of-the-art performance without requiring test-time scaling. 
+
+  ○ **My Insight**: *Qwen3-Coder key challenge laid in environment scaling. It was addressed through large-scale reinforcement learning, providing a comparison to the best LLM models.* 🤖 📂 🚀
+
+# 2. 🔄 Expert Insight: [Complex tasks solved with a six-fold increase in performance](https://news.mit.edu/2025/study-could-lead-llms-better-complex-reasoning-0708)! 
+
+
+  ○ **Synopsis**: No surprise that Large Language Models (LLMs) fall short when given a complex task. But. The test-time strategy leads to a six-fold increase in accuracy, flexibility, and performance. 
+
+
+  ○ **My Insight**: *The MIT researchers show that you can get huge improvements in accuracy with a very small amount of parameter training. We are closer to human-level AI.* 🧩 🧬 🚧
+
+# 3. 🔮 Future Watch: [Ready to earn millions through stocks with AI help](https://www.anthropic.com/news/claude-for-financial-services)? 
+
+<u>*Hypothesis*</u>: "💡 *Claude for Financial Services could help you become a magnate in days?* " 
+
+  ○ **Why**: Utilising Claude's Financial Analysis Solution (FAS), we can unify our financial data into a single interface. As it includes Claude's industry-leading financial capabilities (1), Claude Code with expanded usage limits (2), pre-built MCP connectors (3), and expert implementation support (4), we can build a financial monopoly by just utilising and understanding FAS. 
+
+  ○ **My Insight**: *I like that Claude's FAS offers a fundamentally more reliable approach to analyzing financial data, enabling us to monitor portfolio performance and compare metrics across investments to identify opportunities more quickly and efficiently than traditional methods.* 📊 🧠 🏦 
+
+# 4. ⚖️ Interactive Corner: Your Voice Matters! 
+
+[POLL:What use case would you try first?| AI to manage my investments 💰| AI to solve hard puzzles 🧠|AI to write code for me 💻]
+
+# 5. 🚀 Technology & AI worlds: Major AI & Tech Breakthroughs From June to July 2025

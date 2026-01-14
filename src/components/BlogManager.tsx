@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Save, Eye, Trash2, Plus, Edit3, Calendar, Clock, User, Tag, Lock, Unlock, Mail, Users, Download, Copy, FileText } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Trash2, Plus, Edit3, Calendar, Clock, User, Tag, Lock, Unlock, Mail, Users, Download, Copy, FileText, Bell, Check } from 'lucide-react';
 import { BlogPost } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase, isSupabaseConfigured, createBlogPost, updateBlogPost, getBlogPosts, deleteBlogPost, uploadFile } from '../lib/supabase';
-import { getNewsletterSubscribers, type NewsletterSubscriber } from '../lib/newsletter';
+import { getNewsletterSubscribers, sendNewPostNotification, type NewsletterSubscriber } from '../lib/newsletter';
 import { getBlogPostTemplates } from '../data/samplePosts';
 
 interface BlogManagerProps {
@@ -36,24 +36,39 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     return userId;
   };
 
-  // Helper function to compress images
-  const compressImage = (file: File, quality: number = 0.7): Promise<Blob> => {
+  // Helper function to compress images - removed size limits for maximum flexibility
+  const compressImage = (file: File, quality: number = 0.8): Promise<Blob> => {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d')!;
       const img = new Image();
       
       img.onload = () => {
-        // Calculate new dimensions (max 1200px width)
-        const maxWidth = 1200;
-        const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
-        canvas.width = img.width * ratio;
-        canvas.height = img.height * ratio;
+        // Use original dimensions or scale down only if extremely large
+        const maxDimension = 2400; // Increased from 1200 to allow larger images
+        let { width, height } = img;
         
-        // Draw and compress
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // Only scale down if both dimensions are larger than max
+        if (width > maxDimension || height > maxDimension) {
+          const ratio = Math.min(maxDimension / width, maxDimension / height);
+          width = width * ratio;
+          height = height * ratio;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress with higher quality
+        ctx.drawImage(img, 0, 0, width, height);
         canvas.toBlob((blob) => {
           if (blob) {
+            console.log('📸 Image compressed:', {
+              originalSize: file.size,
+              compressedSize: blob.size,
+              originalDimensions: `${img.width}x${img.height}`,
+              finalDimensions: `${width}x${height}`,
+              quality
+            });
             resolve(blob);
           } else {
             reject(new Error('Failed to compress image'));
@@ -61,6 +76,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
         }, 'image/jpeg', quality);
       };
       
+      img.onerror = () => reject(new Error('Failed to load image'));
       img.src = URL.createObjectURL(file);
     });
   };
@@ -99,7 +115,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     }
   };
 
-  // Poll component with voting functionality
+  // Poll component with SECRET voting functionality
   const PollComponent: React.FC<{
     question: string;
     options: string[];
@@ -113,7 +129,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     const handleVote = (option: string) => {
       if (hasVoted) return;
       
-      // Update poll votes
+      // Update poll votes (secretly - votes are registered and counted)
       setPollVotes(prev => ({
         ...prev,
         [pollId]: {
@@ -122,13 +138,13 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
         }
       }));
       
-      // Mark user as voted
+      // Mark user as voted (choice recorded but not displayed)
       setUserVotes(prev => ({
         ...prev,
         [pollId]: option
       }));
       
-      // Save to localStorage for persistence
+      // Save to localStorage for persistence (backend storage - votes counted secretly)
       const savedVotes = JSON.parse(localStorage.getItem('blog-poll-votes') || '{}');
       const savedUserVotes = JSON.parse(localStorage.getItem('blog-user-votes') || '{}');
       
@@ -160,10 +176,6 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
         <h4 className="font-semibold text-gray-800 mb-3">📊 {question}</h4>
         <div className="space-y-2">
           {options.map((option, optionIndex) => {
-            const voteCount = currentVotes[option] || 0;
-            const percentage = totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
-            const isSelected = userVotes[pollId] === option;
-            
             return (
               <div key={optionIndex} className="relative">
                 <button
@@ -171,47 +183,31 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                   disabled={hasVoted}
                   className={`w-full text-left p-3 rounded border transition-colors ${
                     hasVoted
-                      ? isSelected
-                        ? 'bg-blue-100 border-blue-300 text-blue-800'
-                        : 'bg-gray-100 border-gray-200 text-gray-600'
+                      ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-default'
                       : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700 cursor-pointer'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                        isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                        hasVoted ? 'border-gray-400 bg-gray-400' : 'border-gray-300'
                       }`}>
-                        {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
+                        {hasVoted && <div className="w-2 h-2 bg-white rounded-full" />}
                       </div>
                       <span className="font-medium">{option.trim()}</span>
                     </div>
-                    {hasVoted && (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500">{voteCount} votes</span>
-                        <span className="text-sm font-medium text-gray-700">{percentage.toFixed(1)}%</span>
-                      </div>
-                    )}
+                    {/* No vote counts or percentages shown - keeping votes secret */}
                   </div>
-                  {hasVoted && (
-                    <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all duration-500 ${
-                          isSelected ? 'bg-blue-500' : 'bg-gray-400'
-                        }`}
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                  )}
                 </button>
               </div>
             );
           })}
         </div>
-        <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-          <span>{totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}</span>
-          {hasVoted && (
-            <span className="text-green-600 font-medium">✓ You voted for "{userVotes[pollId]}"</span>
+        <div className="mt-3 flex items-center justify-center text-sm">
+          {hasVoted ? (
+            <span className="text-green-600 font-medium">✅ Your vote has been recorded secretly. Thank you!</span>
+          ) : (
+            <span className="text-gray-500">Click an option to cast your secret vote</span>
           )}
         </div>
       </div>
@@ -297,6 +293,313 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     loadPosts();
     loadSubscribers();
   }, []);
+
+  // Add a cleanup interval to catch rich text editor changes
+  useEffect(() => {
+    if (!currentPost) return;
+    
+    // EXTREME AGGRESSIVE monitoring - check every 50ms for maximum responsiveness
+    const intervalId = setInterval(() => {
+      if (currentPost?.content) {
+        // Check for ANY suspicious content - data URLs, FULL_DATA, or large content
+        const hasDataUrls = currentPost.content.includes('data:image/') || 
+                           currentPost.content.includes('FULL_DATA:') ||
+                           currentPost.content.length > 15000;
+        
+        if (hasDataUrls) {
+          console.log('🔥 EXTREME CLEANUP: Found suspicious content, destroying immediately!');
+          console.log('📊 Original content length:', currentPost.content.length);
+          
+          let cleanedContent = currentPost.content;
+          let changesMade = false;
+          
+          // Pattern 1: The EXACT pattern from your screenshot
+          // ![alt](filename)<!--\nFULL_DATA:data:image/...
+          const exactPattern = /(!\[[^\]]*\]\([^)]+\))<!--[\s\S]*?FULL_DATA:\s*(data:image\/[^;]+;base64,[^\s]+)/g;
+          const exactMatches = cleanedContent.match(exactPattern);
+          if (exactMatches) {
+            console.log('🎯 FOUND EXACT PATTERN: Image with HTML comment and FULL_DATA:', exactMatches.length, 'matches');
+            cleanedContent = cleanedContent.replace(exactPattern, (match, imageMarkdown, dataUrl) => {
+              console.log('🔥 EXACT: Processing exact pattern match');
+              changesMade = true;
+              
+              // Extract filename from the markdown
+              const filenameMatch = imageMarkdown.match(/!\[[^\]]*\]\(([^)]+)\)/);
+              if (filenameMatch) {
+                const filename = filenameMatch[1];
+                console.log('💾 EXACT: Storing data for filename:', filename);
+                storeCompressedFile(filename, dataUrl);
+                
+                const fileInfo = {
+                  id: filename,
+                  name: filename,
+                  originalName: filename,
+                  url: dataUrl,
+                  type: 'image/jpeg',
+                  size: Math.round(dataUrl.length * 0.75)
+                };
+                
+                // Update uploadedFiles without duplicates
+                if (currentPost.uploadedFiles) {
+                  const exists = currentPost.uploadedFiles.find(f => f.name === filename || f.url === dataUrl);
+                  if (!exists) {
+                    const updatedFiles = [...currentPost.uploadedFiles, fileInfo];
+                    setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+                  }
+                } else {
+                  setCurrentPost(prev => prev ? { ...prev, uploadedFiles: [fileInfo] } : null);
+                }
+              }
+              
+              return imageMarkdown; // Return ONLY the clean image markdown
+            });
+          }
+          
+          // Pattern 2: Any remaining HTML comments with content
+          const htmlCommentPattern = /<!--[\s\S]*?FULL_DATA:[\s\S]*?-->/g;
+          const commentMatches = cleanedContent.match(htmlCommentPattern);
+          if (commentMatches) {
+            console.log('🔥 FOUND HTML COMMENTS: Removing HTML comments with FULL_DATA:', commentMatches.length);
+            cleanedContent = cleanedContent.replace(htmlCommentPattern, '');
+            changesMade = true;
+          }
+          
+          // Pattern 3: Standalone FULL_DATA lines
+          const fullDataLinePattern = /FULL_DATA:\s*data:image\/[^;]+;base64,[^\s\n]+/g;
+          const fullDataMatches = cleanedContent.match(fullDataLinePattern);
+          if (fullDataMatches) {
+            console.log('🔥 FOUND FULL_DATA LINES: Removing standalone FULL_DATA lines:', fullDataMatches.length);
+            cleanedContent = cleanedContent.replace(fullDataLinePattern, '');
+            changesMade = true;
+          }
+          
+          // Pattern 4: Any very long base64 strings (over 2000 chars)
+          const longBase64Pattern = /[A-Za-z0-9+/]{2000,}={0,2}/g;
+          const base64Matches = cleanedContent.match(longBase64Pattern);
+          if (base64Matches) {
+            console.log('🔥 FOUND LONG BASE64: Removing long base64 strings:', base64Matches.length);
+            cleanedContent = cleanedContent.replace(longBase64Pattern, '');
+            changesMade = true;
+          }
+          
+          // Pattern 5: Clean up any leftover HTML comment markers
+          const leftoverComments = /<!--[\s\S]*?-->/g;
+          if (leftoverComments.test(cleanedContent)) {
+            console.log('🔥 FOUND LEFTOVER COMMENTS: Removing leftover HTML comments');
+            cleanedContent = cleanedContent.replace(leftoverComments, '');
+            changesMade = true;
+          }
+          
+          // Pattern 6: Clean up multiple empty lines left behind
+          const multipleNewlines = /\n{3,}/g;
+          if (multipleNewlines.test(cleanedContent)) {
+            console.log('🔥 FOUND MULTIPLE NEWLINES: Cleaning up extra newlines');
+            cleanedContent = cleanedContent.replace(multipleNewlines, '\n\n');
+            changesMade = true;
+          }
+          
+          if (changesMade) {
+            const originalLength = currentPost.content.length;
+            const newLength = cleanedContent.length;
+            const savedBytes = originalLength - newLength;
+            console.log('🔥 EXTREME SUCCESS: Content cleaned!');
+            console.log('📊 Length: ' + originalLength + ' → ' + newLength + ' (-' + savedBytes + ' chars)');
+            console.log('💾 Saved ' + Math.round(savedBytes / 1024) + ' KB');
+            setCurrentPost(prev => prev ? { ...prev, content: cleanedContent } : null);
+          }
+        }
+      }
+    }, 50); // Check every 50ms for ultra-fast cleanup
+    
+    return () => clearInterval(intervalId);
+  }, [currentPost?.id]);
+
+  // Add input event listener to textarea for immediate detection
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const handleInput = (event: Event) => {
+      const target = event.target as HTMLTextAreaElement;
+      const content = target.value;
+      
+      // Check for immediate long data URLs
+      const hasLongDataUrls = /data:image\/[^;]+;base64,[^)\s]{100,}/g.test(content);
+      if (hasLongDataUrls) {
+        console.log('🎯 INPUT EVENT - detected long data URL, triggering immediate cleanup');
+        
+        // Immediate cleanup
+        setTimeout(() => {
+          handleContentChange(content);
+        }, 10);
+      }
+    };
+
+    const handlePasteEvent = (event: ClipboardEvent) => {
+      setTimeout(() => {
+        const content = textarea.value;
+        const hasLongDataUrls = /data:image\/[^;]+;base64,[^)\s]{100,}/g.test(content);
+        if (hasLongDataUrls) {
+          console.log('📋 PASTE EVENT - detected long data URL after paste');
+          handleContentChange(content);
+        }
+      }, 50);
+    };
+
+    textarea.addEventListener('input', handleInput);
+    textarea.addEventListener('paste', handlePasteEvent);
+    
+    // Also add a MutationObserver to watch for value changes
+    const observer = new MutationObserver(() => {
+      const content = textarea.value;
+      const hasLongDataUrls = /data:image\/[^;]+;base64,[^)\s]{100,}/g.test(content);
+      if (hasLongDataUrls) {
+        console.log('👁️ MUTATION OBSERVER - detected long data URL');
+        setTimeout(() => handleContentChange(content), 20);
+      }
+    });
+
+    observer.observe(textarea, {
+      attributes: true,
+      attributeFilter: ['value'],
+      childList: false,
+      subtree: false
+    });
+    
+    return () => {
+      textarea.removeEventListener('input', handleInput);
+      textarea.removeEventListener('paste', handlePasteEvent);
+      observer.disconnect();
+    };
+  }, [currentPost?.id]);
+
+  // Function to handle content updates from rich text editor with immediate cleanup
+  const handleContentChange = (newContent: string) => {
+    console.log('📝 Content change detected, length:', newContent.length);
+    
+    // Immediate preprocessing to catch rich text editor insertions
+    let processedContent = newContent;
+    
+    // Check for long data URLs in markdown image format ![alt](data:image/...)
+    const markdownImagePattern = /!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{100,}\)/g;
+    const hasMarkdownImages = markdownImagePattern.test(processedContent);
+    
+    if (hasMarkdownImages) {
+      console.log('🚨 IMMEDIATE cleanup - found markdown images with long data URLs');
+      
+      // Reset the pattern for actual replacement
+      const markdownImageRegex = /!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{100,}\)/g;
+      
+      processedContent = processedContent.replace(markdownImageRegex, (match, alt) => {
+        console.log('🔄 IMMEDIATE processing markdown image, alt:', alt, 'length:', match.length);
+        
+        // Extract the data URL from the match
+        const dataUrlMatch = match.match(/data:image\/[^;]+;base64,[^)]+/);
+        if (dataUrlMatch) {
+          const dataUrl = dataUrlMatch[0];
+          
+          // Generate a new short name and store it immediately
+          const fileExtension = 'jpg';
+          const shortName = generateShortFileName(fileExtension);
+          
+          // Store the image data immediately
+          storeCompressedFile(shortName, dataUrl);
+          console.log('💾 IMMEDIATE stored markdown image with short name:', shortName);
+          
+          // Add to uploaded files immediately
+          const fileInfo = {
+            id: shortName,
+            name: shortName,
+            originalName: alt || 'uploaded-image',
+            url: dataUrl,
+            type: 'image/jpeg',
+            size: Math.round(dataUrl.length * 0.75)
+          };
+          
+          if (currentPost) {
+            const updatedFiles = currentPost.uploadedFiles ? [...currentPost.uploadedFiles] : [];
+            // Check if this exact data URL is already stored
+            const exists = updatedFiles.find(f => f.url === dataUrl);
+            if (!exists) {
+              updatedFiles.push(fileInfo);
+              // Update the post immediately with the new file
+              setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+            }
+          }
+          
+          // Return the markdown format with short name
+          return `![${alt}](${shortName})`;
+        }
+        
+        return match; // Return original if we can't process
+      });
+      
+      console.log('✅ IMMEDIATE markdown cleanup completed, content length reduced from', newContent.length, 'to', processedContent.length);
+    }
+    
+    // Also check for standalone long data URLs (fallback)
+    const longDataUrlPattern = /data:image\/[^;]+;base64,[^)\s]{100,}/g;
+    const hasLongDataUrls = longDataUrlPattern.test(processedContent);
+    
+    if (hasLongDataUrls) {
+      console.log('🚨 IMMEDIATE cleanup - found standalone long data URLs');
+      
+      // Reset the pattern for actual replacement
+      const imageRegex = /data:image\/[^;]+;base64,[^)\s]{100,}/g;
+      
+      processedContent = processedContent.replace(imageRegex, (match) => {
+        console.log('🔄 IMMEDIATE processing standalone data URL, length:', match.length);
+        
+        // Generate a new short name and store it immediately
+        const fileExtension = 'jpg';
+        const shortName = generateShortFileName(fileExtension);
+        
+        // Store the image data immediately
+        storeCompressedFile(shortName, match);
+        console.log('💾 IMMEDIATE stored standalone image with short name:', shortName);
+        
+        // Add to uploaded files immediately
+        const fileInfo = {
+          id: shortName,
+          name: shortName,
+          originalName: 'uploaded-image',
+          url: match,
+          type: 'image/jpeg',
+          size: Math.round(match.length * 0.75)
+        };
+        
+        if (currentPost) {
+          const updatedFiles = currentPost.uploadedFiles ? [...currentPost.uploadedFiles] : [];
+          // Check if this exact data URL is already stored
+          const exists = updatedFiles.find(f => f.url === match);
+          if (!exists) {
+            updatedFiles.push(fileInfo);
+            // Update the post immediately with the new file
+            setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+          }
+        }
+        
+        // Return the short name
+        return shortName;
+      });
+      
+      console.log('✅ IMMEDIATE standalone cleanup completed, content length reduced from', newContent.length, 'to', processedContent.length);
+    }
+    
+    // Update with the processed content
+    updateCurrentPost({ content: processedContent });
+    
+    // Also schedule a delayed cleanup as backup
+    setTimeout(() => {
+      if (currentPost?.content) {
+        const stillHasLongUrls = /data:image\/[^;]+;base64,[^)\s]{50,}/g.test(currentPost.content);
+        if (stillHasLongUrls) {
+          console.log('🔄 Backup cleanup - found missed long data URLs');
+          cleanupLongDataUrls();
+        }
+      }
+    }, 100);
+  };
 
   const loadPosts = async () => {
     setIsLoading(true);
@@ -436,6 +739,9 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       };
 
       let savedPost = null;
+      const isNewPost = !posts.find(p => p.id === updatedPost.id);
+      const wasPublished = currentPost.status === 'published';
+      const isNowPublished = updatedPost.status === 'published';
       
       if (isSupabaseConfigured()) {
         console.log('Saving to Supabase...');
@@ -487,6 +793,32 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       saveToLocalStorage(updatedPosts);
       setCurrentPost(updatedPost);
       setIsEditing(false);
+      
+      // Send email notifications for newly published posts
+      if ((isNewPost && isNowPublished) || (!wasPublished && isNowPublished)) {
+        console.log('📧 Sending email notifications for newly published post...');
+        
+        try {
+          const postUrl = `${window.location.origin}/blogs/${updatedPost.category}/${encodeURIComponent(updatedPost.title.replace(/\s+/g, '-').toLowerCase())}`;
+          
+          const notificationResult = await sendNewPostNotification({
+            title: updatedPost.title,
+            excerpt: updatedPost.excerpt,
+            category: updatedPost.category,
+            author: updatedPost.author?.name || 'Blog Admin',
+            url: postUrl
+          });
+          
+          if (notificationResult.success) {
+            setError(`✅ Post saved and email notifications sent to ${notificationResult.count} subscribers!`);
+            setTimeout(() => setError(null), 5000);
+          } else {
+            console.warn('Email notification failed:', notificationResult.message);
+          }
+        } catch (emailError) {
+          console.error('Error sending email notifications:', emailError);
+        }
+      }
       
       console.log('Post saved successfully');
     } catch (error) {
@@ -540,33 +872,46 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
   const cleanupLongDataUrls = () => {
     if (!currentPost) return;
     
+    console.log('🧹 Running manual cleanup for long data URLs...');
     let content = currentPost.content;
     let hasChanges = false;
     
-    // Replace long base64 image URLs with short references
-    const imageRegex = /!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{100,}\)/g;
+    // Pattern 1: Standard markdown images with long data URLs
+    const imageRegex = /!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{50,}\)/g;
+    
+    let matches = content.match(imageRegex);
+    if (matches) {
+      console.log(`🔍 Found ${matches.length} long markdown image data URLs to clean up`);
+      hasChanges = true;
+    }
     
     content = content.replace(imageRegex, (match, alt) => {
-      hasChanges = true;
+      console.log('🔄 Cleaning up markdown image with long data URL for alt:', alt);
       
       // Extract the base64 data
       const dataUrlMatch = match.match(/data:image\/[^;]+;base64,[^)]+/);
       if (dataUrlMatch && currentPost?.uploadedFiles) {
         const dataUrl = dataUrlMatch[0];
+        console.log('🔍 Looking for matching uploaded file...');
         
         // Find the corresponding uploaded file
         const uploadedFile = currentPost.uploadedFiles.find(f => f.url === dataUrl);
         if (uploadedFile) {
+          console.log('✅ Found matching uploaded file:', uploadedFile.name);
           return `![${alt}](${uploadedFile.name})`;
+        } else {
+          console.log('❌ No matching uploaded file found');
         }
       }
       
       // If no match found, generate a new short name and store it
+      console.log('🆕 Generating new short name for orphaned data URL');
       const fileExtension = 'jpg'; // Default extension
       const shortName = generateShortFileName(fileExtension);
       const dataUrlMatch2 = match.match(/data:[^)]+/);
       if (dataUrlMatch2) {
         storeCompressedFile(shortName, dataUrlMatch2[0]);
+        console.log('💾 Stored orphaned image with short name:', shortName);
         
         // Add to uploaded files
         const fileInfo = {
@@ -590,17 +935,406 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       return match; // Return original if we can't process it
     });
     
+    // Pattern 2: HTML img tags with long data URLs (from rich text editor)
+    const htmlImgRegex = /<img[^>]*src="data:image\/[^;]+;base64,[^"]{50,}"[^>]*>/g;
+    
+    matches = content.match(htmlImgRegex);
+    if (matches) {
+      console.log(`🔍 Found ${matches.length} HTML img tags with long data URLs to clean up`);
+      hasChanges = true;
+    }
+    
+    content = content.replace(htmlImgRegex, (match) => {
+      console.log('🔄 Cleaning up HTML img tag with long data URL');
+      
+      // Extract src and alt from the img tag
+      const srcMatch = match.match(/src="(data:image\/[^"]+)"/);
+      const altMatch = match.match(/alt="([^"]*)"/);
+      
+      if (srcMatch) {
+        const dataUrl = srcMatch[1];
+        const alt = altMatch ? altMatch[1] : 'image';
+        
+        // Check if we already have this data URL stored
+        if (currentPost?.uploadedFiles) {
+          const uploadedFile = currentPost.uploadedFiles.find(f => f.url === dataUrl);
+          if (uploadedFile) {
+            console.log('✅ Found existing uploaded file:', uploadedFile.name);
+            return `![${alt}](${uploadedFile.name})`;
+          }
+        }
+        
+        // Generate a new short name and store it
+        const fileExtension = 'jpg';
+        const shortName = generateShortFileName(fileExtension);
+        
+        storeCompressedFile(shortName, dataUrl);
+        console.log('💾 Stored HTML image with short name:', shortName);
+        
+        // Add to uploaded files
+        const fileInfo = {
+          id: shortName,
+          name: shortName,
+          originalName: alt,
+          url: dataUrl,
+          type: 'image/jpeg',
+          size: Math.round(dataUrl.length * 0.75)
+        };
+        
+        if (currentPost.uploadedFiles) {
+          currentPost.uploadedFiles.push(fileInfo);
+        } else {
+          currentPost.uploadedFiles = [fileInfo];
+        }
+        
+        // Convert to markdown format with short name
+        return `![${alt}](${shortName})`;
+      }
+      
+      return match;
+    });
+    
+    // Pattern 3: Standalone data URLs that might be pasted directly
+    const standaloneDataUrlRegex = /data:image\/[^;]+;base64,[^\s]{100,}/g;
+    
+    matches = content.match(standaloneDataUrlRegex);
+    if (matches) {
+      console.log(`🔍 Found ${matches.length} standalone data URLs to clean up`);
+      hasChanges = true;
+    }
+    
+    content = content.replace(standaloneDataUrlRegex, (match) => {
+      console.log('🔄 Cleaning up standalone data URL');
+      
+      // Check if we already have this data URL stored
+      if (currentPost?.uploadedFiles) {
+        const uploadedFile = currentPost.uploadedFiles.find(f => f.url === match);
+        if (uploadedFile) {
+          console.log('✅ Found existing uploaded file:', uploadedFile.name);
+          return `![image](${uploadedFile.name})`;
+        }
+      }
+      
+      // Generate a new short name and store it
+      const fileExtension = 'jpg';
+      const shortName = generateShortFileName(fileExtension);
+      
+      storeCompressedFile(shortName, match);
+      console.log('💾 Stored standalone image with short name:', shortName);
+      
+      // Add to uploaded files
+      const fileInfo = {
+        id: shortName,
+        name: shortName,
+        originalName: 'image',
+        url: match,
+        type: 'image/jpeg',
+        size: Math.round(match.length * 0.75)
+      };
+      
+      if (currentPost.uploadedFiles) {
+        currentPost.uploadedFiles.push(fileInfo);
+      } else {
+        currentPost.uploadedFiles = [fileInfo];
+      }
+      
+      // Convert to markdown format with short name
+      return `![image](${shortName})`;
+    });
+
     if (hasChanges) {
+      console.log('✅ Manual cleanup completed! Updating post...');
       updateCurrentPost({ content });
+      console.log('📝 Content after cleanup preview:', content.substring(0, 200) + '...');
       alert('✅ Content cleaned up! Long image URLs have been replaced with short references.');
     } else {
+      console.log('ℹ️ No changes needed in cleanup');
       alert('ℹ️ No long image URLs found to clean up.');
+    }
+  };
+
+  // Handle paste events to clean up pasted images immediately
+  const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    console.log('🔄 Paste event triggered');
+    
+    // Get clipboard data
+    const clipboardData = e.clipboardData;
+    const items = clipboardData?.items;
+    
+    if (items) {
+      // Check if any files were pasted
+      const hasFiles = Array.from(items).some(item => item.kind === 'file');
+      
+      if (hasFiles) {
+        console.log('📁 Files detected in paste - processing via file upload');
+        e.preventDefault();
+        
+        const files: File[] = [];
+        Array.from(items).forEach(item => {
+          if (item.kind === 'file') {
+            const file = item.getAsFile();
+            if (file) {
+              files.push(file);
+            }
+          }
+        });
+        
+        if (files.length > 0) {
+          handleFileUpload(files);
+        }
+        return;
+      }
+    }
+    
+    // For text content, let the default paste happen, then clean up after a short delay
+    setTimeout(() => {
+      console.log('🧹 Running post-paste cleanup...');
+      cleanupLongDataUrls();
+    }, 100);
+  };
+
+  // Handle drag and drop events
+  const handleDrop = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    console.log('📂 Drop event triggered');
+    
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      console.log('📁 Files dropped:', files.length);
+      handleFileUpload(files);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+  };
+
+  // Simple function to upload image and return just the short reference
+  const getImageReference = async (files: File[]) => {
+    if (!currentPost || files.length === 0) return;
+    
+    const file = files[0]; // Just handle the first file
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+    
+    console.log('📷 Getting image reference for:', file.name);
+    setIsLoading(true);
+    
+    try {
+      const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
+      const shortName = generateShortFileName(fileExtension);
+      
+      // Compress and convert to base64
+      const compressedFile = await compressImage(file);
+      const reader = new FileReader();
+      
+      const base64Promise = new Promise<string>((resolve, reject) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => reject(new Error('Failed to read file'));
+      });
+      
+      reader.readAsDataURL(compressedFile);
+      const dataUrl = await base64Promise;
+      
+      // Store in localStorage
+      storeCompressedFile(shortName, dataUrl);
+      
+      // Add to uploaded files
+      const fileInfo = {
+        id: shortName,
+        name: shortName,
+        originalName: file.name,
+        url: dataUrl,
+        type: file.type,
+        size: compressedFile.size
+      };
+      
+      const newUploadedFiles = [...(currentPost.uploadedFiles || []), fileInfo];
+      updateCurrentPost({ uploadedFiles: newUploadedFiles });
+      
+      console.log('✅ Image stored with reference:', shortName);
+      
+      // Show the reference to copy
+      const reference = `![${file.name}](${shortName})`;
+      prompt(`✅ Image uploaded! Copy this reference to use in your content:\n\n`, reference);
+      
+    } catch (error) {
+      console.error('Error processing image:', error);
+      alert('Error processing image. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const updateCurrentPost = (updates: Partial<BlogPost>) => {
     if (currentPost) {
-      setCurrentPost({ ...currentPost, ...updates });
+      const updatedPost = { ...currentPost, ...updates };
+      
+      // If content was updated, automatically clean up any long data URLs
+      if (updates.content && updates.content !== currentPost.content) {
+        console.log('📝 Content updated, checking for long data URLs...');
+        
+        // Check if there are any long data URLs that need cleanup (more aggressive pattern)
+        const hasLongDataUrls = /data:image\/[^;]+;base64,[^)\s]{50,}/g.test(updates.content);
+        
+        if (hasLongDataUrls) {
+          console.log('🔄 Found long data URLs, cleaning up automatically...');
+          
+          // Clean up immediately without showing alerts
+          let cleanContent = updates.content;
+          
+          // Pattern 1: Standard markdown images with long data URLs
+          const imageRegex = /!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{50,}\)/g;
+          
+          cleanContent = cleanContent.replace(imageRegex, (match, alt) => {
+            console.log('🧹 Auto-cleaning markdown image with long data URL for alt:', alt);
+            
+            // Extract the data URL
+            const dataUrlMatch = match.match(/data:image\/[^;]+;base64,[^)]+/);
+            if (dataUrlMatch) {
+              const dataUrl = dataUrlMatch[0];
+              
+              // Generate a new short name and store it
+              const fileExtension = 'jpg';
+              const shortName = generateShortFileName(fileExtension);
+              
+              storeCompressedFile(shortName, dataUrl);
+              console.log('💾 Auto-stored markdown image with short name:', shortName);
+              
+              // Add to uploaded files if not already there
+              const fileInfo = {
+                id: shortName,
+                name: shortName,
+                originalName: alt || 'image',
+                url: dataUrl,
+                type: 'image/jpeg',
+                size: Math.round(dataUrl.length * 0.75)
+              };
+              
+              if (updatedPost.uploadedFiles) {
+                // Check if this exact data URL is already stored
+                const exists = updatedPost.uploadedFiles.find(f => f.url === dataUrl);
+                if (!exists) {
+                  updatedPost.uploadedFiles.push(fileInfo);
+                }
+              } else {
+                updatedPost.uploadedFiles = [fileInfo];
+              }
+              
+              return `![${alt}](${shortName})`;
+            }
+            
+            return match;
+          });
+          
+          // Pattern 2: HTML img tags with long data URLs (from rich text editor)
+          const htmlImgRegex = /<img[^>]*src="data:image\/[^;]+;base64,[^"]{50,}"[^>]*>/g;
+          
+          cleanContent = cleanContent.replace(htmlImgRegex, (match) => {
+            console.log('🧹 Auto-cleaning HTML img tag with long data URL');
+            
+            // Extract src and alt from the img tag
+            const srcMatch = match.match(/src="(data:image\/[^"]+)"/);
+            const altMatch = match.match(/alt="([^"]*)"/);
+            
+            if (srcMatch) {
+              const dataUrl = srcMatch[1];
+              const alt = altMatch ? altMatch[1] : 'image';
+              
+              // Generate a new short name and store it
+              const fileExtension = 'jpg';
+              const shortName = generateShortFileName(fileExtension);
+              
+              storeCompressedFile(shortName, dataUrl);
+              console.log('💾 Auto-stored HTML image with short name:', shortName);
+              
+              // Add to uploaded files if not already there
+              const fileInfo = {
+                id: shortName,
+                name: shortName,
+                originalName: alt,
+                url: dataUrl,
+                type: 'image/jpeg',
+                size: Math.round(dataUrl.length * 0.75)
+              };
+              
+              if (updatedPost.uploadedFiles) {
+                // Check if this exact data URL is already stored
+                const exists = updatedPost.uploadedFiles.find(f => f.url === dataUrl);
+                if (!exists) {
+                  updatedPost.uploadedFiles.push(fileInfo);
+                }
+              } else {
+                updatedPost.uploadedFiles = [fileInfo];
+              }
+              
+              // Convert to markdown format with short name
+              return `![${alt}](${shortName})`;
+            }
+            
+            return match;
+          });
+          
+          // Pattern 3: Standalone data URLs that might be pasted directly
+          const standaloneDataUrlRegex = /data:image\/[^;]+;base64,[^\s]{100,}/g;
+          
+          cleanContent = cleanContent.replace(standaloneDataUrlRegex, (match) => {
+            console.log('🧹 Auto-cleaning standalone data URL');
+            
+            // Generate a new short name and store it
+            const fileExtension = 'jpg';
+            const shortName = generateShortFileName(fileExtension);
+            
+            storeCompressedFile(shortName, match);
+            console.log('💾 Auto-stored standalone image with short name:', shortName);
+            
+            // Add to uploaded files if not already there
+            const fileInfo = {
+              id: shortName,
+              name: shortName,
+              originalName: 'image',
+              url: match,
+              type: 'image/jpeg',
+              size: Math.round(match.length * 0.75)
+            };
+            
+            if (updatedPost.uploadedFiles) {
+              // Check if this exact data URL is already stored
+              const exists = updatedPost.uploadedFiles.find(f => f.url === match);
+              if (!exists) {
+                updatedPost.uploadedFiles.push(fileInfo);
+              }
+            } else {
+              updatedPost.uploadedFiles = [fileInfo];
+            }
+            
+            // Convert to markdown format with short name
+            return `![image](${shortName})`;
+          });
+          
+          // Update with cleaned content
+          updatedPost.content = cleanContent;
+          console.log('✅ Auto-cleanup completed, content length reduced from', updates.content.length, 'to', cleanContent.length);
+        }
+        
+        // Also schedule a delayed cleanup to catch rich text editor changes
+        setTimeout(() => {
+          const currentContent = currentPost?.content || '';
+          const hasDelayedLongUrls = /data:image\/[^;]+;base64,[^)\s]{50,}/g.test(currentContent);
+          if (hasDelayedLongUrls) {
+            console.log('🔄 Delayed cleanup - found missed long data URLs');
+            cleanupLongDataUrls();
+          }
+        }, 500);
+      }
+      
+      setCurrentPost(updatedPost);
     }
   };
 
@@ -697,7 +1431,9 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
 
     // Insert all embed codes at once and update uploaded files
     if (allEmbedCodes && currentPost) {
-      console.log('Inserting all embed codes at cursor position:', allEmbedCodes.length, 'characters');
+      console.log('📝 EMBED CODES TO INSERT:');
+      console.log(allEmbedCodes);
+      console.log('🔢 Total embed code length:', allEmbedCodes.length, 'characters');
       
       let insertPosition = 0;
       let endPosition = 0;
@@ -914,19 +1650,104 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     const [editType, setEditType] = useState<'caption' | 'alt' | null>(null);
     const [editValue, setEditValue] = useState('');
 
-    // Resolve short filename to actual data URL if needed
+    // Resolve image source - handle both short names and direct data URLs
     let actualSrc = src;
-    if (!src.startsWith('data:') && !src.startsWith('http')) {
+    
+    console.log('🖼️ EnhancedImage processing:', { 
+      src: src.substring(0, 50) + (src.length > 50 ? '...' : ''),
+      isDataUrl: src.startsWith('data:'),
+      length: src.length,
+      currentPost: currentPost?.title
+    });
+
+    if (src.startsWith('data:image/')) {
+      // Direct data URL - use it as is
+      actualSrc = src;
+      console.log('✅ Using direct data URL');
+    } else if (!src.startsWith('http') && !src.startsWith('/')) {
+      // Short filename - try to resolve it
+      console.log('🔍 Resolving short filename:', src);
+      
+      // Method 1: Check localStorage 'blog-files'
       const storedFile = getStoredFile(src);
       if (storedFile) {
         actualSrc = storedFile;
+        console.log('✅ Resolved from localStorage blog-files');
       } else {
-        const uploadedFile = currentPost?.uploadedFiles?.find(f => f.name === src || f.id === src);
-        if (uploadedFile?.url) {
-          actualSrc = uploadedFile.url;
+        console.log('❌ Not found in localStorage blog-files');
+        
+        // Method 2: Check current post's uploadedFiles
+        if (currentPost?.uploadedFiles) {
+          console.log('🔍 Checking uploadedFiles:', currentPost.uploadedFiles.length, 'files');
+          
+          // Check all uploaded files and log details
+          currentPost.uploadedFiles.forEach((file, index) => {
+            console.log(`  File ${index}: name="${file.name}", id="${file.id}", url="${file.url?.substring(0, 50)}..."`);
+          });
+          
+          // Try multiple matching strategies
+          let uploadedFile = currentPost.uploadedFiles.find(f => f.name === src);
+          if (!uploadedFile) {
+            uploadedFile = currentPost.uploadedFiles.find(f => f.id === src);
+          }
+          if (!uploadedFile) {
+            // Try partial matching for similar filenames
+            uploadedFile = currentPost.uploadedFiles.find(f => 
+              f.name.includes(src) || src.includes(f.name.split('.')[0])
+            );
+          }
+          
+          if (uploadedFile?.url) {
+            actualSrc = uploadedFile.url;
+            console.log('✅ Resolved from current post uploadedFiles:', uploadedFile.name);
+          } else {
+            console.log('❌ Not found in current post uploadedFiles');
+            
+            // Method 3: Check ALL localStorage for any matching key
+            try {
+              const allStorageKeys = Object.keys(localStorage);
+              const blogFileKeys = allStorageKeys.filter(key => key.startsWith('blog-file-') || key.includes(src));
+              console.log('🔍 Found blog file keys:', blogFileKeys);
+              
+              for (const key of blogFileKeys) {
+                const storedData = localStorage.getItem(key);
+                if (storedData && storedData.startsWith('data:image/')) {
+                  actualSrc = storedData;
+                  console.log('✅ Resolved from localStorage key:', key);
+                  break;
+                }
+              }
+            } catch (error) {
+              console.log('❌ Error checking localStorage:', error);
+            }
+          }
+        } else {
+          console.log('❌ No uploadedFiles in current post');
         }
       }
+      
+      // Final fallback - if still not resolved, create placeholder
+      if (actualSrc === src && !src.startsWith('http')) {
+        console.log('⚠️ Image not resolved, using placeholder');
+        actualSrc = `data:image/svg+xml;base64,${btoa(`
+          <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="200" height="100" fill="#f0f0f0" stroke="#ccc"/>
+            <text x="100" y="50" text-anchor="middle" dy=".3em" font-family="Arial" font-size="12" fill="#666">
+              Image: ${src}
+            </text>
+          </svg>
+        `)}`;
+      }
+    } else {
+      console.log('✅ Using URL as-is (http/https)');
     }
+
+    console.log('🎯 Final actualSrc:', { 
+      resolved: actualSrc.substring(0, 50) + (actualSrc.length > 50 ? '...' : ''),
+      isDataUrl: actualSrc.startsWith('data:'),
+      isResolved: actualSrc !== src,
+      success: actualSrc !== src || src.startsWith('http') || src.startsWith('data:')
+    });
 
     const handleContextMenu = (e: React.MouseEvent) => {
       e.preventDefault();
@@ -1133,39 +1954,35 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     );
   };
 
-  // Process inline markdown
+  // Process inline markdown with a more robust, non-greedy link handler
   const processInlineMarkdown = (text: string) => {
     let processedText = text;
     
-    // Handle traditional markdown links [text](url)
-    processedText = processedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
-      // Ensure URL has protocol
-      const processedUrl = url.startsWith('http') ? url : `https://${url}`;
-      return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
-    });
-    
-    // Handle simple link syntax [text|url] - easier to type
+    // PRIORITY 1: Handle both [Text](URL) and [Text|URL] formats - GREEN & ROBUST
+    // Process [Text|URL] format first (pipe separator)
     processedText = processedText.replace(/\[([^\]]+)\|([^\]]+)\]/g, (match, linkText, url) => {
-      // Ensure URL has protocol
-      const processedUrl = url.startsWith('http') ? url : `https://${url}`;
-      return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText}</a>`;
+      let processedUrl = url.trim();
+      if (!processedUrl.startsWith('http')) {
+        processedUrl = `https://${processedUrl}`;
+      }
+      return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText.trim()}</a>`;
     });
     
-    // Handle direct URLs (make them clickable)
-    processedText = processedText.replace(/(^|[\s])((https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?)/g, (match, prefix, url, protocol, domain, path) => {
-      const fullUrl = protocol ? url : `https://${url}`;
-      return `${prefix}<a href="${fullUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${url}</a>`;
+    // Process [Text](URL) format second (parentheses format)
+    processedText = processedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+      let processedUrl = url.trim();
+      if (!processedUrl.startsWith('http')) {
+        processedUrl = `https://${processedUrl}`;
+      }
+      return `<a href="${processedUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline font-medium">${linkText.trim()}</a>`;
     });
     
-    // Handle bold+italic ***text*** (must come before **text** and *text*)
+    // Handle bold+italic ***text***
     processedText = processedText.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
-    
     // Handle bold **text**
     processedText = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
     // Handle italic *text*
     processedText = processedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
     // Handle underline _text_
     processedText = processedText.replace(/_(.*?)_/g, '<u>$1</u>');
     
@@ -1180,33 +1997,61 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       updateCurrentPost({ content: updatedContent });
     };
 
-    const renderLine = (line: string, index: number) => {
+    const renderLine = (line: string, index: number, allLines: string[]) => {
+      // Enhanced debug logging for content structure analysis
+      if (line.includes('# 5.') || line.includes('[POLL:') || line.includes('# 4.') || line.includes('Bodycam')) {
+        console.log(`🔍 STRUCTURE Line ${index}:`, line.substring(0, 100));
+      }
+      
       if (line.trim() === '') return <br key={index} />;
       
       // Skip caption lines that are already handled by images
       if (line.match(/^\*(.+)\*$/) && index > 0) {
-        const lines = content.split('\n');
-        const prevLine = lines[index - 1];
+        const prevLine = allLines[index - 1];
         if (prevLine && prevLine.match(/!\[([^\]]*)\]\(([^)]+)\)/)) {
           return null; // Skip this line as it's handled as a caption
         }
       }
       
-      // Handle headers with inline markdown support
-      if (line.startsWith('# ')) {
-        const headerText = line.substring(2);
+      // Handle headers with inline markdown support - ENHANCED to work after polls with section isolation
+      if (line.match(/^#+\s+/)) {
+        const headerLevel = line.match(/^(#+)\s+/)![1].length;
+        const headerText = line.substring(headerLevel + 1);
         const processedText = processInlineMarkdown(headerText);
-        return <h1 key={index} className="text-2xl font-bold mb-4" dangerouslySetInnerHTML={{ __html: processedText }} />;
-      }
-      if (line.startsWith('## ')) {
-        const headerText = line.substring(3);
-        const processedText = processInlineMarkdown(headerText);
-        return <h2 key={index} className="text-xl font-semibold mb-3" dangerouslySetInnerHTML={{ __html: processedText }} />;
-      }
-      if (line.startsWith('### ')) {
-        const headerText = line.substring(4);
-        const processedText = processInlineMarkdown(headerText);
-        return <h3 key={index} className="text-lg font-medium mb-2" dangerouslySetInnerHTML={{ __html: processedText }} />;
+        
+        console.log(`📝 HEADER PROCESSING at line ${index}: Level ${headerLevel}, Text: "${headerText.substring(0, 50)}"`);
+        
+        // CRITICAL: Add section boundary classes to prevent poll drift
+        const headerClasses = {
+          1: "text-2xl font-bold mb-4 mt-8 clear-both border-t-2 border-gray-200 pt-6", // Added border and padding for clear separation
+          2: "text-xl font-semibold mb-3 mt-6 clear-both border-t border-gray-100 pt-4", 
+          3: "text-lg font-medium mb-2 mt-4 clear-both"
+        };
+        
+        const className = headerClasses[headerLevel as keyof typeof headerClasses] || headerClasses[3];
+        
+        // Add section identification for debugging
+        const sectionId = `section-${index}-${headerText.substring(0, 20).replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}`;
+        
+        if (headerLevel === 1) {
+          return (
+            <div key={`header-section-${index}`} id={sectionId} className="section-boundary">
+              <h1 className={className} dangerouslySetInnerHTML={{ __html: processedText }} />
+            </div>
+          );
+        } else if (headerLevel === 2) {
+          return (
+            <div key={`header-section-${index}`} id={sectionId} className="section-boundary">
+              <h2 className={className} dangerouslySetInnerHTML={{ __html: processedText }} />
+            </div>
+          );
+        } else {
+          return (
+            <div key={`header-section-${index}`} id={sectionId} className="section-boundary">
+              <h3 className={className} dangerouslySetInnerHTML={{ __html: processedText }} />
+            </div>
+          );
+        }
       }
 
       // Handle dividers
@@ -1214,44 +2059,81 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
         return <hr key={index} className="my-8 border-gray-300" />;
       }
 
-      // Handle polls - [POLL:Question|Option1|Option2|Option3]
+      // Handle polls - [POLL:Question|Option1|Option2|Option3] - ULTRA-STABLE with section anchoring
       if (line.includes('[POLL:') && line.includes(']')) {
-        const startIndex = line.indexOf('[POLL:') + 6;
-        const endIndex = line.indexOf(']', startIndex);
-        if (endIndex > startIndex) {
-          const pollData = line.substring(startIndex, endIndex);
-          const parts = pollData.split('|');
-          if (parts.length >= 3) {
-            const question = parts[0];
-            const options = parts.slice(1);
-            const pollId = `poll-${index}-${question.slice(0, 10).replace(/\s+/g, '-')}`;
-            
-            return (
+        console.log(`🗳️ ULTRA-STABLE POLL DETECTION at line ${index}:`, line);
+        const pollMatch = line.match(/\[POLL:([^|]+)\|([^|]+(?:\|[^|]+)*)\]/);
+        if (pollMatch) {
+          const [, question, optionsStr] = pollMatch;
+          const options = optionsStr.split('|').map(opt => opt.trim());
+          
+          // Create ULTRA-STABLE poll ID that includes section context
+          const sectionContext = allLines.slice(Math.max(0, index - 10), index)
+            .reverse()
+            .find(prevLine => prevLine.match(/^#+\s+/))
+            ?.replace(/^#+\s+/, '')
+            .substring(0, 10)
+            .replace(/[^a-zA-Z0-9]/g, '')
+            .toLowerCase() || 'section';
+          
+          const pollId = `poll-${sectionContext}-${index}-${question.slice(0, 15).replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}`;
+          
+          console.log(`🗳️ ULTRA-STABLE POLL CREATION:`, { 
+            index, 
+            sectionContext, 
+            pollId, 
+            question: question.trim(), 
+            options,
+            nextLines: allLines.slice(index + 1, index + 3)
+          });
+          
+          return (
+            <div 
+              key={`poll-container-${index}`} 
+              className="poll-section-simple"
+              style={{
+                margin: '32px 0',
+                padding: '24px',
+                backgroundColor: '#f8fafc',
+                border: '2px solid #e2e8f0',
+                borderRadius: '16px',
+                clear: 'both',
+                display: 'block',
+                width: '100%'
+              }}
+            >
               <PollComponent
-                key={index}
                 pollId={pollId}
-                question={question}
+                question={question.trim()}
                 options={options}
               />
-            );
-          }
+              <div style={{
+                fontSize: '10px',
+                color: '#94a3b8',
+                fontFamily: 'monospace',
+                textAlign: 'right',
+                marginTop: '8px'
+              }}>
+                📍 Line {index}
+              </div>
+            </div>
+          );
         }
       }
 
-      // Handle code blocks - ```language\ncode\n```
+      // Handle code blocks - ```language\ncode\n``` - IMPROVED
       if (line.startsWith('```')) {
         const language = line.substring(3).trim();
-        const lines = content.split('\n');
         let codeLines = [];
         let endIndex = index + 1;
         
         // Find the closing ```
-        for (let i = index + 1; i < lines.length; i++) {
-          if (lines[i].trim() === '```') {
+        for (let i = index + 1; i < allLines.length; i++) {
+          if (allLines[i].trim() === '```') {
             endIndex = i;
             break;
           }
-          codeLines.push(lines[i]);
+          codeLines.push(allLines[i]);
         }
         
         if (endIndex > index) {
@@ -1274,7 +2156,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       }
 
       // Skip lines that are part of code blocks
-      if (isInsideCodeBlock(index, content)) {
+      if (line.trim() !== '```' && isInsideCodeBlock(index, content)) {
         return null;
       }
       
@@ -1485,7 +2367,25 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
         return <p key={index} className="font-bold mb-2">{line.slice(2, -2)}</p>;
       }
       
-      // Handle bullet points
+      // Handle bullet points (multiple formats)
+      if (line.match(/^\s*[-○•·]\s/)) {
+        const match = line.match(/^\s*([-○•·])\s(.+)$/);
+        if (match) {
+          const [, bulletChar, content] = match;
+          const bulletSymbol = bulletChar === '○' ? '○' : 
+                              bulletChar === '•' ? '•' : 
+                              bulletChar === '·' ? '·' : '•';
+          
+          return (
+            <div key={index} className="flex items-start mb-2 ml-4">
+              <span className="text-blue-600 mr-3 flex-shrink-0 mt-1">{bulletSymbol}</span>
+              <span dangerouslySetInnerHTML={{ __html: processInlineMarkdown(content) }} />
+            </div>
+          );
+        }
+      }
+      
+      // Handle regular bullet points (dash format)
       if (line.startsWith('- ')) {
         const content = line.substring(2);
         return (
@@ -1507,6 +2407,20 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
         );
       }
       
+      // Handle HTML div tags (like your centered text)
+      if (line.includes('<div') && line.includes('</div>')) {
+        return (
+          <div key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: line }} />
+        );
+      }
+      
+      // Handle underline tags
+      if (line.includes('<u>') && line.includes('</u>')) {
+        return (
+          <div key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: line }} />
+        );
+      }
+      
       // Handle regular paragraphs with inline markdown
       return (
         <p 
@@ -1520,8 +2434,129 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     return (
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <h3 className="text-lg font-semibold mb-4 text-gray-800">Preview</h3>
-        <div className="prose max-w-none">
-          {content.split('\n').map((line, index) => renderLine(line, index))}
+        <style jsx>{`
+          .section-boundary {
+            position: relative;
+            isolation: isolate;
+            z-index: 1;
+          }
+          .poll-section-simple {
+            display: block !important;
+            clear: both !important;
+            margin: 32px 0 !important;
+            width: 100% !important;
+          }
+        `}</style>
+        <div className="prose max-w-none blog-content">{(() => {
+            try {
+              const allLines = content.split('\n');
+              console.log(`📊 CONTENT ANALYSIS: Processing ${allLines.length} lines`);
+              
+              // COMPREHENSIVE duplicate detection with section analysis
+              const headerMap = new Map();
+              const sectionStructure = [];
+              let duplicateIssues = [];
+              
+              allLines.forEach((line, i) => {
+                if (line.match(/^#+\s+/)) {
+                  const headerText = line.trim();
+                  const headerLevel = line.match(/^(#+)\s+/)![1].length;
+                  
+                  if (headerMap.has(headerText)) {
+                    const firstOccurrence = headerMap.get(headerText);
+                    console.error(`🚨 CRITICAL DUPLICATE HEADER at line ${i}: "${headerText}" (first at line ${firstOccurrence})`);
+                    duplicateIssues.push({
+                      header: headerText,
+                      firstLine: firstOccurrence,
+                      duplicateLine: i,
+                      level: headerLevel
+                    });
+                  } else {
+                    headerMap.set(headerText, i);
+                  }
+                  
+                  sectionStructure.push({
+                    line: i,
+                    level: headerLevel,
+                    text: headerText,
+                    content: line
+                  });
+                }
+                
+                // Enhanced logging for critical elements
+                if (line.includes('# 5.') || line.includes('[POLL:') || line.includes('# 4.') || line.includes('Bodycam')) {
+                  console.log(`📋 CRITICAL LINE ${i}: "${line.substring(0, 100)}"`);
+                }
+              });
+              
+              console.log(`📊 SECTION STRUCTURE:`, sectionStructure);
+              console.log(`🚨 DUPLICATE ISSUES:`, duplicateIssues);
+              
+              const renderedLines = allLines.map((line, index) => {
+                try {
+                  const result = renderLine(line, index, allLines);
+                  
+                  // Enhanced logging for key rendering results
+                  if (line.includes('[POLL:') || line.includes('# 5.') || line.includes('# 4.') || line.includes('Bodycam')) {
+                    console.log(`✅ RENDER Line ${index}:`, {
+                      line: line.substring(0, 50),
+                      result: result ? 'SUCCESS' : 'NULL',
+                      type: result?.type || 'no type',
+                      key: result?.key || 'no key'
+                    });
+                  }
+                  return result;
+                } catch (error) {
+                  console.error(`❌ RENDER ERROR Line ${index}:`, error, line.substring(0, 100));
+                  return <p key={index} className="text-red-500 bg-red-50 p-2 rounded">Error rendering line {index}: {line.substring(0, 100)}</p>;
+                }
+              }).filter(element => element !== null && element !== undefined);
+              
+              console.log(`✅ FINAL RENDER: ${renderedLines.length} elements from ${allLines.length} lines`);
+              
+              // ENHANCED duplicate warning system
+              if (duplicateIssues.length > 0) {
+                const warningComponent = (
+                  <div key="duplicate-warning" className="bg-red-50 border-2 border-red-300 rounded-lg p-6 mb-6 shadow-lg">
+                    <h4 className="text-red-800 font-bold text-lg mb-3 flex items-center">
+                      🚨 CRITICAL: Duplicate Headers Detected
+                    </h4>
+                    <div className="bg-red-100 rounded-lg p-4 mb-4">
+                      <p className="text-red-700 font-semibold mb-2">This is causing your poll positioning issues!</p>
+                      <p className="text-red-600 text-sm">When headers are duplicated, the rendering system gets confused about section boundaries.</p>
+                    </div>
+                    <div className="space-y-3">
+                      {duplicateIssues.map((issue, i) => (
+                        <div key={i} className="bg-white rounded-lg p-3 border border-red-200">
+                          <p className="text-red-800 font-mono text-sm mb-1">
+                            <strong>Duplicate:</strong> {issue.header}
+                          </p>
+                          <p className="text-red-600 text-xs">
+                            First appears at line {issue.firstLine + 1}, duplicated at line {issue.duplicateLine + 1}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="text-yellow-800 text-sm font-semibold">Action Required:</p>
+                      <p className="text-yellow-700 text-sm">Remove the duplicate headers to fix poll positioning and link rendering issues.</p>
+                    </div>
+                  </div>
+                );
+                
+                return [warningComponent, ...renderedLines];
+              }
+              
+              return renderedLines;
+            } catch (error) {
+              console.error('❌ CRITICAL CONTENT PROCESSING ERROR:', error);
+              return <div className="text-red-500 bg-red-50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-2">Content Processing Error</h4>
+                <p className="text-sm">{error.message}</p>
+                <p className="text-xs mt-2">Check console for details</p>
+              </div>;
+            }
+          })()}
         </div>
       </div>
     );
@@ -1623,6 +2658,54 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
               )}
             </div>
           )}
+        </div>
+
+        {/* Email Notification History */}
+        <div className="mb-8 bg-white rounded-2xl p-6 shadow-lg border border-yellow-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <Bell className="w-6 h-6 text-purple-600" />
+              <h2 className="text-xl font-bold text-gray-800">Email Notifications</h2>
+            </div>
+            
+            <button
+              onClick={() => {
+                const history = JSON.parse(localStorage.getItem('email-notifications') || '[]');
+                console.log('📧 Email notification history:', history);
+                alert(`Found ${history.length} email notifications in history. Check console for details.`);
+              }}
+              className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-lg hover:bg-purple-200 transition-colors"
+            >
+              View History
+            </button>
+          </div>
+          
+          {(() => {
+            const notifications = JSON.parse(localStorage.getItem('email-notifications') || '[]');
+            return notifications.length === 0 ? (
+              <p className="text-gray-500 text-center py-4">No email notifications sent yet.</p>
+            ) : (
+              <div className="space-y-3 max-h-32 overflow-y-auto">
+                {notifications.slice(-5).reverse().map((notification: any) => (
+                  <div key={notification.id} className="flex items-center justify-between text-sm bg-purple-50 p-3 rounded-lg">
+                    <div>
+                      <p className="font-medium text-purple-900">{notification.post_title}</p>
+                      <p className="text-purple-600">{new Date(notification.sent_at).toLocaleDateString()} - {notification.recipient_count} recipients</p>
+                    </div>
+                    <div className="flex items-center text-purple-500">
+                      <Check className="w-4 h-4 mr-1" />
+                      <span>Sent</span>
+                    </div>
+                  </div>
+                ))}
+                {notifications.length > 5 && (
+                  <div className="text-sm text-gray-500 text-center">
+                    +{notifications.length - 5} more notifications sent
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         {/* Main Content */}
@@ -1845,7 +2928,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                           <label className="block text-sm font-medium text-gray-700 mb-2">Languages</label>
                           <div className="space-y-2">
                             {[
-                              { code: 'en', label: '🇺🇸 English' },
+                              { code: 'en', label: '🇬🇧 English' },
                               { code: 'lt', label: '🇱🇹 Lithuanian' },
                               { code: 'fr', label: '🇫🇷 French' }
                             ].map((lang) => {
@@ -2035,7 +3118,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                             </div>
                             <div className="flex items-center space-x-2">
                               <span className="text-lg">🖼️</span>
-                              <span><strong>Images:</strong> <code className="bg-blue-100 px-1 rounded">![description](https://image-url.com/image.jpg)</code></span>
+                              <span><strong>Images:</strong> <code className="bg-blue-100 px-1 rounded">![description](image-123.jpg)</code> or use "Get Reference" button</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <span className="text-lg">🔗</span>
@@ -2048,6 +3131,12 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                             <div className="flex items-center space-x-2">
                               <span className="text-lg">📊</span>
                               <span><strong>Polls:</strong> <code className="bg-blue-100 px-1 rounded">[POLL:Question?|Option 1|Option 2|Option 3]</code></span>
+                            </div>
+                            <div className="bg-green-50 border border-green-200 rounded p-2 mt-2">
+                              <p className="text-xs text-green-700 mb-1"><strong>📊 Professional Poll Example:</strong></p>
+                              <code className="text-xs bg-green-100 px-1 rounded block">
+                                [POLL:What's your biggest challenge in remote work?|Communication with team members|Maintaining work-life balance|Staying motivated and focused|Technical issues and connectivity|Managing time zones and schedules]
+                              </code>
                             </div>
                             <div className="flex items-center space-x-2">
                               <span className="text-lg">💻</span>
@@ -2094,13 +3183,106 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                               {isLoading ? '⏳ Processing...' : '📁 Upload & Insert'}
                             </label>
                             
+                            {/* Get Image Reference button */}
+                            <input
+                              type="file"
+                              onChange={(e) => {
+                                const files = Array.from(e.target.files || []);
+                                if (files.length > 0) {
+                                  getImageReference(files);
+                                }
+                              }}
+                              className="hidden"
+                              id="image-reference"
+                              accept="image/*"
+                            />
+                            <label
+                              htmlFor="image-reference"
+                              className={`cursor-pointer inline-flex items-center px-4 py-2 border border-green-300 rounded-lg text-sm font-medium transition-colors ${
+                                isLoading
+                                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                  : 'bg-green-600 hover:bg-green-700 text-white'
+                              }`}
+                              title="Upload image and get just the reference to copy-paste manually"
+                            >
+                              {isLoading ? '⏳ Processing...' : '🖼️ Get Reference'}
+                            </label>
+                            
                             {/* Cleanup button for fixing existing posts with long data URLs */}
                             <button
-                              onClick={cleanupLongDataUrls}
-                              className="inline-flex items-center px-4 py-2 border border-orange-300 rounded-lg text-sm font-medium bg-orange-50 hover:bg-orange-100 text-orange-700 transition-colors"
-                              title="Clean up existing posts that have very long image URLs"
+                              onClick={() => {
+                                if (!currentPost) return;
+                                
+                                console.log('🧹 MANUAL CLEANUP: Starting immediate cleanup');
+                                console.log('📊 Original content length:', currentPost.content.length);
+                                
+                                let cleanedContent = currentPost.content;
+                                let changesMade = false;
+                                
+                                // Manual cleanup using the same patterns as the interval
+                                // Pattern 1: Exact HTML comment pattern
+                                const exactPattern = /(!\[[^\]]*\]\([^)]+\))<!--[\s\S]*?FULL_DATA:\s*(data:image\/[^;]+;base64,[^\s]+)/g;
+                                const exactMatches = cleanedContent.match(exactPattern);
+                                if (exactMatches) {
+                                  console.log('🧹 MANUAL: Found exact patterns:', exactMatches.length);
+                                  cleanedContent = cleanedContent.replace(exactPattern, (match, imageMarkdown, dataUrl) => {
+                                    const filenameMatch = imageMarkdown.match(/!\[[^\]]*\]\(([^)]+)\)/);
+                                    if (filenameMatch) {
+                                      const filename = filenameMatch[1];
+                                      storeCompressedFile(filename, dataUrl);
+                                      
+                                      const fileInfo = {
+                                        id: filename,
+                                        name: filename,
+                                        originalName: filename,
+                                        url: dataUrl,
+                                        type: 'image/jpeg',
+                                        size: Math.round(dataUrl.length * 0.75)
+                                      };
+                                      
+                                      if (currentPost.uploadedFiles) {
+                                        const exists = currentPost.uploadedFiles.find(f => f.name === filename);
+                                        if (!exists) {
+                                          const updatedFiles = [...currentPost.uploadedFiles, fileInfo];
+                                          setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+                                        }
+                                      } else {
+                                        setCurrentPost(prev => prev ? { ...prev, uploadedFiles: [fileInfo] } : null);
+                                      }
+                                    }
+                                    changesMade = true;
+                                    return imageMarkdown;
+                                  });
+                                }
+                                
+                                // Pattern 2: Remove all HTML comments
+                                cleanedContent = cleanedContent.replace(/<!--[\s\S]*?-->/g, '');
+                                
+                                // Pattern 3: Remove FULL_DATA lines
+                                cleanedContent = cleanedContent.replace(/FULL_DATA:[\s\S]*?(?=\n|$)/g, '');
+                                
+                                // Pattern 4: Remove very long base64 strings
+                                cleanedContent = cleanedContent.replace(/[A-Za-z0-9+/]{1000,}={0,2}/g, '');
+                                
+                                // Pattern 5: Clean up multiple newlines
+                                cleanedContent = cleanedContent.replace(/\n{3,}/g, '\n\n');
+                                
+                                if (cleanedContent !== currentPost.content) {
+                                  changesMade = true;
+                                }
+                                
+                                if (changesMade) {
+                                  console.log('🧹 MANUAL SUCCESS: Content cleaned from', currentPost.content.length, 'to', cleanedContent.length, 'characters');
+                                  setCurrentPost(prev => prev ? { ...prev, content: cleanedContent } : null);
+                                  alert(`✅ Content cleaned!\nBefore: ${currentPost.content.length} characters\nAfter: ${cleanedContent.length} characters\nSaved: ${currentPost.content.length - cleanedContent.length} characters`);
+                                } else {
+                                  alert('✨ Content is already clean!');
+                                }
+                              }}
+                              className="inline-flex items-center px-4 py-2 border border-red-300 rounded-lg text-sm font-medium bg-red-50 hover:bg-red-100 text-red-700 transition-colors"
+                              title="Immediately clean up existing posts with data URL issues"
                             >
-                              🧹 Clean Content
+                              🔥 Fix Now
                             </button>
                             
                             {/* Test button for debugging */}
@@ -2194,10 +3376,192 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
                       <textarea
                         ref={textareaRef}
                         value={currentPost.content}
-                        onChange={(e) => updateCurrentPost({ content: e.target.value })}
+                        onPaste={(e) => {
+                          const pastedText = e.clipboardData.getData('text');
+                          console.log('📋 PASTE INTERCEPTED - length:', pastedText.length);
+                          
+                          // ULTRA AGGRESSIVE paste protection - BLOCK any data URLs immediately
+                          if (pastedText.includes('data:image/') || pastedText.length > 2000) {
+                            console.log('🚨 BLOCKING PASTE - contains data URL or too long');
+                            e.preventDefault(); // STOP the paste completely
+                            
+                            let cleanedText = pastedText;
+                            let changesMade = false;
+                            
+                            // Pattern 1: Markdown images with data URLs
+                            if (cleanedText.includes('![') && cleanedText.includes('data:image/')) {
+                              cleanedText = cleanedText.replace(/!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{10,}\)/g, (match, alt) => {
+                                console.log('🔥 PASTE CLEANUP: Converting markdown image');
+                                changesMade = true;
+                                
+                                const dataUrlMatch = match.match(/data:image\/[^;]+;base64,[^)]+/);
+                                if (dataUrlMatch) {
+                                  const dataUrl = dataUrlMatch[0];
+                                  const shortName = generateShortFileName('jpg');
+                                  storeCompressedFile(shortName, dataUrl);
+                                  
+                                  const fileInfo = {
+                                    id: shortName,
+                                    name: shortName,
+                                    originalName: alt || 'pasted-image',
+                                    url: dataUrl,
+                                    type: 'image/jpeg',
+                                    size: Math.round(dataUrl.length * 0.75)
+                                  };
+                                  
+                                  if (currentPost) {
+                                    const updatedFiles = [...(currentPost.uploadedFiles || []), fileInfo];
+                                    setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+                                  }
+                                  
+                                  return `![${alt}](${shortName})`;
+                                }
+                                return `![${alt}](error.jpg)`;
+                              });
+                            }
+                            
+                            // Pattern 2: Standalone data URLs
+                            if (cleanedText.includes('data:image/')) {
+                              cleanedText = cleanedText.replace(/data:image\/[^;]+;base64,[^\s)]{10,}/g, (match) => {
+                                console.log('🔥 PASTE CLEANUP: Converting standalone data URL');
+                                changesMade = true;
+                                
+                                const shortName = generateShortFileName('jpg');
+                                storeCompressedFile(shortName, match);
+                                
+                                const fileInfo = {
+                                  id: shortName,
+                                  name: shortName,
+                                  originalName: 'pasted-image',
+                                  url: match,
+                                  type: 'image/jpeg',
+                                  size: Math.round(match.length * 0.75)
+                                };
+                                
+                                if (currentPost) {
+                                  const updatedFiles = [...(currentPost.uploadedFiles || []), fileInfo];
+                                  setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+                                }
+                                
+                                return `![Pasted Image](${shortName})`;
+                              });
+                            }
+                            
+                            // Insert the cleaned text manually at cursor position
+                            if (textareaRef.current && currentPost) {
+                              const start = textareaRef.current.selectionStart;
+                              const end = textareaRef.current.selectionEnd;
+                              const currentContent = currentPost.content;
+                              const newContent = currentContent.substring(0, start) + cleanedText + currentContent.substring(end);
+                              
+                              // Direct update to avoid any processing loops
+                              setCurrentPost(prev => prev ? { ...prev, content: newContent } : null);
+                              
+                              // Restore cursor position
+                              setTimeout(() => {
+                                if (textareaRef.current) {
+                                  textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + cleanedText.length;
+                                  textareaRef.current.focus();
+                                }
+                              }, 10);
+                            }
+                            
+                            console.log('✅ PASTE BLOCKED AND CLEANED:', pastedText.length, '→', cleanedText.length);
+                            return; // Exit early - we handled everything
+                          }
+                          
+                          console.log('✅ PASTE ALLOWED - clean content');
+                        }}
+                        onChange={(e) => {
+                          const newValue = e.target.value;
+                          console.log('📝 Textarea onChange triggered, length:', newValue.length);
+                          
+                          // SUPER AGGRESSIVE immediate cleanup - prevent any long data URLs from appearing
+                          let cleanedValue = newValue;
+                          let didCleanup = false;
+                          
+                          // Pattern 1: Markdown images with data URLs ![alt](data:image/...)
+                          if (cleanedValue.includes('data:image/') && cleanedValue.includes('base64')) {
+                            console.log('🚨 ULTRA CLEANUP: Found data URL content');
+                            
+                            // More aggressive pattern - catch any data URL in markdown image format
+                            cleanedValue = cleanedValue.replace(/!\[([^\]]*)\]\(data:image\/[^;]+;base64,[^)]{10,}\)/g, (match, alt) => {
+                              console.log('🔥 DESTROYING long data URL in markdown:', match.substring(0, 100) + '...');
+                              didCleanup = true;
+                              
+                              const dataUrlMatch = match.match(/data:image\/[^;]+;base64,[^)]+/);
+                              if (dataUrlMatch) {
+                                const dataUrl = dataUrlMatch[0];
+                                const shortName = generateShortFileName('jpg');
+                                storeCompressedFile(shortName, dataUrl);
+                                
+                                // Add to uploadedFiles immediately
+                                const fileInfo = {
+                                  id: shortName,
+                                  name: shortName,
+                                  originalName: alt || 'uploaded-image',
+                                  url: dataUrl,
+                                  type: 'image/jpeg',
+                                  size: Math.round(dataUrl.length * 0.75)
+                                };
+                                
+                                if (currentPost) {
+                                  const updatedFiles = [...(currentPost.uploadedFiles || []), fileInfo];
+                                  setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+                                }
+                                
+                                console.log('✅ DESTROYED and converted to:', shortName);
+                                return `![${alt}](${shortName})`;
+                              }
+                              return `![${alt}](error.jpg)`;
+                            });
+                            
+                            // Pattern 2: Any standalone data URLs that are too long
+                            cleanedValue = cleanedValue.replace(/data:image\/[^;]+;base64,[^\s)]{50,}/g, (match) => {
+                              console.log('� DESTROYING standalone data URL:', match.substring(0, 100) + '...');
+                              didCleanup = true;
+                              
+                              const shortName = generateShortFileName('jpg');
+                              storeCompressedFile(shortName, match);
+                              
+                              // Add to uploadedFiles immediately
+                              const fileInfo = {
+                                id: shortName,
+                                name: shortName,
+                                originalName: 'pasted-image',
+                                url: match,
+                                type: 'image/jpeg',
+                                size: Math.round(match.length * 0.75)
+                              };
+                              
+                              if (currentPost) {
+                                const updatedFiles = [...(currentPost.uploadedFiles || []), fileInfo];
+                                setCurrentPost(prev => prev ? { ...prev, uploadedFiles: updatedFiles } : null);
+                              }
+                              
+                              console.log('✅ DESTROYED standalone and converted to:', shortName);
+                              return `![Image](${shortName})`;
+                            });
+                          }
+                          
+                          // If we cleaned anything, log the improvement
+                          if (didCleanup) {
+                            console.log('🎯 ULTRA CLEANUP SUCCESS: reduced from', newValue.length, 'to', cleanedValue.length, 'characters');
+                            console.log('🔥 DATA URLS DESTROYED - content should now be clean!');
+                          }
+                          
+                          // Use direct update to bypass additional processing
+                          if (currentPost) {
+                            setCurrentPost(prev => prev ? { ...prev, content: cleanedValue } : null);
+                          }
+                        }}
+                        onBlur={cleanupLongDataUrls}
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onDragEnter={handleDragEnter}
                         rows={20}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent font-mono text-sm"
-                        placeholder="Write your blog post content here..."
+                        placeholder="Write your blog post content here... (You can also drag & drop or paste images directly)"
                       />
                     </div>
                   ) : (

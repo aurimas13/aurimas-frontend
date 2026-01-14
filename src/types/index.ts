@@ -1,15 +1,17 @@
 export interface BlogPost {
   id: string;
-  title: string;
-  excerpt: string;
-  content: string;
+  title: LocalizedText | string;
+  excerpt: LocalizedText | string;
+  content: LocalizedText | string;
   category: 'molecule-to-machine' | 'grace-to-life' | 'transcend-loneliness' | 'other-story-time';
-  publishedAt: string;
-  readTime: number;
-  isPremium: boolean;
+  publishedAt?: string;
+  date?: string;
+  readTime: LocalizedText | string | number;
+  isPremium?: boolean;
+  published?: boolean;
   tags: string[];
-  author: string;
-  status: 'draft' | 'published' | 'scheduled';
+  author: LocalizedText | string;
+  status?: 'draft' | 'published' | 'scheduled';
   featuredImage?: string;
   subtitle?: string;
   language?: 'en' | 'lt' | 'fr' | 'en,lt' | 'en,fr' | 'lt,fr' | 'en,lt,fr';
@@ -26,6 +28,8 @@ export interface BlogPost {
     type: string;
     size: number;
   }[];
+  blogEndpoint?: string;
+  destinationUrl?: string;
 }
 
 export interface LocalizedText {

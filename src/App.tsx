@@ -256,73 +256,15 @@
 //   );
 // }
 
-import React, { useState } from 'react';
-import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { About } from './components/About';
-import { BlogSection } from './components/BlogSection';
-import { BlogManager } from './components/BlogManager';
-import { Gallery } from './components/Gallery';
-import { SupportSection } from './components/SupportSection';
-import { ContactSection } from './components/ContactSection';
-import { Footer } from './components/Footer';
-import { MusicPlayer } from './components/MusicPlayer';
+import React from 'react';
+import { AppRouter } from './AppRouter';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
-  const [showBlogManager, setShowBlogManager] = useState(false);
-
-  const handleManageBlog = () => {
-    console.log('handleManageBlog called');
-    setShowBlogManager(true);
-  };
-
-  if (showBlogManager) {
-    return (
-      <div className="min-h-screen bg-white">
-        <BlogManager onBack={() => setShowBlogManager(false)} />
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
-      <main>
-        <div id="hero">
-          <Hero onSectionChange={() => {}} />
-        </div>
-        
-        <div id="about">
-          <About />
-        </div>
-        
-        <div id="blog">
-          <BlogSection onManageBlog={handleManageBlog} />
-        </div>
-        
-        <div id="gallery">
-          <Gallery />
-        </div>
-        
-        <div id="support">
-          <SupportSection />
-        </div>
-        
-        <div id="contact">
-          <ContactSection />
-        </div>
-      </main>
-      
-      <Footer />
-      
-      {/* Background Music Player */}
-      <MusicPlayer 
-        videoId="IJiHDmyhE1A"
-        title="Baba Yetu"
-        artist="Christopher Tin feat. Soweto Gospel Choir"
-      />
-    </div>
+    <LanguageProvider>
+      <AppRouter />
+    </LanguageProvider>
   );
 }
 

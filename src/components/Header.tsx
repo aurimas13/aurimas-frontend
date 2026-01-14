@@ -103,6 +103,7 @@
 // };
 
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLanguage } from '../hooks/useLanguage';
@@ -112,8 +113,15 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage];
+  const location = useLocation();
 
   const scrollToSection = (sectionId: string) => {
+    // If we're not on the home page, navigate to home first
+    if (location.pathname !== '/') {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -126,14 +134,14 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <div className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               <img 
                 src="/UoE.png" 
                 alt="University of Edinburgh" 
                 className="w-8 h-8 object-contain"
               />
               <h1 className="text-xl font-bold text-gray-900">Aurimas</h1>
-            </div>
+            </Link>
           </div>
           
           {/* Desktop Navigation */}
@@ -156,6 +164,12 @@ export function Header() {
             >
               {t.navigation.blog}
             </button>
+            <Link
+              to="/blogs"
+              className="text-gray-700 hover:text-amber-600 transition-colors"
+            >
+              All Blogs
+            </Link>
             <button
               onClick={() => scrollToSection('gallery')}
               className="text-gray-700 hover:text-amber-600 transition-colors"
