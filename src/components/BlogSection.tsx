@@ -20,9 +20,22 @@ interface BlogSectionProps {
   onManageBlog?: () => void;
 }
 
+<<<<<<< HEAD
 // YouTube Embed Component (same as BlogManager)
 const YouTubeEmbed: React.FC<{ url: string; videoId: string }> = ({ url, videoId }) => {
   const [videoTitle, setVideoTitle] = useState('Loading video title...');
+=======
+export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
+  const { currentLanguage } = useLanguage();
+  const t = translations[currentLanguage as LanguageCode];
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [showAllBlogs, setShowAllBlogs] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [newsletterMessage, setNewsletterMessage] = useState('');
+>>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
 
   React.useEffect(() => {
     const fetchTitle = async () => {
@@ -1781,6 +1794,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
     return html;
   };
 
+<<<<<<< HEAD
   // Content renderer component using the same renderLine system as BlogManager
   const ContentRenderer: React.FC<{ 
     content: string; 
@@ -2308,6 +2322,16 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
     setRedoHistory(prev => prev.slice(1));
     setCurrentPost(updatePostField(currentPost, 'content', activeLanguageTab, nextContent));
     setLastSavedContent(nextContent);
+=======
+  const handleShowAllBlogs = () => {
+    setSelectedPost(null);
+    setShowAllBlogs(true);
+  };
+
+  const handleBackToPreview = () => {
+    setSelectedPost(null);
+    setShowAllBlogs(false);
+>>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -2427,6 +2451,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [currentPost, activeLanguageTab, showImageMenu]);
 
+<<<<<<< HEAD
   if (selectedPost) {
     return (
       <section id="blog" className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
@@ -2438,6 +2463,105 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t.backToBlog || 'Back to Blog'}
           </button>
+=======
+  const renderNewsletterSection = () => (
+    <div className="mb-12">
+      <div className="bg-yellow-100 rounded-lg p-6 border border-yellow-300 max-w-2xl mx-auto text-center">
+        <h4 className="text-lg font-bold mb-3 text-gray-800">🔔 {t.blogs.beFirstToKnow}</h4>
+        <p className="text-gray-600 mb-4">
+          {t.blogs.joinWaitlist}
+        </p>
+
+        {newsletterStatus === 'success' && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
+            <p className="text-green-800 text-sm font-medium">✅ {newsletterMessage}</p>
+          </div>
+        )}
+
+        {newsletterStatus === 'error' && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg">
+            <p className="text-red-800 text-sm font-medium">❌ {newsletterMessage}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <input 
+            type="email" 
+            value={newsletterEmail}
+            onChange={(e) => setNewsletterEmail(e.target.value)}
+            placeholder={t.blogs.enterEmail}
+            required
+            disabled={newsletterStatus === 'loading'}
+            className="px-4 py-2 rounded-lg bg-white text-gray-800 placeholder-gray-500 border border-yellow-300 focus:ring-2 focus:ring-yellow-400 outline-none flex-1 max-w-xs disabled:opacity-50"
+          />
+          <button 
+            type="submit"
+            disabled={newsletterStatus === 'loading'}
+            className="bg-yellow-500 hover:bg-yellow-400 text-gray-800 font-bold px-6 py-2 rounded-lg transition-colors transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            {newsletterStatus === 'loading' ? t.blogs.subscribing : t.blogs.joinWaitlistBtn}
+          </button>
+        </form>
+        <p className="text-xs text-gray-500 mt-2">
+          {t.blogs.noSpam}
+        </p>
+      </div>
+    </div>
+  );
+
+  const renderSubstackSection = () => (
+    <div className="mb-12">
+      <h4 className="text-lg font-semibold text-gray-700 mb-4 text-center">
+        {t.blogs.originalSubstack}
+      </h4>
+
+      <div className="max-w-3xl mx-auto grid gap-6 grid-cols-1">
+        {Object.entries(blogCategories).map(([key, category]) => (
+          <div
+            key={key}
+            className="w-full bg-white rounded-xl shadow-sm p-8 text-center hover:shadow-md transition-shadow border border-yellow-300"
+          >
+            <h5 className="text-base font-semibold text-gray-800 mb-2">
+              {category.title[currentLanguage as LanguageCode]}
+            </h5>
+            <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+              {category.description[currentLanguage as LanguageCode]}
+            </p>
+            <div className="mb-4">
+              <p className="text-xs uppercase tracking-wide text-gray-500">
+                {category.languages[currentLanguage as LanguageCode]}
+              </p>
+            </div>
+            <a
+              href={category.originalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-6 py-2 bg-orange-600 text-white text-sm font-bold rounded-lg hover:bg-orange-700 transition-colors mx-auto"
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              {t.blogs.visitSubstack}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Individual post view
+  if (selectedPost) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <button 
+              onClick={() => setSelectedPost(null)}
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors mb-6"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back to Blogs</span>
+            </button>
+          </div>
+>>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
 
           <article className="bg-white rounded-xl shadow-sm overflow-hidden">
             {selectedPost.featuredImage && (
@@ -2495,6 +2619,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             </div>
           </article>
 
+<<<<<<< HEAD
           {/* Newsletter subscription */}
           <div className="mt-12 bg-white rounded-xl shadow-sm p-8">
             <div className="text-center">
@@ -2534,6 +2659,39 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               </form>
             </div>
           </div>
+=======
+  // If showing all blogs, render the blog list
+  if (showAllBlogs) {
+    return (
+      <section id="blogs" className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              {t.blogs.title}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              {t.blogs.subtitle}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-4 justify-center mb-12">
+            <button 
+              onClick={handleBackToPreview}
+              className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              ← Back to Home
+            </button>
+            <button 
+              onClick={handleAuthentication}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              {t.blogs.manageBlog}
+            </button>
+          </div>
+
+          {renderNewsletterSection()}
+          {renderSubstackSection()}
+>>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
         </div>
       </section>
     );
@@ -2551,6 +2709,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           </p>
         </div>
 
+<<<<<<< HEAD
         {/* Authentication and Management Controls */}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -3724,6 +3883,24 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             </div>
           </div>
         </div>
+=======
+        <div className="flex flex-wrap gap-4 justify-center mb-12">
+          <button 
+            onClick={handleShowAllBlogs}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            {t.blogs.allBlogs}
+          </button>
+          <button 
+            onClick={handleAuthentication}
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            {t.blogs.manageBlog}
+          </button>
+        </div>
+        {renderNewsletterSection()}
+        {renderSubstackSection()}
+>>>>>>> 699639a006f3aab4478c5b979d20688f310f0efa
       </div>
     </section>
   );
