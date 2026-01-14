@@ -31,8 +31,6 @@ export const SupportSection: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             {t.support.title}
           </h2>
-          <p className="text-xl text-gray-800 mb-8">{t.support.subtitle}</p>
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-400 to-red-500 mx-auto rounded-full"></div>
         </div>
 
         <div className="max-w-4xl mx-auto">

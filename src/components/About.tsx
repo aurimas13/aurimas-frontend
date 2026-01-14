@@ -87,7 +87,6 @@ export const About: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             {t.about.title}
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-400 to-red-500 mx-auto rounded-full"></div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-start">

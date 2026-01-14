@@ -125,10 +125,9 @@ export const ContactSection: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             {t.contact.title}
           </h2>
-          <p className="text-xl text-gray-800 mb-8">
+          <p className="text-xl text-gray-800">
             {t.contact.subtitle}
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 mx-auto rounded-full"></div>
         </div>
 
         <div className="max-w-4xl mx-auto">
