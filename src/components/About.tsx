@@ -69,13 +69,13 @@ export const About: React.FC = () => {
 
   const skills = [
     { name: currentLanguage === 'lt' ? 'Dirbtinis intelektas' : currentLanguage === 'fr' ? 'Intelligence artificielle' : 'Artificial Intelligence', level: 100, color: 'bg-yellow-200' },
-    { name: currentLanguage === 'lt' ? 'Mašininis mokymasis' : currentLanguage === 'fr' ? 'Apprentissage automatique' : 'Machine Learning', level: 100, color: 'bg-green-200' },
-    { name: currentLanguage === 'lt' ? 'Chemija' : currentLanguage === 'fr' ? 'Chimie' : 'Chemistry', level: 100, color: 'bg-cyan-200' },
-    { name: 'Python', level: 95, color: 'bg-blue-200' },
-    { name: 'Java', level: 90, color: 'bg-orange-200' },
-    { name: currentLanguage === 'lt' ? 'Duomenų mokslas' : currentLanguage === 'fr' ? 'Science des données' : 'Data Science', level: 90, color: 'bg-purple-200' },
-    { name: 'JavaScript/TypeScript', level: 85, color: 'bg-pink-200' },
-    { name: 'C++', level: 80, color: 'bg-indigo-200' }
+    { name: currentLanguage === 'lt' ? 'Vadovavimas' : currentLanguage === 'fr' ? 'Leadership' : 'Leadership', level: 100, color: 'bg-green-200' },
+    { name: currentLanguage === 'lt' ? 'Bendravimas' : currentLanguage === 'fr' ? 'Communication' : 'Communication', level: 100, color: 'bg-cyan-200' },
+    { name: currentLanguage === 'lt' ? 'Chemija' : currentLanguage === 'fr' ? 'Chimie' : 'Chemistry', level: 100, color: 'bg-blue-200' },
+    { name: currentLanguage === 'lt' ? 'Komandinis darbas' : currentLanguage === 'fr' ? 'Travail d\'équipe' : 'Teamwork', level: 100, color: 'bg-orange-200' },
+    { name: currentLanguage === 'lt' ? 'Vadyba' : currentLanguage === 'fr' ? 'Gestion' : 'Management', level: 100, color: 'bg-purple-200' },
+    { name: currentLanguage === 'lt' ? 'Mokymas' : currentLanguage === 'fr' ? 'Enseignement' : 'Teaching', level: 100, color: 'bg-pink-200' },
+    { name: currentLanguage === 'lt' ? 'Programavimas' : currentLanguage === 'fr' ? 'Programmation' : 'Programming', level: 90, color: 'bg-indigo-200' }
   ];
 
 
@@ -168,61 +168,94 @@ export const About: React.FC = () => {
                 <h3 className="text-2xl font-bold text-gray-800">{t.about.experience}</h3>
               </div>
               <div className="space-y-4">
+                {/* Teacher */}
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h4 className="font-bold text-gray-800">
+                    {currentLanguage === 'lt' ? 'Mokytojas' : 
+                     currentLanguage === 'fr' ? 'Enseignant' : 
+                     'Teacher'}
+                  </h4>
+                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
+                    {currentLanguage === 'lt' ? 
+                      'Mokiau kompiuterių mokslų, dirbtinio intelekto, chemijos ir biologijos teorijos, pagrindų ir taikymų. Teikiau medžiagą. Vertinau. Daugiau nei 3 metų patirtis.' :
+                     currentLanguage === 'fr' ? 
+                      'Enseignement de la théorie, des principes fondamentaux et des applications de l\'informatique, de l\'intelligence artificielle, de la chimie et de la biologie. Fourniture du matériel pédagogique. Notation des travaux. Plus de 3 ans d\'expérience.' :
+                      'Taught theory, fundamentals, and applications of Computer Science, Artificial Intelligence, Chemistry, and Biology. Provided the material. Graded. Over 3 years of experience.'}
+                  </p>
+                </div>
+                {/* Manager */}
                 <div className="border-l-4 border-yellow-500 pl-4">
                   <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'DI architektas' : 
-                     currentLanguage === 'fr' ? 'Architecte IA' : 
-                     'AI Architect'}
+                    {currentLanguage === 'lt' ? 'Vadybininkas' : 
+                     currentLanguage === 'fr' ? 'Responsable' : 
+                     'Manager'}
                   </h4>
-                  <p className="text-gray-600">
-                    {currentLanguage === 'lt' ? '2022 - Dabar' : 
-                     currentLanguage === 'fr' ? '2022 - présent' : 
-                     '2022 - Present'}
-                  </p>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
-                      'Specializuojuosi dirbtinio intelekto ruošimo ir sprendimų architektūroje, mašininio mokymosi sistemų kūrime bei duomenų mokslo projektų vadovavime. Dirbu su įvairiomis technologijomis: Python, TensorFlow, PyTorch, bei debesų platformomis.' :
+                      '5 projektai. Techninių, komunikacijos ir pardavimo komandų valdymas. Daugiau nei 3 metų patirtis.' :
                      currentLanguage === 'fr' ? 
-                      'Spécialisé dans l\'architecture de solutions IA, la préparation et le développement de systèmes d\'apprentissage automatique et la direction de projets en science des données. Travaille avec diverses technologies, notamment Python, TensorFlow, PyTorch et les plateformes cloud.' :
-                      'Specialized in AI solution architecture, machine learning system preparation and development, and data science project leadership. Working with diverse technologies including Python, TensorFlow, PyTorch, and cloud platforms.'}
+                      '5 projets à son actif. Gestion des équipes techniques, communicationnelles et commerciales. Plus de 3 ans d\'expérience.' :
+                      '5 projects under the belt. Handling management over technical, communicational, and sales teams. Over 3 years of experience.'}
                   </p>
                 </div>
+                {/* AI Architect & Leader */}
+                <div className="border-l-4 border-purple-500 pl-4">
+                  <h4 className="font-bold text-gray-800">
+                    {currentLanguage === 'lt' ? 'DI architektas ir vadovas' : 
+                     currentLanguage === 'fr' ? 'Architecte et responsable IA' : 
+                     'AI Architect & Leader'}
+                  </h4>
+                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
+                    {currentLanguage === 'lt' ? 
+                      'Specializuojuosi dirbtinio intelekto srityje. Vadovavau techninėms, verslo, mokslo ir švietimo komandoms. Dirbau su suinteresuotosiomis šalimis. Turiu didelį IT, verslo, mokslo ir komunikacijos žinių bagažą. Daugiau nei 5 metų patirtis.' :
+                     currentLanguage === 'fr' ? 
+                      'Spécialisé en intelligence artificielle. A dirigé des équipes techniques, commerciales, scientifiques et pédagogiques. A travaillé avec des parties prenantes. Vaste arsenal en matière d\'informatique, de commerce, de sciences et de communication. Plus de 5 ans d\'expérience.' :
+                      'Specialize in Artificial Intelligence. Led technical, business, scientific, and educational teams. Worked with stakeholders. A huge arsenal of IT, business, science, and communication. Over 5 years of experience.'}
+                  </p>
+                </div>
+                {/* Research Engineer */}
                 <div className="border-l-4 border-green-500 pl-4">
                   <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Mokslo tyrėjas' : 
-                     currentLanguage === 'fr' ? 'Chercheur scientifique' : 
-                     'Scientific Researcher'}
+                    {currentLanguage === 'lt' ? 'Tyrimų inžinierius' : 
+                     currentLanguage === 'fr' ? 'Ingénieur de recherche' : 
+                     'Research Engineer'}
                   </h4>
-                  <p className="text-gray-600">
-                    {currentLanguage === 'lt' ? 'Edinburgo universitetas ir kitos mokslinės įstaigos' : 
-                     currentLanguage === 'fr' ? 'Université d\'Édimbourg et autres' : 
-                     'University of Edinburgh & Others'}
-                  </p>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
-                      'Patirtis mokslinių tyrimų srityje, įskaitant kompiuterinę chemiją, molekulinį modeliavimą, duomenų analizę, biochemiją ir mokslinių straipsnių rengimą. Dalyvavimas tarptautiniuose projektuose ir konferencijose.' :
+                      'Chemikas, turintis tyrimų patirties Europoje ir Jungtinėse Valstijose. Dirbau fizikinės, organinės, kompiuterinės chemijos, molekulinio modeliavimo ir statistikos srityse. 12 metų patirtis.' :
                      currentLanguage === 'fr' ? 
-                      'Expérience en recherche scientifique, notamment en chimie computationnelle, modélisation moléculaire, analyse de données et rédaction d\'articles scientifiques. Participation à des projets et conférences internationaux.' :
-                      'Experience in scientific research, including computational chemistry, molecular modeling, data analysis, and scientific publication writing. Participation in international projects and conferences.'}
+                      'Chimiste ayant mené des recherches en Europe et aux États-Unis. Travaille dans les domaines de la chimie physique, organique et computationnelle, de la modélisation moléculaire et des statistiques. 12 ans d\'expérience.' :
+                      'A chemist with research under the belt spanning Europe and the United States. Work with physical, organic, computational chemistry, molecular modeling, and statistics. 12 years of experience.'}
                   </p>
                 </div>
-                <div className="border-l-4 border-red-500 pl-4">
+                {/* Developer */}
+                <div className="border-l-4 border-orange-500 pl-4">
                   <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Savanoris' : 
-                     currentLanguage === 'fr' ? 'Bénévole' : 
-                     'Volunteer'}
+                    {currentLanguage === 'lt' ? 'Kūrėjas' : 
+                     currentLanguage === 'fr' ? 'Développeur' : 
+                     'Developer'}
                   </h4>
-                  <p className="text-gray-600">
-                    {currentLanguage === 'lt' ? 'Įvairios organizacijos ir projektai' : 
-                     currentLanguage === 'fr' ? 'Diverses organisations et projets' : 
-                     'Various Organizations & Projects'}
-                  </p>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
-                      'Įvairi veiklos patirtis, įskaitant mokslo švietimą bendruomenėje, mentorystę programavimo srityje, tyrimų pagalbą universitetuose, dalyvavimą STEM skatinimo programose, dirbtinio intelekto programų kūrime ir rankų darbų reikalaujančiose veiklose.' :
+                      'Kūriau mažų ir didelių įmonių verslo sprendimus. Nuo duomenų intuicijos iki diegimo. Prižiūrėjau. Daugiau nei 12 metų patirtis.' :
                      currentLanguage === 'fr' ? 
-                      'Expérience bénévole dans les domaines suivants : éducation scientifique communautaire, mentorat en programmation, assistance à la recherche universitaire, participation à des programmes de promotion des STEM, aide à des tâches manuelles et développement de programmes d\'IA.' :
-                      'Volunteer experience including community science education, programming mentorship, university research assistance, participation in STEM promotion programs, manual labour assistance, and AI program developments.'}
+                      'A conçu des solutions pour les petites entreprises et les grandes sociétés. Les a supervisées depuis l\'intuition des données jusqu\'au déploiement. A supervisé. Plus de 12 ans d\'expérience.' :
+                      'Constructed small business and enterprise solutions. Looked over them from data intuition to deployment. Looked over. Over 12 years of experience.'}
+                  </p>
+                </div>
+                {/* Writer */}
+                <div className="border-l-4 border-red-500 pl-4">
+                  <h4 className="font-bold text-gray-800">
+                    {currentLanguage === 'lt' ? 'Rašytojas' : 
+                     currentLanguage === 'fr' ? 'Rédacteur' : 
+                     'Writer'}
+                  </h4>
+                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
+                    {currentLanguage === 'lt' ? 
+                      'Techniniai, meniniai ir moksliniai raštai. Poezija. Daugiau nei 15 metų patirtis.' :
+                     currentLanguage === 'fr' ? 
+                      'Rédaction technique, artistique et scientifique. Poésie. Plus de 15 ans d\'expérience.' :
+                      'Technical, artistic, and scientific writing. Poetry. Over 15 years of experience.'}
                   </p>
                 </div>
               </div>
