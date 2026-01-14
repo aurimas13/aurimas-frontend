@@ -176,7 +176,7 @@ export const translations = {
       greeting: "Laba, esu",
       name: "Aurimas Aleksandras Nausėdas",
       subtitle: "Chemikas tapęs DI architektu, lyderiu ir rašytoju",
-      description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, veiklos nutapė lyderiu, o gyvenimo istorijos atgyja ant lapo.",
+      description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, veiklos nušlifavo lyderį, o gyvenimo istorijos atgyja ant lapo.",
       cta: "Tyrinėti mano darbus"
     },
     about: {
