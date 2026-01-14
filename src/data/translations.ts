@@ -89,8 +89,8 @@ export const translations = {
     },
     support: {
       title: "Support If Want To",
-      subtitle: "Help me continue creating art",
-      description: "Help me continue creating art",
+      subtitle: "",
+      description: "",
       monthly: {
         title: "Monthly Subscription",
         description: "Support my work with a recurring monthly contribution"
@@ -261,8 +261,8 @@ export const translations = {
     },
     support: {
       title: "Paremkite jei norite",
-      subtitle: "Ir padėkite man toliau kurti meną",
-      description: "Ir padėkite man toliau kurti meną",
+      subtitle: "",
+      description: "",
       monthly: {
         title: "Mėnesinis prenumeratos mokestis",
         description: "Paremkite mano darbą reguliariu mėnesiniu įnašu"
@@ -433,8 +433,8 @@ export const translations = {
     },
     support: {
       title: "Soutenez si vous voulez",
-      subtitle: "Aidez-moi s'il vous plaît à continuer à créer de l'art",
-      description: "Aidez-moi s'il vous plaît à continuer à créer de l'art",
+      subtitle: "",
+      description: "",
       monthly: {
         title: "Abonnement mensuel",
         description: "Soutenez mon travail avec une contribution mensuelle récurrente"
