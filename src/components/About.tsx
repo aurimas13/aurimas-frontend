@@ -194,7 +194,7 @@ export const About: React.FC = () => {
                       '5 projektai. Techninių, komunikacijos ir pardavimo komandų valdymas. Daugiau nei 3 metų patirtis.' :
                      currentLanguage === 'fr' ? 
                       '5 projets à son actif. Gestion des équipes techniques, communicationnelles et commerciales. Plus de 3 ans d\'expérience.' :
-                      '5 projects under the belt. Handling management over technical, communicational, and sales teams. Over 3 years of experience.'}
+                      '5 projects under belt. Handling management over technical, communicational, and sales teams. Over 3 years of experience.'}
                   </p>
                 </div>
                 {/* AI Architect & Leader */}
@@ -206,10 +206,10 @@ export const About: React.FC = () => {
                   </h4>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
-                      'Specializuojuosi dirbtinio intelekto srityje. Vadovavau techninėms, verslo, mokslo ir švietimo komandoms. Dirbau su suinteresuotosiomis šalimis. Turiu didelį IT, verslo, mokslo ir komunikacijos žinių bagažą. Daugiau nei 5 metų patirtis.' :
+                      'Specializuojuosi dirbtinio intelekto srityje. Vadovavau techninėms, verslo, mokslo ir švietimo komandoms. Dirbau su suinteresuotosiomis šalimis. Turiu didelį IT, verslo, mokslo ir komunikacijos žinių bagažą. Daugiau nei 10 metų patirtis.' :
                      currentLanguage === 'fr' ? 
-                      'Spécialisé en intelligence artificielle. A dirigé des équipes techniques, commerciales, scientifiques et pédagogiques. A travaillé avec des parties prenantes. Vaste arsenal en matière d\'informatique, de commerce, de sciences et de communication. Plus de 5 ans d\'expérience.' :
-                      'Specialize in Artificial Intelligence. Led technical, business, scientific, and educational teams. Worked with stakeholders. A huge arsenal of IT, business, science, and communication. Over 5 years of experience.'}
+                      'Spécialisé en intelligence artificielle. A dirigé des équipes techniques, commerciales, scientifiques et pédagogiques. A travaillé avec des parties prenantes. Vaste arsenal en matière d\'informatique, de commerce, de sciences et de communication. Plus de 10 ans d\'expérience.' :
+                      'Specialize in Artificial Intelligence. Led technical, business, scientific, and educational teams. Worked with stakeholders. A huge arsenal of IT, business, science, and communication. Over 10 years of experience.'}
                   </p>
                 </div>
                 {/* Research Engineer */}
@@ -224,7 +224,7 @@ export const About: React.FC = () => {
                       'Chemikas, turintis tyrimų patirties Europoje ir Jungtinėse Valstijose. Dirbau fizikinės, organinės, kompiuterinės chemijos, molekulinio modeliavimo ir statistikos srityse. 12 metų patirtis.' :
                      currentLanguage === 'fr' ? 
                       'Chimiste ayant mené des recherches en Europe et aux États-Unis. Travaille dans les domaines de la chimie physique, organique et computationnelle, de la modélisation moléculaire et des statistiques. 12 ans d\'expérience.' :
-                      'A chemist with research under the belt spanning Europe and the United States. Work with physical, organic, computational chemistry, molecular modeling, and statistics. 12 years of experience.'}
+                      'A chemist with research under belt spanning Europe and the United States. Work with physical, organic, computational chemistry, molecular modeling, and statistics. 12 years of experience.'}
                   </p>
                 </div>
                 {/* Developer */}
@@ -236,10 +236,10 @@ export const About: React.FC = () => {
                   </h4>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
-                      'Kūriau mažų ir didelių įmonių verslo sprendimus. Nuo duomenų intuicijos iki diegimo. Prižiūrėjau. Daugiau nei 12 metų patirtis.' :
+                      'Kūriau mažų ir didelių įmonių verslo sprendimus. Nuo duomenų intuicijos iki diegimo.\nDaugiau nei 12 metų patirtis.' :
                      currentLanguage === 'fr' ? 
-                      'A conçu des solutions pour les petites entreprises et les grandes sociétés. Les a supervisées depuis l\'intuition des données jusqu\'au déploiement. A supervisé. Plus de 12 ans d\'expérience.' :
-                      'Constructed small business and enterprise solutions. Looked over them from data intuition to deployment. Looked over. Over 12 years of experience.'}
+                      'A conçu des solutions pour les petites entreprises et les grandes sociétés. Les a supervisées depuis l\'intuition des données jusqu\'au déploiement.\nPlus de 12 ans d\'expérience.' :
+                      'Constructed small business and enterprise solutions. Looked over them from data intuition to deployment.\nOver 12 years of experience.'}
                   </p>
                 </div>
                 {/* Writer */}
