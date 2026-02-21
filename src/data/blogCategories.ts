@@ -8,9 +8,9 @@ export const blogCategories: BlogCategories = {
       fr: 'Molecule To Machine'
     },
     description: {
-      en: 'Chemistry meets AI and technology',
-      lt: 'Chemija ir mokslas pasitinka DI ir technologijas',
-      fr: 'La chimie rencontre l\'IA et la technologie'
+      en: 'Weekly AI, Technology, Music & Healthcare Newsletter',
+      lt: 'Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis',
+      fr: 'Newsletter hebdomadaire sur l\'IA, la technologie, la musique et la santé'
     },
     originalUrl: 'https://moleculetomachine.substack.com/',
     languages: {

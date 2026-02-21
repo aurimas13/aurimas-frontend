@@ -1273,9 +1273,9 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
                'Molecule To Machine'}
             </h4>
             <p className="text-gray-600 mb-2 text-sm">
-              {currentLanguage === 'lt' ? 'Chemija susitinka su dirbtiniu intelektu ir technologijomis' : 
-               currentLanguage === 'fr' ? 'La chimie rencontre l\'IA et la technologie' : 
-               'Chemistry meets AI and technology'}
+              {currentLanguage === 'lt' ? 'Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis' :
+               currentLanguage === 'fr' ? 'Newsletter hebdomadaire sur l\'IA, la technologie, la musique et la santé' :
+               'Weekly AI, Technology, Music & Healthcare Newsletter'}
             </p>
             <p className="text-gray-500 mb-4 text-xs italic">
               {t.blogs.inLanguage}
