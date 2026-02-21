@@ -236,10 +236,10 @@ export const About: React.FC = () => {
                   </h4>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
-                      'Kūriau mažų ir didelių įmonių verslo sprendimus. Nuo duomenų intuicijos iki diegimo ir komunikacijos.\nDaugiau nei 12 metų patirtis.' :
+                      'Kūriau mažų ir didelių įmonių verslo sprendimus. Nuo duomenų intuicijos iki diegimo ir komunikacijos.\nDaugiau nei 13 metų patirtis.' :
                      currentLanguage === 'fr' ?
-                      'A conçu des solutions pour les petites entreprises et les grandes sociétés. Les a supervisées depuis l\'intuition des données jusqu\'au déploiement et à la communication.\nPlus de 12 ans d\'expérience.' :
-                      'Constructed small business and enterprise solutions. Looked over them from data intuition to deployment to communication.\nOver 12 years of experience.'}
+                      'A conçu des solutions pour les petites entreprises et les grandes sociétés. Les a supervisées depuis l\'intuition des données jusqu\'au déploiement et à la communication.\nPlus de 13 ans d\'expérience.' :
+                      'Constructed small business and enterprise solutions. Looked over them from data intuition to deployment to communication.\nOver 13 years of experience.'}
                   </p>
                 </div>
                 {/* Writer */}
