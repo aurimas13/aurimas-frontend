@@ -191,10 +191,10 @@ export const About: React.FC = () => {
                   </h4>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
-                      '5 projektai. Techninių, komunikacijos ir pardavimo komandų valdymas. Daugiau nei 3 metų patirtis.' :
-                     currentLanguage === 'fr' ? 
-                      '5 projets à son actif. Gestion des équipes techniques, communicationnelles et commerciales. Plus de 3 ans d\'expérience.' :
-                      '5 projects under belt. Handling management over technical, communicational, and sales teams. Over 3 years of experience.'}
+                      '5 projektai. Techninių, komunikacijos, pardavimo ir suinteresuotųjų šalių komandų valdymas. Daugiau nei 5 metų patirtis.' :
+                     currentLanguage === 'fr' ?
+                      '5 projets à son actif. Gestion des équipes techniques, communicationnelles, commerciales et des parties prenantes. Plus de 5 ans d\'expérience.' :
+                      '5 projects under belt. Handling management over technical, communicational, sales and stakeholder teams. Over 5 years of experience.'}
                   </p>
                 </div>
                 {/* AI Architect & Leader */}
