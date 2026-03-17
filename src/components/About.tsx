@@ -197,12 +197,12 @@ export const About: React.FC = () => {
                       '5 projects under belt. Managed technical, communication and sales teams. Over 5 years of experience.'}
                   </p>
                 </div>
-                {/* AI Architect & Leader */}
+                {/* Fractional CTO & Leader */}
                 <div className="border-l-4 border-purple-500 pl-4">
                   <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'DI architektas ir vadovas' : 
-                     currentLanguage === 'fr' ? 'Architecte et responsable IA' : 
-                     'AI Architect & Leader'}
+                    {currentLanguage === 'lt' ? 'Frakcinis technologijų vadovas ir lyderis' : 
+                     currentLanguage === 'fr' ? 'CTO fractionnel et responsable' : 
+                     'Fractional CTO & Leader'}
                   </h4>
                   <p className="text-gray-700 mt-2 text-sm sm:text-base">
                     {currentLanguage === 'lt' ? 
