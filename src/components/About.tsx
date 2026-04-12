@@ -1,5 +1,5 @@
 import React from 'react';
-import { Beaker, BookOpen, Award, Download } from 'lucide-react';
+import { BookOpen, Download } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
@@ -79,8 +79,7 @@ export const About: React.FC = () => {
           </h2>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-start">
-          {/* Bio Section */}
+        <div className="max-w-3xl mx-auto">
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="flex items-center mb-6">
@@ -124,108 +123,6 @@ export const About: React.FC = () => {
             </div>
           </div>
 
-          {/* Experience */}
-          <div className="space-y-8">
-            {/* Experience Highlights */}
-            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-              <div className="flex items-center mb-6">
-                <Award className="w-8 h-8 text-yellow-600 mr-3" />
-                <h3 className="text-2xl font-bold text-gray-800">{t.about.experience}</h3>
-              </div>
-              <div className="space-y-4">
-                {/* Teacher */}
-                <div className="border-l-4 border-blue-500 pl-4">
-                  <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Mokytojas' : 
-                     currentLanguage === 'fr' ? 'Enseignant' : 
-                     'Teacher'}
-                  </h4>
-                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
-                    {currentLanguage === 'lt' ? 
-                      'Mokiau kompiuterių mokslų, dirbtinio intelekto, chemijos ir biologijos teorijos, pagrindų ir taikymų. Teikiau medžiagą. Vertinau. Daugiau nei 3 metų patirtis.' :
-                     currentLanguage === 'fr' ? 
-                      'Enseignement de la théorie, des principes fondamentaux et des applications de l\'informatique, de l\'intelligence artificielle, de la chimie et de la biologie. Fourniture du matériel pédagogique. Notation des travaux. Plus de 3 ans d\'expérience.' :
-                      'Taught theory, fundamentals, and applications of Computer Science, Artificial Intelligence, Chemistry, and Biology. Provided the material. Graded. Over 3 years of experience.'}
-                  </p>
-                </div>
-                {/* Manager */}
-                <div className="border-l-4 border-yellow-500 pl-4">
-                  <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Vadybininkas' : 
-                     currentLanguage === 'fr' ? 'Responsable' : 
-                     'Manager'}
-                  </h4>
-                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
-                    {currentLanguage === 'lt' ? 
-                      '5 projektai. Vadovavau techninėms, komunikacijos ir pardavimo komandoms. Daugiau nei 5 metų patirtis.' :
-                     currentLanguage === 'fr' ?
-                      '5 projets à son actif. Gestion des équipes techniques, de communication et commerciales. Plus de 5 ans d\'expérience.' :
-                      '5 projects under belt. Managed technical, communication and sales teams. Over 5 years of experience.'}
-                  </p>
-                </div>
-                {/* Technical Product Manager & Leader */}
-                <div className="border-l-4 border-purple-500 pl-4">
-                  <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Techninis produkto vadovas ir lyderis' : 
-                     currentLanguage === 'fr' ? 'Chef de Produit Technique et responsable' : 
-                     'Technical Product Manager & Leader'}
-                  </h4>
-                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
-                    {currentLanguage === 'lt' ? 
-                      'Specializuojuosi dirbtinio intelekto srityje. Vadovavau techninėms, verslo, mokslo ir švietimo komandoms. Dirbau su suinteresuotosiomis šalimis. Turiu didelį IT, verslo, mokslo ir komunikacijos žinių bagažą. Daugiau nei 10 metų patirtis.' :
-                     currentLanguage === 'fr' ? 
-                      'Spécialisé en intelligence artificielle. A dirigé des équipes techniques, commerciales, scientifiques et pédagogiques. A travaillé avec des parties prenantes. Vaste arsenal en matière d\'informatique, de commerce, de sciences et de communication. Plus de 10 ans d\'expérience.' :
-                      'Specialize in Artificial Intelligence. Led technical, business, scientific, and educational teams. Worked with stakeholders. A huge arsenal of IT, business, science, and communication. Over 10 years of experience.'}
-                  </p>
-                </div>
-                {/* Research Engineer */}
-                <div className="border-l-4 border-green-500 pl-4">
-                  <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Tyrimų inžinierius' : 
-                     currentLanguage === 'fr' ? 'Ingénieur de recherche' : 
-                     'Research Engineer'}
-                  </h4>
-                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
-                    {currentLanguage === 'lt' ? 
-                      'Chemikas, turintis tyrimų patirties Europoje ir Jungtinėse Valstijose. Dirbau fizikinės, organinės, kompiuterinės chemijos, molekulinio modeliavimo ir statistikos srityse. 12 metų patirtis.' :
-                     currentLanguage === 'fr' ? 
-                      'Chimiste ayant mené des recherches en Europe et aux États-Unis. Travaille dans les domaines de la chimie physique, organique et computationnelle, de la modélisation moléculaire et des statistiques. 12 ans d\'expérience.' :
-                      'A chemist with research under belt spanning Europe and the United States. Work with physical, organic, computational chemistry, molecular modeling, and statistics. 12 years of experience.'}
-                  </p>
-                </div>
-                {/* Developer */}
-                <div className="border-l-4 border-orange-500 pl-4">
-                  <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Kūrėjas' : 
-                     currentLanguage === 'fr' ? 'Développeur' : 
-                     'Developer'}
-                  </h4>
-                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
-                    {currentLanguage === 'lt' ? 
-                      'Kūriau mažų ir didelių įmonių verslo sprendimus. Nuo duomenų intuicijos iki diegimo ir komunikacijos.\nDaugiau nei 13 metų patirtis.' :
-                     currentLanguage === 'fr' ?
-                      'A conçu des solutions pour les petites entreprises et les grandes sociétés. Les a supervisées depuis l\'intuition des données jusqu\'au déploiement et à la communication.\nPlus de 13 ans d\'expérience.' :
-                      'Constructed small business and enterprise solutions. Looked over them from data intuition to deployment to communication.\nOver 13 years of experience.'}
-                  </p>
-                </div>
-                {/* Writer */}
-                <div className="border-l-4 border-red-500 pl-4">
-                  <h4 className="font-bold text-gray-800">
-                    {currentLanguage === 'lt' ? 'Rašytojas' : 
-                     currentLanguage === 'fr' ? 'Rédacteur' : 
-                     'Writer'}
-                  </h4>
-                  <p className="text-gray-700 mt-2 text-sm sm:text-base">
-                    {currentLanguage === 'lt' ? 
-                      'Techniniai, meniniai ir moksliniai raštai. Poezija. Daugiau nei 15 metų patirtis.' :
-                     currentLanguage === 'fr' ? 
-                      'Rédaction technique, artistique et scientifique. Poésie. Plus de 15 ans d\'expérience.' :
-                      'Technical, artistic, and scientific writing. Poetry. Over 15 years of experience.'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         </div>
       </div>
