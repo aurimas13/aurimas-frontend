@@ -3,7 +3,7 @@ export const translations = {
     hero: {
       greeting: "Hi, I'm",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemist turned AI Product Manager, Fractional CTO & Writer",
+      subtitle: "Chemist turned AI Product Manager, Technical Product Manager & Writer",
       description: "Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.",
       cta: "Explore My Work"
     },
@@ -152,7 +152,7 @@ export const translations = {
       fillAllFields: "Please fill in all fields"
     },
     footer: {
-      description: "I'm a chemist turned AI product manager, fractional CTO and writer, passionate about the intersection of science, technology, and creativity.",
+      description: "I'm a chemist turned AI product manager, technical product manager and writer, passionate about the intersection of science, technology, and creativity.",
       quickLinks: "Quick Links",
       connect: "Connect",
       madeWith: "Made with",
@@ -174,7 +174,7 @@ export const translations = {
     hero: {
       greeting: "Laba, esu",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemikas tapęs DI produkto vadovu, frakciniu technologijų vadovu ir rašytoju",
+      subtitle: "Chemikas tapęs DI produkto vadovu, techniniu produkto vadovu ir rašytoju",
       description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, DI duoda rezultatus, o istorijos atgyja ant lapo.",
       cta: "Tyrinėti mano darbus"
     },
@@ -323,7 +323,7 @@ export const translations = {
       fillAllFields: "Prašome užpildyti visus laukus"
     },
     footer: {
-      description: "Esu chemikas, tapęs DI produkto vadovu, frakciniu technologijų vadovu ir rašytoju, aistringas mokslo, technologijų ir kūrybos sankirtose.",
+      description: "Esu chemikas, tapęs DI produkto vadovu, techniniu produkto vadovu ir rašytoju, aistringas mokslo, technologijų ir kūrybos sankirtose.",
       quickLinks: "Greitos nuorodos",
       connect: "Susisiekti",
       madeWith: "Sukurta su",
@@ -345,7 +345,7 @@ export const translations = {
     hero: {
       greeting: "Bonjour, je suis",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chimiste devenu Chef de Produit IA, CTO fractionnel et écrivain",
+      subtitle: "Chimiste devenu Chef de Produit IA, Chef de Produit Technique et écrivain",
       description: "Bienvenue dans mon espace virtuel, où la chimie devient code, l'IA produit des résultats et les histoires reprennent vie.",
       cta: "Explorer mon travail"
     },
@@ -494,7 +494,7 @@ export const translations = {
       fillAllFields: "Veuillez remplir tous les champs"
     },
     footer: {
-      description: "Je suis un chimiste devenu Chef de Produit IA, CTO fractionnel et écrivain, passionné par l'intersection de la science, de la technologie et de la créativité.",
+      description: "Je suis un chimiste devenu Chef de Produit IA, Chef de Produit Technique et écrivain, passionné par l'intersection de la science, de la technologie et de la créativité.",
       quickLinks: "Liens rapides",
       connect: "Se connecter",
       madeWith: "Fait avec",
