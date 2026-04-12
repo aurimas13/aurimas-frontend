@@ -334,7 +334,7 @@ export const generateNewsletterHTML = (blogContent: string, unsubscribeToken: st
     <body>
       <div class="header">
         <h1>🚀 New Blog Post from Aurimas</h1>
-        <p>Chemist turned AI Product Manager, Technical Product Manager & Writer</p>
+        <p>Chemist turned AI/Technical Product Manager & Writer</p>
       </div>
       <div class="content">
         ${blogContent}
