@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { MusicPlayer } from './MusicPlayer';
 
 export const Layout: React.FC = () => {
   const location = useLocation();
@@ -17,13 +16,6 @@ export const Layout: React.FC = () => {
       </main>
       
       {!isBlogManager && <Footer />}
-      
-      {/* Background Music Player */}
-      <MusicPlayer 
-        videoId="IJiHDmyhE1A"
-        title="Baba Yetu"
-        artist="Christopher Tin feat. Soweto Gospel Choir"
-      />
     </div>
   );
 };

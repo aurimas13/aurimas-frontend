@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code, Beaker, BookOpen, Award, Download } from 'lucide-react';
+import { Beaker, BookOpen, Award, Download } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
@@ -67,16 +67,6 @@ export const About: React.FC = () => {
     }
   };
 
-  const skills = [
-    { name: currentLanguage === 'lt' ? 'Dirbtinis intelektas' : currentLanguage === 'fr' ? 'Intelligence artificielle' : 'Artificial Intelligence', level: 100, color: 'bg-yellow-200' },
-    { name: currentLanguage === 'lt' ? 'Vadovavimas' : currentLanguage === 'fr' ? 'Leadership' : 'Leadership', level: 100, color: 'bg-green-200' },
-    { name: currentLanguage === 'lt' ? 'Bendravimas' : currentLanguage === 'fr' ? 'Communication' : 'Communication', level: 100, color: 'bg-cyan-200' },
-    { name: currentLanguage === 'lt' ? 'Chemija' : currentLanguage === 'fr' ? 'Chimie' : 'Chemistry', level: 100, color: 'bg-blue-200' },
-    { name: currentLanguage === 'lt' ? 'Komandinis darbas' : currentLanguage === 'fr' ? 'Travail d\'équipe' : 'Teamwork', level: 100, color: 'bg-orange-200' },
-    { name: currentLanguage === 'lt' ? 'Vadyba' : currentLanguage === 'fr' ? 'Gestion' : 'Management', level: 100, color: 'bg-purple-200' },
-    { name: currentLanguage === 'lt' ? 'Mokymas' : currentLanguage === 'fr' ? 'Enseignement' : 'Teaching', level: 100, color: 'bg-pink-200' },
-    { name: currentLanguage === 'lt' ? 'Programavimas' : currentLanguage === 'fr' ? 'Programmation' : 'Programming', level: 90, color: 'bg-indigo-200' }
-  ];
 
 
   return (
@@ -134,32 +124,8 @@ export const About: React.FC = () => {
             </div>
           </div>
 
-          {/* Skills & Experience */}
+          {/* Experience */}
           <div className="space-y-8">
-            {/* Skills */}
-            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-              <div className="flex items-center mb-6">
-                <Code className="w-8 h-8 text-green-600 mr-3" />
-                <h3 className="text-2xl font-bold text-gray-800">{t.about.skills}</h3>
-              </div>
-              <div className="space-y-4">
-                {skills.map((skill) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between mb-2">
-                      <span className="font-medium text-gray-700 text-sm sm:text-base">{skill.name}</span>
-                      <span className="text-gray-500 text-sm sm:text-base">{skill.level}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3">
-                      <div
-                        className={`h-3 rounded-full ${skill.color} transition-all duration-1000 ease-out`}
-                        style={{ width: `${skill.level}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Experience Highlights */}
             <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="flex items-center mb-6">
