@@ -6,6 +6,8 @@ import { BlogsPage } from './components/BlogsPage';
 import { BlogPage } from './components/BlogPage';
 import { BlogPostPage } from './components/BlogPostPage';
 import { BlogManager } from './components/BlogManager';
+import { ProjectsPage } from './components/ProjectsPage';
+import { ProjectDetailPage } from './components/ProjectDetailPage';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: "blog-manager",
         element: <BlogManager onBack={() => window.history.back()} />
+      },
+      {
+        path: "projects",
+        element: <ProjectsPage />
+      },
+      {
+        path: "projects/:slug",
+        element: <ProjectDetailPage />
       }
     ]
   }

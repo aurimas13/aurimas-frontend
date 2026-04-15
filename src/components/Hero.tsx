@@ -1,7 +1,15 @@
 import React from 'react';
-import { ChevronDown, Heart, Code, Beaker, FileText, Image, Mail, User } from 'lucide-react';
+import { ChevronDown, Heart, Code, Beaker, FileText, Image, Mail, User, ExternalLink, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
+
+const projectLinks = [
+  { slug: 'cleartrace', url: 'https://cleartrace-intelligence.vercel.app', color: 'from-blue-500 to-cyan-500' },
+  { slug: 'aegis', url: 'https://aegis-ai-enterprise.vercel.app', color: 'from-purple-500 to-indigo-500' },
+  { slug: 'gateway', url: 'https://ai-gateway-poc.vercel.app', color: 'from-amber-500 to-orange-500' },
+  { slug: 'agentic', url: 'https://b2b-mobile-agent.vercel.app', color: 'from-green-500 to-emerald-500' },
+];
 
 interface HeroProps {
   onSectionChange: (section: string) => void;
@@ -75,6 +83,41 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
             <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-600 max-w-5xl mx-auto leading-relaxed animate-fade-in delay-500">
               {t.hero.description}
             </p>
+          </div>
+
+          {/* Featured Projects */}
+          <div className="mt-12 animate-fade-in delay-700">
+            <h3 className="text-lg font-semibold text-gray-500 uppercase tracking-wider mb-6">{t.projects.featured}</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {projectLinks.map((project) => {
+                const item = (t.projects as any).items[project.slug];
+                return (
+                  <div key={project.slug} className="bg-white rounded-xl shadow-md border border-gray-100 p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 text-left">
+                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${project.color} flex items-center justify-center mb-3`}>
+                      <Code className="w-5 h-5 text-white" />
+                    </div>
+                    <h4 className="font-bold text-gray-800 text-sm mb-1">{item.name}</h4>
+                    <p className="text-xs text-gray-500 mb-3">{item.tagline}</p>
+                    <div className="flex flex-col space-y-2">
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
+                      >
+                        {t.projects.viewProject} <ExternalLink className="w-3 h-3 ml-1" />
+                      </a>
+                      <Link
+                        to={`/projects/${project.slug}`}
+                        className="inline-flex items-center text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors"
+                      >
+                        {t.projects.viewCaseStudy} <ArrowRight className="w-3 h-3 ml-1" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

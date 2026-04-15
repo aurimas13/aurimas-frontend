@@ -167,7 +167,57 @@ export const translations = {
       blog: "Blog",
       gallery: "Gallery",
       support: "Support",
-      contact: "Contact"
+      contact: "Contact",
+      projects: "Projects"
+    },
+    projects: {
+      title: "Projects",
+      subtitle: "A selection of products I've built — from AI fraud detection to agentic mobile platforms.",
+      featured: "Featured Projects",
+      viewProject: "View Live Project",
+      viewCaseStudy: "View Case Study",
+      caseStudyComingSoon: "Case study coming soon",
+      problem: "Problem",
+      approach: "Approach",
+      outcome: "Outcome",
+      screenshots: "Screenshots",
+      liveDemo: "Live Demo",
+      backToProjects: "Back to Projects",
+      screenshotsPlaceholder: "Screenshots will be added soon.",
+      items: {
+        cleartrace: {
+          name: "ClearTrace Intelligence",
+          tagline: "AI Fraud & AML Platform",
+          description: "An AI-powered platform for real-time fraud detection and anti-money-laundering compliance, designed for financial institutions and fintech companies.",
+          problem: "Financial institutions struggle with rising fraud sophistication and complex AML regulatory requirements, leading to missed threats and costly compliance failures.",
+          approach: "Built a real-time AI engine that combines transaction monitoring, behavioral analytics, and risk scoring to detect anomalies and flag suspicious activity across multiple channels.",
+          outcome: "Demonstrated a working prototype capable of real-time fraud scoring, configurable AML rules, and interactive compliance dashboards for stakeholder review."
+        },
+        aegis: {
+          name: "Aegis AI Enterprise",
+          tagline: "LLM Governance Platform",
+          description: "An enterprise governance platform for managing, monitoring, and securing Large Language Model deployments across the organization.",
+          problem: "Enterprises deploying LLMs face challenges around prompt injection, data leakage, model bias, and lack of audit trails — creating compliance and security risks.",
+          approach: "Designed a governance layer that sits between users and LLM providers, enforcing policies, logging interactions, measuring toxicity, and providing real-time dashboards for AI ops teams.",
+          outcome: "Delivered a PoC with policy enforcement, audit logging, toxicity monitoring, and a governance dashboard — enabling safe, compliant LLM adoption at enterprise scale."
+        },
+        gateway: {
+          name: "Gateway PoC",
+          tagline: "Product-Led Growth Prototype",
+          description: "A product-led growth prototype demonstrating how AI-powered gateways can drive user activation, retention, and expansion in B2B SaaS products.",
+          problem: "B2B SaaS products often rely on sales-led motions that are expensive and slow to scale, missing opportunities for organic, product-driven growth.",
+          approach: "Prototyped an AI gateway that onboards users with interactive walkthroughs, personalizes feature discovery, and triggers expansion prompts based on usage patterns.",
+          outcome: "Created a functional prototype showing how product-led growth loops can be embedded directly into AI-powered platforms to reduce time-to-value."
+        },
+        agentic: {
+          name: "Agentic Mobile MVP",
+          tagline: "Creative Agentic Platform",
+          description: "A mobile-first MVP for a creative agentic platform where AI agents collaborate with users to generate, refine, and publish creative content.",
+          problem: "Content creators need AI tools that go beyond simple generation — they need collaborative agents that understand context, iterate on feedback, and adapt to creative workflows.",
+          approach: "Built a mobile-first agentic platform where multiple AI agents handle different creative tasks — ideation, drafting, editing, and formatting — orchestrated through a conversational interface.",
+          outcome: "Shipped an MVP demonstrating multi-agent creative workflows on mobile, with real-time collaboration between user and AI agents for content creation."
+        }
+      }
     }
   },
   lt: {
@@ -338,7 +388,57 @@ export const translations = {
       blog: "Tinkliaraštis",
       gallery: "Galerija",
       support: "Parama",
-      contact: "Kontaktai"
+      contact: "Kontaktai",
+      projects: "Projektai"
+    },
+    projects: {
+      title: "Projektai",
+      subtitle: "Produktai, kuriuos sukūriau — nuo DI sukčiavimo aptikimo iki agentinių mobilių platformų.",
+      featured: "Pagrindiniai projektai",
+      viewProject: "Žiūrėti projektą",
+      viewCaseStudy: "Žiūrėti atvejo analizę",
+      caseStudyComingSoon: "Atvejo analizė netrukus",
+      problem: "Problema",
+      approach: "Metodas",
+      outcome: "Rezultatas",
+      screenshots: "Ekrano nuotraukos",
+      liveDemo: "Tiesioginė demonstracija",
+      backToProjects: "Grįžti prie projektų",
+      screenshotsPlaceholder: "Ekrano nuotraukos bus pridėtos netrukus.",
+      items: {
+        cleartrace: {
+          name: "ClearTrace Intelligence",
+          tagline: "DI sukčiavimo ir pinigų plovimo prevencijos platforma",
+          description: "DI valdoma platforma, skirta sukčiavimo aptikimui realiuoju laiku ir pinigų plovimo prevencijos atitikčiai, suprojektuota finansų institucijoms ir fintech įmonėms.",
+          problem: "Finansų institucijos susiduria su augančiu sukčiavimo sudėtingumu ir sudėtingais pinigų plovimo prevencijos reguliavimo reikalavimais.",
+          approach: "Sukurtas realaus laiko DI variklis, derinantis sandorių stebėjimą, elgsenos analitiką ir rizikos vertinimą.",
+          outcome: "Pademonstruotas veikiantis prototipas su realaus laiko sukčiavimo vertinimu ir interaktyviomis atitikties informacinėmis suvestinėmis."
+        },
+        aegis: {
+          name: "Aegis AI Enterprise",
+          tagline: "Didelių kalbos modelių valdymo platforma",
+          description: "Įmonių valdymo platforma, skirta didelių kalbos modelių diegimų valdymui, stebėjimui ir apsaugai visoje organizacijoje.",
+          problem: "Įmonės, diegiančios didelius kalbos modelius, susiduria su duomenų nutekėjimo, modelio šališkumo ir audito pėdsakų trūkumo iššūkiais.",
+          approach: "Suprojektuotas valdymo sluoksnis tarp vartotojų ir modelių tiekėjų, užtikrinantis politikų vykdymą ir sąveikų registravimą.",
+          outcome: "Pristatytas prototipas su politikų vykdymu, audito registravimu ir valdymo informacine suvestine."
+        },
+        gateway: {
+          name: "Gateway PoC",
+          tagline: "Produktu grįsto augimo prototipas",
+          description: "Produktu grįsto augimo prototipas, demonstruojantis kaip DI valdomi vartai gali skatinti vartotojų aktyvavimą B2B SaaS produktuose.",
+          problem: "B2B SaaS produktai dažnai remiasi pardavimais grįstu modeliu, kuris yra brangus ir lėtai plečiamas.",
+          approach: "Sukurtas DI vartų prototipas su interaktyviomis apžvalgomis ir personalizuotu funkcijų atradimu.",
+          outcome: "Sukurtas funkcionalus prototipas, rodantis kaip produktu grįsto augimo ciklai gali būti integruoti į DI platformas."
+        },
+        agentic: {
+          name: "Agentic Mobile MVP",
+          tagline: "Kūrybinė agentinė platforma",
+          description: "Mobili MVP kūrybinė agentinė platforma, kurioje DI agentai bendradarbiauja su vartotojais kuriant ir publikuojant kūrybinį turinį.",
+          problem: "Turinio kūrėjams reikia DI įrankių, kurie ne tik generuoja — jiems reikia bendradarbiaujančių agentų.",
+          approach: "Sukurta mobili agentinė platforma, kurioje keli DI agentai atlieka skirtingas kūrybines užduotis.",
+          outcome: "Išleistas MVP, demonstruojantis kelių agentų kūrybinius darbo srautus mobiliajame įrenginyje."
+        }
+      }
     }
   },
   fr: {
@@ -509,7 +609,57 @@ export const translations = {
       blog: "Blog",
       gallery: "Galerie",
       support: "Soutien",
-      contact: "Contact"
+      contact: "Contact",
+      projects: "Projets"
+    },
+    projects: {
+      title: "Projets",
+      subtitle: "Une sélection de produits que j'ai construits — de la détection de fraude IA aux plateformes agentiques mobiles.",
+      featured: "Projets en vedette",
+      viewProject: "Voir le projet",
+      viewCaseStudy: "Voir l'étude de cas",
+      caseStudyComingSoon: "Étude de cas à venir",
+      problem: "Problème",
+      approach: "Approche",
+      outcome: "Résultat",
+      screenshots: "Captures d'écran",
+      liveDemo: "Démo en direct",
+      backToProjects: "Retour aux projets",
+      screenshotsPlaceholder: "Les captures d'écran seront ajoutées prochainement.",
+      items: {
+        cleartrace: {
+          name: "ClearTrace Intelligence",
+          tagline: "Plateforme IA de fraude et LCB-FT",
+          description: "Une plateforme alimentée par l'IA pour la détection de fraude en temps réel et la conformité anti-blanchiment, conçue pour les institutions financières.",
+          problem: "Les institutions financières peinent face à la sophistication croissante de la fraude et aux exigences réglementaires complexes de lutte contre le blanchiment.",
+          approach: "Conception d'un moteur IA en temps réel combinant surveillance des transactions, analyse comportementale et scoring de risque.",
+          outcome: "Prototype fonctionnel démontrant le scoring de fraude en temps réel et des tableaux de bord de conformité interactifs."
+        },
+        aegis: {
+          name: "Aegis AI Enterprise",
+          tagline: "Plateforme de gouvernance LLM",
+          description: "Une plateforme de gouvernance d'entreprise pour gérer, surveiller et sécuriser les déploiements de grands modèles de langage.",
+          problem: "Les entreprises déployant des LLM font face à des défis de fuite de données, de biais de modèle et de manque de pistes d'audit.",
+          approach: "Conception d'une couche de gouvernance entre les utilisateurs et les fournisseurs de LLM, appliquant des politiques et enregistrant les interactions.",
+          outcome: "PoC livré avec application des politiques, journalisation d'audit et tableau de bord de gouvernance."
+        },
+        gateway: {
+          name: "Gateway PoC",
+          tagline: "Prototype de croissance produit",
+          description: "Un prototype de croissance orientée produit démontrant comment les passerelles IA peuvent stimuler l'activation des utilisateurs dans les produits B2B SaaS.",
+          problem: "Les produits B2B SaaS reposent souvent sur des approches commerciales coûteuses et lentes à mettre à l'échelle.",
+          approach: "Prototypage d'une passerelle IA avec des parcours interactifs et une découverte personnalisée des fonctionnalités.",
+          outcome: "Prototype fonctionnel montrant comment les boucles de croissance produit peuvent être intégrées aux plateformes IA."
+        },
+        agentic: {
+          name: "Agentic Mobile MVP",
+          tagline: "Plateforme agentique créative",
+          description: "Un MVP mobile pour une plateforme agentique créative où les agents IA collaborent avec les utilisateurs pour créer et publier du contenu.",
+          problem: "Les créateurs de contenu ont besoin d'outils IA allant au-delà de la simple génération — ils ont besoin d'agents collaboratifs.",
+          approach: "Construction d'une plateforme agentique mobile où plusieurs agents IA gèrent différentes tâches créatives.",
+          outcome: "MVP livré démontrant des flux de travail créatifs multi-agents sur mobile."
+        }
+      }
     }
   }
 };

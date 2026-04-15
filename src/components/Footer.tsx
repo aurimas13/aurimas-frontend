@@ -81,19 +81,23 @@
 //   );
 // };
 
-import React from 'react';
-import { Heart, Github, Linkedin, Mail, Facebook, Instagram, Twitter, Youtube, Camera, Music, Activity } from 'lucide-react';
+import React, { useState } from 'react';
+import { Heart, Github, Linkedin, Mail, Facebook, Instagram, Twitter, Youtube, Camera, Music, Activity, ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
+
+const projectSlugs = ['cleartrace', 'aegis', 'gateway', 'agentic'];
 
 export function Footer() {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage];
+  const [projectsOpen, setProjectsOpen] = useState(false);
 
   return (
     <footer className="bg-gradient-to-br from-lime-25 to-yellow-25 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Aurimas Aleksandras Nausėdas</h3>
@@ -127,6 +131,34 @@ export function Footer() {
                 </a>
               </li>
             </ul>
+          </div>
+
+          {/* Projects */}
+          <div>
+            <button
+              onClick={() => setProjectsOpen(!projectsOpen)}
+              className="text-lg font-semibold mb-4 flex items-center hover:text-amber-600 transition-colors"
+            >
+              {t.navigation.projects}
+              <ChevronDown className={`w-4 h-4 ml-1 transition-transform duration-200 ${projectsOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {projectsOpen && (
+              <ul className="space-y-2">
+                {projectSlugs.map((slug) => {
+                  const item = (t.projects as any).items[slug];
+                  return (
+                    <li key={slug}>
+                      <Link
+                        to={`/projects/${slug}`}
+                        className="text-gray-600 hover:text-amber-600 transition-colors text-sm"
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
 
           {/* Social Links */}
