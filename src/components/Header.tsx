@@ -102,18 +102,24 @@
 //   );
 // };
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
+const projectSlugs = ['cleartrace', 'aegis', 'gateway', 'agentic'] as const;
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [projectsDropdownOpen, setProjectsDropdownOpen] = useState(false);
+  const [mobileProjectsOpen, setMobileProjectsOpen] = useState(false);
+  const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage];
   const location = useLocation();
+  const projects = (t.projects as any).items;
 
   const scrollToSection = (sectionId: string) => {
     // If we're not on the home page, navigate to home first
@@ -205,6 +211,52 @@ export function Header() {
             >
               {t.navigation.support}
             </button>
+
+            {/* Projects dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => {
+                if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+                setProjectsDropdownOpen(true);
+              }}
+              onMouseLeave={() => {
+                dropdownTimeout.current = setTimeout(() => setProjectsDropdownOpen(false), 150);
+              }}
+            >
+              <Link
+                to="/projects"
+                className="text-gray-700 hover:text-amber-600 transition-colors inline-flex items-center"
+              >
+                {t.navigation.projects}
+                <ChevronDown className={`w-3.5 h-3.5 ml-0.5 transition-transform duration-200 ${projectsDropdownOpen ? 'rotate-180' : ''}`} />
+              </Link>
+              {projectsDropdownOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
+                  <div className="bg-white rounded-xl shadow-lg border border-gray-100 py-2 w-56">
+                    {projectSlugs.map((slug) => (
+                      <Link
+                        key={slug}
+                        to={`/projects/${slug}`}
+                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                        onClick={() => setProjectsDropdownOpen(false)}
+                      >
+                        <span className="font-medium">{projects[slug].name}</span>
+                        <span className="block text-xs text-gray-400 mt-0.5">{projects[slug].tagline}</span>
+                      </Link>
+                    ))}
+                    <div className="border-t border-gray-100 mt-1 pt-1">
+                      <Link
+                        to="/projects"
+                        className="block px-4 py-2 text-sm font-medium text-amber-600 hover:bg-amber-50 transition-colors"
+                        onClick={() => setProjectsDropdownOpen(false)}
+                      >
+                        {t.projects.title} &rarr;
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="flex items-center space-x-4">
@@ -260,6 +312,36 @@ export function Header() {
               >
                 {t.navigation.support}
               </button>
+
+              {/* Mobile Projects */}
+              <button
+                onClick={() => setMobileProjectsOpen(!mobileProjectsOpen)}
+                className="flex items-center justify-between w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
+              >
+                {t.navigation.projects}
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileProjectsOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {mobileProjectsOpen && (
+                <div className="pl-4 space-y-1">
+                  {projectSlugs.map((slug) => (
+                    <Link
+                      key={slug}
+                      to={`/projects/${slug}`}
+                      className="block px-3 py-2 text-sm text-gray-600 hover:text-amber-600 hover:bg-gray-50 rounded-md"
+                      onClick={() => { setIsMenuOpen(false); setMobileProjectsOpen(false); }}
+                    >
+                      {projects[slug].name}
+                    </Link>
+                  ))}
+                  <Link
+                    to="/projects"
+                    className="block px-3 py-2 text-sm font-medium text-amber-600 hover:bg-amber-50 rounded-md"
+                    onClick={() => { setIsMenuOpen(false); setMobileProjectsOpen(false); }}
+                  >
+                    {t.projects.title} &rarr;
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
