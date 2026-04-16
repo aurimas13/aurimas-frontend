@@ -3,7 +3,7 @@ export const translations = {
     hero: {
       greeting: "Hi, I'm",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemist turned AI/Technical Product Manager & Writer",
+      subtitle: "AI Product Manager & Writer",
       description: "Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.",
       cta: "Explore My Work"
     },
@@ -224,7 +224,7 @@ export const translations = {
     hero: {
       greeting: "Laba, esu",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemikas tapęs DI/techniniu produkto vadovu ir rašytoju",
+      subtitle: "DI produkto vadovas ir rašytojas",
       description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, DI duoda rezultatus, o istorijos atgyja ant lapo.",
       cta: "Tyrinėti mano darbus"
     },
@@ -445,7 +445,7 @@ export const translations = {
     hero: {
       greeting: "Bonjour, je suis",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chimiste devenu Chef de Produit IA/Technique et écrivain",
+      subtitle: "Chef de Produit IA et Écrivain",
       description: "Bienvenue dans mon espace virtuel, où la chimie devient code, l'IA produit des résultats et les histoires reprennent vie.",
       cta: "Explorer mon travail"
     },
