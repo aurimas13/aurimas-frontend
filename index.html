@@ -77,77 +77,67 @@
         border-style: solid;
         border-color: #e5e7eb;
       }
-      /* Loading state */
-      .loading {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        font-family: 'Inter', sans-serif;
-        color: #374151;
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
+      /* Hide static fallback once React app mounts */
+      body.app-loaded #static-fallback {
+        display: none !important;
       }
     </style>
   </head>
   <body>
-    <div id="root">
-      <!-- Static HTML for SEO crawlers and non-JS users — React replaces this on load -->
-      <div style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; color: #1f2937; max-width: 960px; margin: 0 auto; padding: 40px 20px;">
-        <header style="text-align: center; padding: 40px 0 20px;">
-          <img src="/basketball.jpg" alt="Aurimas Nausėdas" width="160" height="160" style="border-radius: 50%; border: 4px solid #fbbf24; object-fit: cover;" />
-          <h1 style="font-size: 2.5rem; margin: 24px 0 8px;">Aurimas Nausėdas</h1>
-          <p style="font-size: 1.25rem; color: #374151; margin: 0 0 8px;">AI Product Manager | Writer</p>
-          <p style="font-size: 1rem; color: #6b7280; max-width: 600px; margin: 0 auto;">Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.</p>
-        </header>
+    <!-- Static fallback for crawlers & non-JS users. Hidden once React mounts (body.app-loaded). -->
+    <div id="static-fallback" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; color: #1f2937; max-width: 960px; margin: 0 auto; padding: 40px 20px;">
+      <header style="text-align: center; padding: 40px 0 20px;">
+        <img src="/basketball.jpg" alt="Aurimas Nausėdas" width="160" height="160" style="border-radius: 50%; border: 4px solid #fbbf24; object-fit: cover;" />
+        <h1 style="font-size: 2.5rem; margin: 24px 0 8px;">Hi, I'm Aurimas</h1>
+        <p style="font-size: 1.25rem; color: #374151; margin: 0 0 8px;">Chemist turned AI Product Manager &amp; Writer</p>
+        <p style="font-size: 1rem; color: #6b7280; max-width: 600px; margin: 0 auto;">Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.</p>
+      </header>
 
-        <section style="padding: 30px 0;">
-          <h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 24px;">Featured Projects</h2>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-            <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-              <h3 style="font-size: 1rem; margin: 0 0 4px;">ClearTrace Intelligence</h3>
-              <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">AI Fraud &amp; AML Platform</p>
-              <a href="https://cleartrace-intelligence.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-            </div>
-            <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-              <h3 style="font-size: 1rem; margin: 0 0 4px;">Aegis AI Enterprise</h3>
-              <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">LLM Governance Platform</p>
-              <a href="https://aegis-ai-enterprise.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-            </div>
-            <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-              <h3 style="font-size: 1rem; margin: 0 0 4px;">Gateway PoC</h3>
-              <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">Product-Led Growth Prototype</p>
-              <a href="https://ai-gateway-poc.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-            </div>
-            <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-              <h3 style="font-size: 1rem; margin: 0 0 4px;">Agentic Mobile MVP</h3>
-              <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">Creative Agentic Platform</p>
-              <a href="https://b2b-mobile-agent.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-            </div>
+      <section style="padding: 30px 0;">
+        <h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 24px;">Featured Projects</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+            <h3 style="font-size: 1rem; margin: 0 0 4px;">ClearTrace Intelligence</h3>
+            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">AI Fraud &amp; AML Platform</p>
+            <a href="https://cleartrace-intelligence.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
           </div>
-        </section>
+          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+            <h3 style="font-size: 1rem; margin: 0 0 4px;">Aegis AI Enterprise</h3>
+            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">LLM Governance Platform</p>
+            <a href="https://aegis-ai-enterprise.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
+          </div>
+          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+            <h3 style="font-size: 1rem; margin: 0 0 4px;">Gateway PoC</h3>
+            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">Product-Led Growth Prototype</p>
+            <a href="https://ai-gateway-poc.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
+          </div>
+          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+            <h3 style="font-size: 1rem; margin: 0 0 4px;">Agentic Mobile MVP</h3>
+            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">Creative Agentic Platform</p>
+            <a href="https://b2b-mobile-agent.vercel.app" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
+          </div>
+        </div>
+      </section>
 
-        <section style="padding: 30px 0;">
-          <h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 12px;">About</h2>
-          <p style="color: #374151; line-height: 1.7;">I am a chemist from the University of Edinburgh who re-specialized in Computer Science, AI, and Product Management. I lead cross-functional teams across product delivery, technical architecture, and stakeholder communication. On this website you will find my projects, blog posts, and creative writing.</p>
-        </section>
+      <section style="padding: 30px 0;">
+        <h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 12px;">About</h2>
+        <p style="color: #374151; line-height: 1.7;">I am a chemist from the University of Edinburgh who re-specialized in Computer Science, AI, and Product Management. I lead cross-functional teams across product delivery, technical architecture, and stakeholder communication. On this website you will find my projects, blog posts, and creative writing.</p>
+      </section>
 
-        <footer style="border-top: 1px solid #e5e7eb; padding: 24px 0; text-align: center; font-size: 0.875rem; color: #6b7280;">
-          <p>Aurimas Aleksandras Nausėdas — AI Product Manager, Writer, and former chemist.</p>
-          <p style="margin-top: 8px;">
-            <a href="https://github.com/aurimas13" style="color: #d97706; margin: 0 8px;">GitHub</a>
-            <a href="https://www.linkedin.com/in/aurimasnausedas/" style="color: #d97706; margin: 0 8px;">LinkedIn</a>
-            <a href="mailto:aurimas.nausedas@proton.me" style="color: #d97706; margin: 0 8px;">Email</a>
-          </p>
-          <p style="margin-top: 8px;">© 2025 Aurimas Aleksandras Nausėdas. All rights reserved.</p>
-        </footer>
-      </div>
+      <footer style="border-top: 1px solid #e5e7eb; padding: 24px 0; text-align: center; font-size: 0.875rem; color: #6b7280;">
+        <p>Aurimas Aleksandras Nausėdas — AI Product Manager, Writer, and former chemist.</p>
+        <p style="margin-top: 8px;">
+          <a href="https://github.com/aurimas13" style="color: #d97706; margin: 0 8px;">GitHub</a>
+          <a href="https://www.linkedin.com/in/aurimasnausedas/" style="color: #d97706; margin: 0 8px;">LinkedIn</a>
+          <a href="mailto:aurimas.nausedas@proton.me" style="color: #d97706; margin: 0 8px;">Email</a>
+        </p>
+        <p style="margin-top: 8px;">© 2025 Aurimas Aleksandras Nausėdas. All rights reserved.</p>
+      </footer>
     </div>
+
+    <div id="root"></div>
+
     <noscript>
-      <style>#root > div { display: block !important; }</style>
       <p style="text-align:center; padding:20px; font-family:sans-serif;">This site works best with JavaScript enabled, but the content above is still accessible.</p>
     </noscript>
     <script type="module" src="/src/main.tsx"></script>

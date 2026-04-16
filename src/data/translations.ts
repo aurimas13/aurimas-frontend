@@ -3,7 +3,7 @@ export const translations = {
     hero: {
       greeting: "Hi, I'm",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "AI Product Manager & Writer",
+      subtitle: "Chemist turned AI Product Manager & Writer",
       description: "Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.",
       cta: "Explore My Work"
     },
@@ -68,7 +68,6 @@ export const translations = {
       subscribe: "Subscribe",
       followMeOn: "Or follow me on:",
       browseByCategoryTitle: "Browse by Category",
-      published: "Published",
       post: "post",
       posts: "posts",
       languages: "Languages",
@@ -224,7 +223,7 @@ export const translations = {
     hero: {
       greeting: "Laba, esu",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "DI produkto vadovas ir rašytojas",
+      subtitle: "Chemikas tapęs DI produkto vadovu ir rašytoju",
       description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, DI duoda rezultatus, o istorijos atgyja ant lapo.",
       cta: "Tyrinėti mano darbus"
     },
@@ -289,7 +288,6 @@ export const translations = {
       subscribe: "Prenumeruoti",
       followMeOn: "Arba sekite mane:",
       browseByCategoryTitle: "Naršyti pagal kategoriją",
-      published: "Paskelbta",
       post: "įrašas",
       posts: "įrašai",
       languages: "Kalbos",
@@ -445,7 +443,7 @@ export const translations = {
     hero: {
       greeting: "Bonjour, je suis",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chef de Produit IA et Écrivain",
+      subtitle: "Chimiste devenu Chef de Produit IA et Écrivain",
       description: "Bienvenue dans mon espace virtuel, où la chimie devient code, l'IA produit des résultats et les histoires reprennent vie.",
       cta: "Explorer mon travail"
     },
@@ -510,7 +508,6 @@ export const translations = {
       subscribe: "S'abonner",
       followMeOn: "Ou suivez-moi sur:",
       browseByCategoryTitle: "Parcourir par catégorie",
-      published: "Publié",
       post: "article",
       posts: "articles",
       languages: "Langues",

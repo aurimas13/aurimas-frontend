@@ -25,7 +25,9 @@ import ErrorBoundary from './components/ErrorBoundary'
 import { LanguageProvider } from './contexts/LanguageContext'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root')!;
+
+ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <ErrorBoundary>
       <LanguageProvider>
@@ -34,3 +36,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </React.StrictMode>,
 )
+
+// Signal that React has mounted — hides the static fallback via CSS
+requestAnimationFrame(() => {
+  document.body.classList.add('app-loaded');
+})
