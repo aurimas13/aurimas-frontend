@@ -1220,7 +1220,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
 
         {/* Newsletter Section - Always Show */}
         <div className="mb-12">
-          <div className="bg-yellow-100 rounded-lg p-6 border border-yellow-300 max-w-2xl mx-auto text-center">
+          <div className="bg-yellow-100 rounded-xl px-12 py-8 border border-yellow-300 max-w-4xl mx-auto text-center">
             <h4 className="text-lg font-bold mb-3 text-gray-800">🔔 {t.blogs.beFirstToKnow}</h4>
             <p className="text-gray-600 mb-4">
               {t.blogs.joinWaitlist}
