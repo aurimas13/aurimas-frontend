@@ -79,7 +79,7 @@ export const About: React.FC = () => {
           </h2>
         </div>
 
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="flex items-center mb-6">
