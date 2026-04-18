@@ -468,7 +468,7 @@ export const translations = {
       noPosts: "Pas encore d'articles",
       checkBack: "Revenez bientôt pour du nouveau contenu!",
       beFirstToKnow: "Soyez le premier à savoir!",
-      joinWaitlist: "Rejoignez la prochaine newsletter pour être informé dès son lancement et de la publication de nouveaux articles",
+      joinWaitlist: "Rejoignez la newsletter pour être informé dès son lancement et des nouveaux articles",
       enterEmail: "Entrez votre email",
       joinWaitlistBtn: "S'abonner",
       noSpam: "Pas de spam, désabonnement à tout moment",
