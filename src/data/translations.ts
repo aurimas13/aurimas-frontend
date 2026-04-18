@@ -28,7 +28,7 @@ export const translations = {
       noPosts: "No posts yet",
       checkBack: "Check back soon for new content!",
       beFirstToKnow: "Be the First to Know!",
-      joinWaitlist: "Join the upcoming newsletter apart from the Substack platform, where it is now, as seen below, to get notified when it and new posts are published",
+      joinWaitlist: "Join the upcoming newsletter to get notified when it is live, and when its new posts are published",
       enterEmail: "Enter your email",
       joinWaitlistBtn: "Join Newsletter",
       noSpam: "No spam, unsubscribe anytime",
