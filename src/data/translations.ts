@@ -19,7 +19,7 @@ export const translations = {
     },
     blogs: {
       title: "Blog",
-      subtitle: "Upcoming after the transfer from Substack: Weekly AI, Technology, Music & Healthcare Newsletter",
+      subtitle: "Upcoming from Substack: Weekly AI, Technology, Music & Healthcare Newsletter",
       readMore: "Read More",
       allBlogs: "All Blogs",
       manageBlog: "Manage Blog",
@@ -239,7 +239,7 @@ export const translations = {
     },
     blogs: {
       title: "Tinkliaraštis",
-      subtitle: "Netrukus po perkėlimo iš Substack: Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis",
+      subtitle: "Netrukus iš Substack: Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis",
       readMore: "Skaityti daugiau",
       allBlogs: "Visi tinkliaraščiai",
       manageBlog: "Valdyti tinkliaraštį",
@@ -459,7 +459,7 @@ export const translations = {
     },
     blogs: {
       title: "Blog",
-      subtitle: "Prochainement après le transfert depuis Substack : Newsletter hebdomadaire sur l'IA, la technologie, la musique et la santé",
+      subtitle: "Prochainement depuis Substack : Newsletter hebdomadaire sur l'IA, la technologie, la musique et la santé",
       readMore: "Lire la suite",
       allBlogs: "Tous les blogs",
       manageBlog: "Gérer le blog",
