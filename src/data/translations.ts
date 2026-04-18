@@ -19,7 +19,7 @@ export const translations = {
     },
     blogs: {
       title: "Blog",
-      subtitle: "Thoughts, stories, scribbles and insights from my journey in tech and life.",
+      subtitle: "Upcoming after the transfer from Substack: Weekly AI, Technology, Music & Healthcare Newsletter",
       readMore: "Read More",
       allBlogs: "All Blogs",
       manageBlog: "Manage Blog",
@@ -239,7 +239,7 @@ export const translations = {
     },
     blogs: {
       title: "Tinkliaraštis",
-      subtitle: "Idėjos, istorijos, keverziojimai ir pastebėjimai mano technologijų ir gyvenimo kelionėje.",
+      subtitle: "Netrukus po perkėlimo iš Substack: Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis",
       readMore: "Skaityti daugiau",
       allBlogs: "Visi tinkliaraščiai",
       manageBlog: "Valdyti tinkliaraštį",
@@ -248,7 +248,7 @@ export const translations = {
       noPosts: "Kol kas įrašų nėra",
       checkBack: "Netrukus bus naujo turinio!",
       beFirstToKnow: "Sužinokite pirmi!",
-      joinWaitlist: "Prisijunkite prie būsimo naujienlaiškio, be Substack platformos, kurioje jis dabar yra, kaip matote žemiau, kad gautumėte pranešimus apie jį ir naujus įrašus",
+      joinWaitlist: "Prisijunkite prie būsimo naujienlaiškio - ne Substack platformoje, kurioje jis dabar yra, kaip matote žemiau - kad gautumėte pranešimus apie naują jį ir jo įrašus",
       enterEmail: "Įveskite el. paštą",
       joinWaitlistBtn: "Prenumeruoti",
       noSpam: "Jokio šlamšto, atsisakyti galima bet kada",
@@ -459,7 +459,7 @@ export const translations = {
     },
     blogs: {
       title: "Blog",
-      subtitle: "Réflexions, histoires, griffonnages et réflexions sur mon parcours dans la technologie et la vie.",
+      subtitle: "Prochainement après le transfert depuis Substack : Newsletter hebdomadaire sur l'IA, la technologie, la musique et la santé",
       readMore: "Lire la suite",
       allBlogs: "Tous les blogs",
       manageBlog: "Gérer le blog",
