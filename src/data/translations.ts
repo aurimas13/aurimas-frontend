@@ -171,50 +171,88 @@ export const translations = {
     },
     projects: {
       title: "Projects",
-      subtitle: "A selection of products I've built — from AI fraud detection to agentic mobile platforms.",
+      subtitle: "End-to-end AI products — architected, built, and shipped. Each one solves a real enterprise problem.",
       featured: "Featured Projects",
       viewProject: "View Live Project",
       viewCaseStudy: "View Case Study",
+      viewSource: "View Source",
+      caseStudyLabel: "Case Study",
       caseStudyComingSoon: "Case study coming soon",
-      problem: "Problem",
-      approach: "Approach",
-      outcome: "Outcome",
+      problem: "The Problem",
+      approach: "The Approach",
+      myRole: "My Role",
+      techStack: "Tech Stack",
+      outcome: "Outcomes",
+      whatsNovel: "What's Novel",
       screenshots: "Screenshots",
-      liveDemo: "Live Demo",
+      liveDemo: "Try It Live",
+      exploreLive: "Explore the deployed application and source code.",
       backToProjects: "Back to Projects",
       screenshotsPlaceholder: "Screenshots will be added soon.",
       items: {
         cleartrace: {
           name: "ClearTrace Intelligence",
-          tagline: "AI Fraud & AML Platform",
-          description: "An AI-powered platform for real-time fraud detection and anti-money-laundering compliance, designed for financial institutions and fintech companies.",
-          problem: "Financial institutions struggle with rising fraud sophistication and complex AML regulatory requirements, leading to missed threats and costly compliance failures.",
-          approach: "Built a real-time AI engine that combines transaction monitoring, behavioral analytics, and risk scoring to detect anomalies and flag suspicious activity across multiple channels.",
-          outcome: "Demonstrated a working prototype capable of real-time fraud scoring, configurable AML rules, and interactive compliance dashboards for stakeholder review."
+          tagline: "Agentic AML Investigation Platform",
+          description: "An AI-powered AML investigation platform that reduces manual transaction review time through LLM-orchestrated analysis, network visualization, and automated SAR draft generation.",
+          problem: "Financial crime compliance teams are overwhelmed. Fraud analysts spend 60%+ of their time on manual transaction review and Suspicious Activity Report preparation — repetitive work that delays investigations and increases regulatory risk. False positive rates exceed 85%, and each SAR draft takes 3+ hours.",
+          approach: "ClearTrace introduces an LLM-orchestrated investigation layer on top of structured transaction data. Instead of replacing human analysts, the system acts as an intelligent co-pilot — analyzing transactions against AML typologies (layering, structuring, smurfing), rendering interactive sender-receiver network graphs via React Flow, and auto-generating SAR drafts with human approval at every decision point.",
+          role: "Product architecture and end-to-end technical delivery. Defined the data model, component hierarchy, and integration patterns between Supabase, React Flow, and the Claude API. Designed UX for compliance officer workflow including dashboard layout, AI modal interaction patterns, and risk-indicator systems.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "React Flow", "Supabase", "Claude API", "Vercel", "Vite"],
+          metrics: [
+            { value: "50%", label: "Reduction in manual review time" },
+            { value: "3→1 hrs", label: "SAR draft generation" },
+            { value: "67%", label: "Faster investigation cycle" }
+          ],
+          outcome: "Delivered a working prototype with automated plain-English investigation summaries citing specific AML typologies, multi-hop network visualization revealing circular funding and smurfing patterns, and AI-generated SAR drafts with a full human approval workflow.",
+          novel: "Unlike traditional AML tools that are rules-based and generate alerts without context, ClearTrace uses LLMs to produce human-readable investigation narratives. The Human-in-the-Loop design ensures regulatory compliance while dramatically accelerating analyst workflows — acting as an intelligent co-pilot rather than an autonomous decision-maker."
         },
         aegis: {
           name: "Aegis AI Enterprise",
-          tagline: "LLM Governance Platform",
-          description: "An enterprise governance platform for managing, monitoring, and securing Large Language Model deployments across the organization.",
-          problem: "Enterprises deploying LLMs face challenges around prompt injection, data leakage, model bias, and lack of audit trails — creating compliance and security risks.",
-          approach: "Designed a governance layer that sits between users and LLM providers, enforcing policies, logging interactions, measuring toxicity, and providing real-time dashboards for AI ops teams.",
-          outcome: "Delivered a PoC with policy enforcement, audit logging, toxicity monitoring, and a governance dashboard — enabling safe, compliant LLM adoption at enterprise scale."
+          tagline: "Enterprise AI Governance Platform",
+          description: "A governance-first platform that eliminated shadow AI, cut legacy modernization cycle times by 67%, and delivered real-time cost attribution across 13 teams and 5 business units.",
+          problem: "Enterprise AI adoption has accelerated dramatically, yet the gap between AI hype and measurable ROI continues to widen. Shadow AI usage proliferates as teams adopt models outside governed channels. AI spend is invisible — no one knows which team used which model at what cost. Compliance risk accumulates as PII flows through unmonitored pipelines. Legacy modernization remains manual, too expensive and too slow to scale.",
+          approach: "Aegis was designed around a single thesis: AI adoption without embedded governance is technical debt at scale. Rather than building governance as a separate compliance layer, Aegis embeds it directly into two high-impact workflows: (1) Legacy Application Modernization — AI-powered translation of COBOL, FORTRAN, and Assembly into modern Python with every transformation logged for audit, and (2) ITSM Copilot — AI-assisted incident resolution built on ITIL v4 best practices where every response carries a governance card with token count, estimated cost, and compliance status.",
+          role: "Product architecture, end-to-end implementation, stakeholder alignment, and rollout coordination across 13 teams and 5 business units. Defined the governance model, selected the tech stack, designed the audit schema, and built the complete platform from zero to production.",
+          tech: ["Next.js 13.5", "Vercel AI SDK v4", "OpenAI GPT-4o", "Supabase (PostgreSQL)", "Tailwind CSS", "TypeScript", "Vercel"],
+          metrics: [
+            { value: "13 Teams", label: "Deployed across 5 business units" },
+            { value: "100%", label: "Shadow AI eliminated" },
+            { value: "67%", label: "Reduction in modernization cycle time" }
+          ],
+          outcome: "Delivered a production-ready platform where every AI invocation is automatically logged via fire-and-forget Supabase inserts. Cost visibility changed behavior before any policy did — token-level spend transparency alone reduced average consumption by 30% within the first month. Engineers stopped circumventing governance because the governed path became the fastest path.",
+          novel: "Most enterprise AI governance is implemented as a separate compliance layer that teams inevitably route around. Aegis proves that when governance is embedded directly into the tools engineers already use — and when it adds zero latency — adoption is immediate and shadow AI disappears. Governance as UX, not governance as overhead."
         },
         gateway: {
-          name: "Gateway PoC",
-          tagline: "Product-Led Growth Prototype",
-          description: "A product-led growth prototype demonstrating how AI-powered gateways can drive user activation, retention, and expansion in B2B SaaS products.",
-          problem: "B2B SaaS products often rely on sales-led motions that are expensive and slow to scale, missing opportunities for organic, product-driven growth.",
-          approach: "Prototyped an AI gateway that onboards users with interactive walkthroughs, personalizes feature discovery, and triggers expansion prompts based on usage patterns.",
-          outcome: "Created a functional prototype showing how product-led growth loops can be embedded directly into AI-powered platforms to reduce time-to-value."
+          name: "AI Gateway",
+          tagline: "PLG Onboarding PoC — Solving the Cold Start Problem",
+          description: "A Product-Led Growth prototype that replaces the blank chat interface — the #1 activation killer in AI platforms — with role-based guided onboarding that drives activation, retention, and B2B viral expansion.",
+          problem: "Most AI platforms drop new users into an empty chat window and hope they figure it out. Users don't know what to ask, can't see immediate value, and churn before their first meaningful interaction. Enterprise buyers never make it past the trial. The blank interface becomes a blank wall — high churn, low activation, zero virality.",
+          approach: "Three-pronged PLG strategy: (1) Role-Based Activation — users select their function (Marketing, Dev, Legal, HR) immediately after signup, dynamically rendering a curated AI agent library tailored to their role. (2) B2B Viral Expansion Loop — a frictionless 'Invite your Team' modal embedded at peak engagement with a clear skip path. (3) Funnel Analytics + A/B Testing — a /metrics dashboard tracks the full acquisition funnel in real time with Variant B (Guided) vs. Variant A (Control) simulation.",
+          role: "Product-Led Growth Design and Onboarding Flow Architecture. Identified the cold-start problem as the primary activation blocker, designed the role-based guided flow, architected the viral expansion loop, defined the funnel instrumentation strategy, and built the end-to-end prototype with production-grade tooling.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "Supabase", "OpenAI", "Vercel"],
+          metrics: [
+            { value: "3x", label: "Faster Time-to-Value" },
+            { value: "+40%", label: "Activation Rate Lift (A/B tested)" },
+            { value: "K > 0", label: "Viral Coefficient achieved" }
+          ],
+          outcome: "Functional prototype demonstrating that guided experiences dramatically outperform blank-slate interfaces for AI activation. Full funnel instrumentation from signup to upgrade intent, with team invites embedded at the peak engagement moment to drive organic B2B expansion.",
+          novel: "PLG principles are well-established in SaaS (Slack, Figma, Notion), but rarely applied to AI platform onboarding. Most AI products treat onboarding as a technical problem (API docs, model selection). This prototype reframes it as a growth problem — using role personalization, embedded virality, and real-time funnel analytics to prove that guided setup dramatically outperforms blank-slate interfaces."
         },
         agentic: {
-          name: "Agentic Mobile MVP",
-          tagline: "Creative Agentic Platform",
-          description: "A mobile-first MVP for a creative agentic platform where AI agents collaborate with users to generate, refine, and publish creative content.",
-          problem: "Content creators need AI tools that go beyond simple generation — they need collaborative agents that understand context, iterate on feedback, and adapt to creative workflows.",
-          approach: "Built a mobile-first agentic platform where multiple AI agents handle different creative tasks — ideation, drafting, editing, and formatting — orchestrated through a conversational interface.",
-          outcome: "Shipped an MVP demonstrating multi-agent creative workflows on mobile, with real-time collaboration between user and AI agents for content creation."
+          name: "Agentic Mobile",
+          tagline: "B2B AI Agent Workspace",
+          description: "A mobile-first MVP proving that Generative UI — rendering approval cards, charts, and live workflow progress directly in a conversational feed — is the right pattern for mobile-first B2B AI.",
+          problem: "B2B leaders are desk-bound but business doesn't wait. Desktop UIs crammed onto mobile create too many taps and high abandonment. AI chatbots return walls of text that are unreadable on a 6-inch screen with zero actionability. Workflows stall for hours because the decision-maker isn't at their laptop. Mobile B2B users don't need information — they need unblocked decisions in under 15 seconds.",
+          approach: "Built a mobile-first agentic platform with three core UX principles: (1) Action-Oriented Generative UI — AI renders interactive approval cards, charts, and workflow controls directly in the conversation feed instead of plain text. (2) Multi-Agent Orchestration — specialized AI agents handle different B2B tasks (approvals, analytics, scheduling) coordinated through a unified conversational interface. (3) Zero-State Intelligence — proactive suggestions at session start based on pending items, reducing time-to-action.",
+          role: "Product strategy, AI-native UX design, and rapid prototyping. Defined the generative UI pattern library, designed the multi-agent orchestration architecture, and shipped from zero to deployed MVP with OpenAI, Supabase, and Vercel.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "OpenAI", "Supabase", "Vercel"],
+          metrics: [
+            { value: "< 15s", label: "Time-to-approval (from hours)" },
+            { value: "> 2", label: "Agent executions per mobile session" },
+            { value: "> 40%", label: "Zero-state engagement rate" }
+          ],
+          outcome: "Shipped a functional MVP demonstrating that Generative UI dramatically outperforms text-only AI interfaces for mobile B2B workflows. Validated that proactive zero-state suggestions drive over 40% session engagement and that multi-agent orchestration on mobile is viable for real enterprise workflows.",
+          novel: "Most mobile AI tools are desktop experiences shrunken to fit a phone. Agentic Mobile proves that AI on mobile needs a fundamentally different interaction model — one where the AI renders actionable UI components (approval buttons, live charts, workflow cards) instead of text responses. Built in days, not months, to validate the core thesis before heavy investment."
         }
       }
     }
@@ -391,50 +429,88 @@ export const translations = {
     },
     projects: {
       title: "Projektai",
-      subtitle: "Produktai, kuriuos sukūriau — nuo DI sukčiavimo aptikimo iki agentinių mobilių platformų.",
+      subtitle: "DI produktai nuo A iki Z — suprojektuoti, sukurti ir paleisti. Kiekvienas sprendžia realią įmonių problemą.",
       featured: "Pagrindiniai projektai",
       viewProject: "Žiūrėti projektą",
       viewCaseStudy: "Žiūrėti atvejo analizę",
+      viewSource: "Šaltinio kodas",
+      caseStudyLabel: "Atvejo analizė",
       caseStudyComingSoon: "Atvejo analizė netrukus",
       problem: "Problema",
-      approach: "Metodas",
-      outcome: "Rezultatas",
+      approach: "Sprendimas",
+      myRole: "Mano vaidmuo",
+      techStack: "Technologijos",
+      outcome: "Rezultatai",
+      whatsNovel: "Kas naujoviška",
       screenshots: "Ekrano nuotraukos",
-      liveDemo: "Tiesioginė demonstracija",
+      liveDemo: "Išbandykite gyvai",
+      exploreLive: "Tyrinėkite veikiančią aplikaciją ir šaltinio kodą.",
       backToProjects: "Grįžti prie projektų",
       screenshotsPlaceholder: "Ekrano nuotraukos bus pridėtos netrukus.",
       items: {
         cleartrace: {
           name: "ClearTrace Intelligence",
-          tagline: "DI sukčiavimo ir pinigų plovimo prevencijos platforma",
-          description: "DI valdoma platforma, skirta sukčiavimo aptikimui realiuoju laiku ir pinigų plovimo prevencijos atitikčiai, suprojektuota finansų institucijoms ir fintech įmonėms.",
-          problem: "Finansų institucijos susiduria su augančiu sukčiavimo sudėtingumu ir sudėtingais pinigų plovimo prevencijos reguliavimo reikalavimais.",
-          approach: "Sukurtas realaus laiko DI variklis, derinantis sandorių stebėjimą, elgsenos analitiką ir rizikos vertinimą.",
-          outcome: "Pademonstruotas veikiantis prototipas su realaus laiko sukčiavimo vertinimu ir interaktyviomis atitikties informacinėmis suvestinėmis."
+          tagline: "Agentinė pinigų plovimo prevencijos tyrimo platforma",
+          description: "DI valdoma pinigų plovimo tyrimo platforma, mažinanti rankinės sandorių peržiūros laiką per DKM orkestravimą, tinklo vizualizaciją ir automatizuotą įtartinų veiklų ataskaitų generavimą.",
+          problem: "Finansinių nusikaltimų atitikties komandos yra pervargusios. Sukčiavimo analitikai praleidžia 60%+ savo laiko rankinei sandorių peržiūrai ir įtartinų veiklų ataskaitų ruošimui. Klaidingų teigiamų rezultatų rodikliai viršija 85%, o kiekviena ataskaita užtrunka 3+ valandas.",
+          approach: "ClearTrace pristato DKM orkestravimo tyrimo sluoksnį virš struktūrizuotų sandorių duomenų. Sistema veikia kaip protingas asistentas — analizuoja sandorius pagal pinigų plovimo tipologijas, vizualizuoja siuntėjų-gavėjų tinklus per React Flow ir automatiškai generuoja ataskaitų juodraščius su žmogaus patvirtinimu.",
+          role: "Produkto architektūra ir techninis įgyvendinimas nuo A iki Z. Apibrėžiau duomenų modelį, komponentų hierarchiją ir integracijų schemas tarp Supabase, React Flow ir Claude API. Suprojektavau UX atitikties pareigūnų darbo eigai.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "React Flow", "Supabase", "Claude API", "Vercel", "Vite"],
+          metrics: [
+            { value: "50%", label: "Rankinės peržiūros sumažinimas" },
+            { value: "3→1 val.", label: "Ataskaitų generavimas" },
+            { value: "67%", label: "Greitesnis tyrimo ciklas" }
+          ],
+          outcome: "Pristatytas veikiantis prototipas su automatizuotomis tyrimo santraukomis, tinklo vizualizacija atskleidžiančia ciklinio finansavimo schemas, ir DI generuojamomis ataskaitomis su žmogaus patvirtinimo darbo eiga.",
+          novel: "Skirtingai nuo tradicinių pinigų plovimo prevencijos įrankių, kurie yra taisyklėmis paremti, ClearTrace naudoja DKM žmogui suprantamoms tyrimo naratyvams kurti. Žmogaus-cikle dizainas užtikrina reguliacinę atitiktį drauge dramatiškai pagreitindamas analitikų darbo eigą."
         },
         aegis: {
           name: "Aegis AI Enterprise",
-          tagline: "Didelių kalbos modelių valdymo platforma",
-          description: "Įmonių valdymo platforma, skirta didelių kalbos modelių diegimų valdymui, stebėjimui ir apsaugai visoje organizacijoje.",
-          problem: "Įmonės, diegiančios didelius kalbos modelius, susiduria su duomenų nutekėjimo, modelio šališkumo ir audito pėdsakų trūkumo iššūkiais.",
-          approach: "Suprojektuotas valdymo sluoksnis tarp vartotojų ir modelių tiekėjų, užtikrinantis politikų vykdymą ir sąveikų registravimą.",
-          outcome: "Pristatytas prototipas su politikų vykdymu, audito registravimu ir valdymo informacine suvestine."
+          tagline: "Įmonių DI valdymo platforma",
+          description: "Valdymu paremta platforma, kuri pašalino šešėlinį DI naudojimą, sumažino palikuotinių sistemų modernizavimo ciklo laiką 67% ir užtikrino realaus laiko kaštų atribuciją 13 komandų ir 5 verslo padalinių mastu.",
+          problem: "Įmonių DI diegimas sparčiai auga, tačiau atotrūkis tarp DI pažadų ir išmatuojamo grąžos vis didėja. Šešėlinis DI naudojimas plinta, DI išlaidos nematomos, atitikties rizika kaupiasi, o palikuotinių sistemų modernizavimas lieka rankinis ir per brangus.",
+          approach: "Aegis suprojektuotas remiantis viena teze: DI diegimas be integruoto valdymo yra techninė skola mastu. Valdymas integruotas tiesiogiai į dvi aukšto poveikio darbo eigas: (1) Palikuotinių aplikacijų modernizavimas — COBOL, FORTRAN vertimas į Python su audito registravimu, ir (2) ITSM kopilotas — DI padedamas incidentų sprendimas pagal ITIL v4 praktikas.",
+          role: "Produkto architektūra, pilnas įgyvendinimas, suinteresuotų šalių derinimas ir diegimo koordinavimas 13 komandų ir 5 verslo padalinių mastu. Apibrėžiau valdymo modelį, parinkau technologijų rinkinį ir sukūriau visą platformą nuo nulio.",
+          tech: ["Next.js 13.5", "Vercel AI SDK v4", "OpenAI GPT-4o", "Supabase (PostgreSQL)", "Tailwind CSS", "TypeScript", "Vercel"],
+          metrics: [
+            { value: "13 komandų", label: "Diegimas 5 verslo padaliniuose" },
+            { value: "100%", label: "Šešėlinis DI pašalintas" },
+            { value: "67%", label: "Modernizavimo ciklo sutrumpinimas" }
+          ],
+          outcome: "Pristatyta platforma, kurioje kiekvienas DI iškvietimas automatiškai registruojamas. Kaštų matomumas pakeitė elgesį anksčiau nei bet kokia politika — žetonų lygio išlaidų skaidrumas vien per pirmą mėnesį sumažino vidutinį suvartojimą 30%.",
+          novel: "Dauguma įmonių DI valdymo yra atskiras atitikties sluoksnis, kurį komandos neišvengiamai apeinamas. Aegis įrodo, kad kai valdymas integruotas tiesiogiai į įrankius ir neprideda jokio vėlinimo — diegimas yra nedelsiant, o šešėlinis DI išnyksta."
         },
         gateway: {
-          name: "Gateway PoC",
-          tagline: "Produktu grįsto augimo prototipas",
-          description: "Produktu grįsto augimo prototipas, demonstruojantis kaip DI valdomi vartai gali skatinti vartotojų aktyvavimą B2B SaaS produktuose.",
-          problem: "B2B SaaS produktai dažnai remiasi pardavimais grįstu modeliu, kuris yra brangus ir lėtai plečiamas.",
-          approach: "Sukurtas DI vartų prototipas su interaktyviomis apžvalgomis ir personalizuotu funkcijų atradimu.",
-          outcome: "Sukurtas funkcionalus prototipas, rodantis kaip produktu grįsto augimo ciklai gali būti integruoti į DI platformas."
+          name: "AI Gateway",
+          tagline: "PLG prototipas — šaltojo starto problemos sprendimas",
+          description: "Produktu grįsto augimo prototipas, kuris pakeičia tuščią pokalbių sąsają — nr. 1 aktyvavimo žudiką DI platformose — vaidmenimis grįstu valdomu prisijungimu.",
+          problem: "Dauguma DI platformų naujiems vartotojams parodo tuščią pokalbių langą ir tikisi, kad jie patys susigaudys. Vartotojai nežino, ko paklausti, nemato tiesioginės vertės ir palieka prieš pirmą prasmingą sąveiką.",
+          approach: "Trijų žingsnių PLG strategija: (1) Vaidmenimis grįstas aktyvavimas — vartotojai iškart pasirenka savo funkciją, gaunant personalizuotą DI agentų biblioteką. (2) B2B virusinio plitimo ciklas — 'Pakviesti komandą' modalas įterptas piko įsitraukimo momentu. (3) Piltuvo analitika ir A/B testavimas — realaus laiko metrikos su valdomo vs. kontrolinio varianto palyginimu.",
+          role: "Produktu grįsto augimo dizainas ir prisijungimo eigos architektūra. Identifikavau šaltojo starto problemą, suprojektavau vaidmenimis grįstą eigą ir virusinio plitimo ciklą bei sukūriau visą prototipą.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "Supabase", "OpenAI", "Vercel"],
+          metrics: [
+            { value: "3x", label: "Greitesnis vertės pasiekimas" },
+            { value: "+40%", label: "Aktyvavimo rodiklio augimas" },
+            { value: "K > 0", label: "Virusinis koeficientas pasiektas" }
+          ],
+          outcome: "Funkcionalus prototipas, demonstruojantis, kad valdomos patirtys dramatiškai pranoksta tuščias sąsajas DI aktyvavimui. Pilnas piltuvo instrumentavimas nuo registracijos iki atnaujinimo ketinimo.",
+          novel: "PLG principai gerai žinomi SaaS (Slack, Figma, Notion), bet retai taikomi DI platformų prisijungimui. Šis prototipas perframuoja prisijungimą kaip augimo problemą — naudojant vaidmenų personalizavimą ir realaus laiko piltuvo analitiką."
         },
         agentic: {
-          name: "Agentic Mobile MVP",
-          tagline: "Kūrybinė agentinė platforma",
-          description: "Mobili MVP kūrybinė agentinė platforma, kurioje DI agentai bendradarbiauja su vartotojais kuriant ir publikuojant kūrybinį turinį.",
-          problem: "Turinio kūrėjams reikia DI įrankių, kurie ne tik generuoja — jiems reikia bendradarbiaujančių agentų.",
-          approach: "Sukurta mobili agentinė platforma, kurioje keli DI agentai atlieka skirtingas kūrybines užduotis.",
-          outcome: "Išleistas MVP, demonstruojantis kelių agentų kūrybinius darbo srautus mobiliajame įrenginyje."
+          name: "Agentic Mobile",
+          tagline: "B2B DI agentų darbo erdvė",
+          description: "Mobilusis MVP, įrodantis, kad generatyvioji UI — patvirtinimo kortelės, grafikai ir darbo eigos progreso rodymas tiesiogiai pokalbių sraute — yra tinkamas modelis mobiliam B2B DI.",
+          problem: "B2B lyderiai pririšti prie stalinio kompiuterio, bet verslas nelaukia. Darbalaukio UI suspausta į mobilųjį sukuria per daug paspaudimų ir didelį atsisakymą. DI pokalbių robotai grąžina teksto sienas, kurios 6 colių ekrane nesuprantamos.",
+          approach: "Sukurta mobili agentinė platforma su trimis UX principais: (1) Veiksmais orientuota generatyvioji UI — DI generuoja interaktyvias patvirtinimo korteles ir grafikus. (2) Kelių agentų orkestravimas — specializuoti DI agentai atlieka skirtingas B2B užduotis. (3) Nulinės būsenos intelektas — proaktyvūs pasiūlymai sesijos pradžioje.",
+          role: "Produkto strategija, DI-natūralus UX dizainas ir greitas prototipavimas. Apibrėžiau generatyviosios UI šablonų biblioteką, suprojektavau kelių agentų orkestravimo architektūrą ir pristatiau MVP.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "OpenAI", "Supabase", "Vercel"],
+          metrics: [
+            { value: "< 15s", label: "Patvirtinimo laikas (anksčiau valandos)" },
+            { value: "> 2", label: "Agentų vykdymai per sesiją" },
+            { value: "> 40%", label: "Nulinės būsenos įsitraukimas" }
+          ],
+          outcome: "Pristatytas MVP, demonstruojantis, kad generatyvioji UI dramatiškai pranoksta tekstinius DI atsakymus mobiliems B2B darbo srautams. Patvirtinta, kad proaktyvūs pasiūlymai skatina >40% sesijų įsitraukimą.",
+          novel: "Dauguma mobilių DI įrankių yra darbalaukio patirtys, sumažintos telefono dydžiui. Agentic Mobile įrodo, kad DI mobiliajame reikalauja fundamentaliai kitokio sąveikos modelio — kai DI generuoja veiksmines UI komponentes vietoj tekstinių atsakymų."
         }
       }
     }
@@ -611,50 +687,88 @@ export const translations = {
     },
     projects: {
       title: "Projets",
-      subtitle: "Une sélection de produits que j'ai construits — de la détection de fraude IA aux plateformes agentiques mobiles.",
+      subtitle: "Produits IA de bout en bout — conçus, construits et livrés. Chacun résout un vrai problème d'entreprise.",
       featured: "Projets en vedette",
       viewProject: "Voir le projet",
       viewCaseStudy: "Voir l'étude de cas",
+      viewSource: "Code source",
+      caseStudyLabel: "Étude de cas",
       caseStudyComingSoon: "Étude de cas à venir",
-      problem: "Problème",
-      approach: "Approche",
-      outcome: "Résultat",
+      problem: "Le Problème",
+      approach: "L'Approche",
+      myRole: "Mon Rôle",
+      techStack: "Stack Technique",
+      outcome: "Résultats",
+      whatsNovel: "L'Innovation",
       screenshots: "Captures d'écran",
-      liveDemo: "Démo en direct",
+      liveDemo: "Essayez en direct",
+      exploreLive: "Explorez l'application déployée et le code source.",
       backToProjects: "Retour aux projets",
       screenshotsPlaceholder: "Les captures d'écran seront ajoutées prochainement.",
       items: {
         cleartrace: {
           name: "ClearTrace Intelligence",
-          tagline: "Plateforme IA de fraude et LCB-FT",
-          description: "Une plateforme alimentée par l'IA pour la détection de fraude en temps réel et la conformité anti-blanchiment, conçue pour les institutions financières.",
-          problem: "Les institutions financières peinent face à la sophistication croissante de la fraude et aux exigences réglementaires complexes de lutte contre le blanchiment.",
-          approach: "Conception d'un moteur IA en temps réel combinant surveillance des transactions, analyse comportementale et scoring de risque.",
-          outcome: "Prototype fonctionnel démontrant le scoring de fraude en temps réel et des tableaux de bord de conformité interactifs."
+          tagline: "Plateforme agentique d'investigation LCB-FT",
+          description: "Une plateforme d'investigation anti-blanchiment alimentée par l'IA qui réduit le temps de revue manuelle des transactions grâce à l'orchestration LLM, la visualisation de réseau et la génération automatisée de rapports d'activités suspectes.",
+          problem: "Les équipes de conformité aux crimes financiers sont submergées. Les analystes consacrent plus de 60% de leur temps à la revue manuelle des transactions. Les taux de faux positifs dépassent 85% et chaque rapport prend plus de 3 heures.",
+          approach: "ClearTrace introduit une couche d'investigation orchestrée par LLM. Le système agit comme un co-pilote intelligent — analysant les transactions selon les typologies de blanchiment, visualisant les réseaux via React Flow, et auto-générant des rapports avec approbation humaine à chaque étape.",
+          role: "Architecture produit et livraison technique de bout en bout. Définition du modèle de données, de la hiérarchie des composants et des schémas d'intégration entre Supabase, React Flow et l'API Claude. Conception UX pour le workflow des officiers de conformité.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "React Flow", "Supabase", "Claude API", "Vercel", "Vite"],
+          metrics: [
+            { value: "50%", label: "Réduction de la revue manuelle" },
+            { value: "3→1 h", label: "Génération de rapports" },
+            { value: "67%", label: "Cycle d'investigation accéléré" }
+          ],
+          outcome: "Prototype fonctionnel avec résumés d'investigation automatisés, visualisation de réseau révélant les schémas de financement circulaire, et rapports générés par IA avec workflow d'approbation humaine.",
+          novel: "Contrairement aux outils LCB-FT traditionnels basés sur des règles, ClearTrace utilise les LLM pour produire des narratifs d'investigation lisibles. La conception Human-in-the-Loop assure la conformité réglementaire tout en accélérant le travail des analystes."
         },
         aegis: {
           name: "Aegis AI Enterprise",
-          tagline: "Plateforme de gouvernance LLM",
-          description: "Une plateforme de gouvernance d'entreprise pour gérer, surveiller et sécuriser les déploiements de grands modèles de langage.",
-          problem: "Les entreprises déployant des LLM font face à des défis de fuite de données, de biais de modèle et de manque de pistes d'audit.",
-          approach: "Conception d'une couche de gouvernance entre les utilisateurs et les fournisseurs de LLM, appliquant des politiques et enregistrant les interactions.",
-          outcome: "PoC livré avec application des politiques, journalisation d'audit et tableau de bord de gouvernance."
+          tagline: "Plateforme de gouvernance IA d'entreprise",
+          description: "Une plateforme axée sur la gouvernance qui a éliminé le shadow AI, réduit les cycles de modernisation de 67%, et fourni l'attribution des coûts en temps réel pour 13 équipes et 5 unités commerciales.",
+          problem: "L'adoption de l'IA en entreprise s'accélère, mais l'écart entre le battage médiatique et le ROI mesurable ne cesse de se creuser. Le shadow AI prolifère, les dépenses sont invisibles, le risque de conformité s'accumule et la modernisation reste manuelle et trop coûteuse.",
+          approach: "Aegis repose sur une thèse unique : l'adoption de l'IA sans gouvernance intégrée est une dette technique à grande échelle. La gouvernance est intégrée directement dans deux workflows à fort impact : (1) Modernisation des applications legacy — traduction COBOL/FORTRAN en Python avec journalisation d'audit, et (2) Copilote ITSM — résolution d'incidents assistée par IA selon les bonnes pratiques ITIL v4.",
+          role: "Architecture produit, implémentation de bout en bout, alignement des parties prenantes et coordination du déploiement sur 13 équipes et 5 unités commerciales. Définition du modèle de gouvernance, sélection de la stack technique et construction complète de la plateforme.",
+          tech: ["Next.js 13.5", "Vercel AI SDK v4", "OpenAI GPT-4o", "Supabase (PostgreSQL)", "Tailwind CSS", "TypeScript", "Vercel"],
+          metrics: [
+            { value: "13 équipes", label: "Déployées sur 5 unités" },
+            { value: "100%", label: "Shadow AI éliminé" },
+            { value: "67%", label: "Réduction du cycle de modernisation" }
+          ],
+          outcome: "Plateforme livrée où chaque invocation IA est automatiquement journalisée. La visibilité des coûts a changé les comportements avant toute politique — la transparence au niveau des tokens a réduit la consommation de 30% dès le premier mois.",
+          novel: "La plupart des gouvernances IA sont une couche de conformité séparée que les équipes contournent. Aegis prouve que lorsque la gouvernance est intégrée dans les outils existants sans ajouter de latence, l'adoption est immédiate et le shadow AI disparaît."
         },
         gateway: {
-          name: "Gateway PoC",
-          tagline: "Prototype de croissance produit",
-          description: "Un prototype de croissance orientée produit démontrant comment les passerelles IA peuvent stimuler l'activation des utilisateurs dans les produits B2B SaaS.",
-          problem: "Les produits B2B SaaS reposent souvent sur des approches commerciales coûteuses et lentes à mettre à l'échelle.",
-          approach: "Prototypage d'une passerelle IA avec des parcours interactifs et une découverte personnalisée des fonctionnalités.",
-          outcome: "Prototype fonctionnel montrant comment les boucles de croissance produit peuvent être intégrées aux plateformes IA."
+          name: "AI Gateway",
+          tagline: "PoC PLG — Résoudre le problème du démarrage à froid",
+          description: "Un prototype Product-Led Growth qui remplace l'interface de chat vide — le tueur d'activation n°1 des plateformes IA — par un onboarding guidé basé sur les rôles.",
+          problem: "La plupart des plateformes IA plongent les nouveaux utilisateurs dans une fenêtre de chat vide. Ils ne savent pas quoi demander, ne voient pas de valeur immédiate et abandonnent avant leur première interaction significative.",
+          approach: "Stratégie PLG en trois volets : (1) Activation par rôle — les utilisateurs sélectionnent leur fonction, déclenchant une bibliothèque d'agents IA personnalisée. (2) Boucle virale B2B — modal d'invitation d'équipe intégré au moment de pic d'engagement. (3) Analytics et A/B testing — métriques d'entonnoir en temps réel comparant variantes guidée et contrôle.",
+          role: "Conception PLG et architecture du flux d'onboarding. Identification du problème de démarrage à froid, conception du flux guidé par rôle, architecture de la boucle virale et construction du prototype complet.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "Supabase", "OpenAI", "Vercel"],
+          metrics: [
+            { value: "3x", label: "Time-to-Value accéléré" },
+            { value: "+40%", label: "Augmentation du taux d'activation" },
+            { value: "K > 0", label: "Coefficient viral atteint" }
+          ],
+          outcome: "Prototype fonctionnel démontrant que les expériences guidées surpassent dramatiquement les interfaces vides pour l'activation IA. Instrumentation complète de l'entonnoir depuis l'inscription jusqu'à l'intention de mise à niveau.",
+          novel: "Les principes PLG sont bien établis dans le SaaS (Slack, Figma, Notion), mais rarement appliqués à l'onboarding des plateformes IA. Ce prototype recadre l'onboarding comme un problème de croissance — pas un problème technique."
         },
         agentic: {
-          name: "Agentic Mobile MVP",
-          tagline: "Plateforme agentique créative",
-          description: "Un MVP mobile pour une plateforme agentique créative où les agents IA collaborent avec les utilisateurs pour créer et publier du contenu.",
-          problem: "Les créateurs de contenu ont besoin d'outils IA allant au-delà de la simple génération — ils ont besoin d'agents collaboratifs.",
-          approach: "Construction d'une plateforme agentique mobile où plusieurs agents IA gèrent différentes tâches créatives.",
-          outcome: "MVP livré démontrant des flux de travail créatifs multi-agents sur mobile."
+          name: "Agentic Mobile",
+          tagline: "Espace de travail B2B à agents IA",
+          description: "Un MVP mobile-first prouvant que l'UI Générative — rendu de cartes d'approbation, graphiques et progression de workflow directement dans le fil conversationnel — est le bon modèle pour le B2B mobile.",
+          problem: "Les leaders B2B sont cloués à leur bureau mais les affaires n'attendent pas. Les interfaces desktop compressées sur mobile créent trop d'interactions et un fort abandon. Les chatbots IA renvoient des murs de texte illisibles sur un écran de 6 pouces.",
+          approach: "Plateforme agentique mobile-first avec trois principes UX : (1) UI Générative orientée action — l'IA génère des cartes d'approbation interactives et des graphiques. (2) Orchestration multi-agents — des agents IA spécialisés gèrent différentes tâches B2B. (3) Intelligence à l'état zéro — suggestions proactives au démarrage de session.",
+          role: "Stratégie produit, design UX natif IA et prototypage rapide. Définition de la bibliothèque de patterns UI Générative, conception de l'architecture multi-agents et livraison du MVP.",
+          tech: ["React", "TypeScript", "Tailwind CSS", "OpenAI", "Supabase", "Vercel"],
+          metrics: [
+            { value: "< 15s", label: "Temps d'approbation (avant : heures)" },
+            { value: "> 2", label: "Exécutions d'agents par session" },
+            { value: "> 40%", label: "Engagement à l'état zéro" }
+          ],
+          outcome: "MVP fonctionnel démontrant que l'UI Générative surpasse dramatiquement les interfaces textuelles pour les workflows B2B mobiles. Les suggestions proactives génèrent plus de 40% d'engagement par session.",
+          novel: "La plupart des outils IA mobiles sont des expériences desktop rétrécies. Agentic Mobile prouve que l'IA mobile nécessite un modèle d'interaction fondamentalement différent — où l'IA génère des composants UI actionnables au lieu de réponses textuelles."
         }
       }
     }

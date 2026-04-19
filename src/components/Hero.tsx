@@ -5,10 +5,10 @@ import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
 const projectLinks = [
-  { slug: 'cleartrace', url: 'https://cleartrace-intelligence.vercel.app', color: 'from-blue-500 to-cyan-500' },
-  { slug: 'aegis', url: 'https://aegis-ai-enterprise.vercel.app', color: 'from-purple-500 to-indigo-500' },
-  { slug: 'gateway', url: 'https://ai-gateway-poc.vercel.app', color: 'from-amber-500 to-orange-500' },
-  { slug: 'agentic', url: 'https://b2b-mobile-agent.vercel.app', color: 'from-green-500 to-emerald-500' },
+  { slug: 'cleartrace', url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace', color: 'from-blue-500 to-cyan-500' },
+  { slug: 'aegis', url: 'https://aegis.aurimas.io', github: 'https://github.com/aurimas13/Aegis_AI', color: 'from-purple-500 to-indigo-500' },
+  { slug: 'gateway', url: 'https://gateway.aurimas.io', github: 'https://github.com/aurimas13/AI_Platform', color: 'from-amber-500 to-orange-500' },
+  { slug: 'agentic', url: 'https://agentic.aurimas.io', github: 'https://github.com/aurimas13/web_application', color: 'from-green-500 to-emerald-500' },
 ];
 
 interface HeroProps {

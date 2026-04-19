@@ -1,14 +1,14 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, AlertCircle, Camera } from 'lucide-react';
+import { ArrowLeft, ExternalLink, AlertCircle, Github, Briefcase, Wrench, Target, Lightbulb, TrendingUp } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
-const projectMeta: Record<string, { url: string; color: string }> = {
-  cleartrace: { url: 'https://cleartrace-intelligence.vercel.app', color: 'from-blue-500 to-cyan-500' },
-  aegis: { url: 'https://aegis-ai-enterprise.vercel.app', color: 'from-purple-500 to-indigo-500' },
-  gateway: { url: 'https://ai-gateway-poc.vercel.app', color: 'from-amber-500 to-orange-500' },
-  agentic: { url: 'https://b2b-mobile-agent.vercel.app', color: 'from-green-500 to-emerald-500' },
+const projectMeta: Record<string, { url: string; github: string; color: string; accent: string }> = {
+  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace', color: 'from-blue-500 to-cyan-500', accent: 'blue' },
+  aegis: { url: 'https://aegis.aurimas.io', github: 'https://github.com/aurimas13/Aegis_AI', color: 'from-purple-500 to-indigo-500', accent: 'purple' },
+  gateway: { url: 'https://gateway.aurimas.io', github: 'https://github.com/aurimas13/AI_Platform', color: 'from-amber-500 to-orange-500', accent: 'amber' },
+  agentic: { url: 'https://agentic.aurimas.io', github: 'https://github.com/aurimas13/web_application', color: 'from-green-500 to-emerald-500', accent: 'green' },
 };
 
 export const ProjectDetailPage: React.FC = () => {
@@ -49,17 +49,31 @@ export const ProjectDetailPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-8">
           <div className={`h-3 bg-gradient-to-r ${meta.color}`}></div>
           <div className="p-6 sm:p-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium mb-4">
+              <Briefcase className="w-3.5 h-3.5" />
+              {t.projects.caseStudyLabel}
+            </div>
             <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">{item.name}</h1>
             <p className="text-lg text-gray-500 mb-4">{item.tagline}</p>
             <p className="text-gray-600 leading-relaxed mb-6">{item.description}</p>
-            <a
-              href={meta.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-5 py-2.5 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors"
-            >
-              {t.projects.viewProject} <ExternalLink className="w-4 h-4 ml-2" />
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href={meta.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-5 py-2.5 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
+              >
+                {t.projects.viewProject} <ExternalLink className="w-4 h-4 ml-2" />
+              </a>
+              <a
+                href={meta.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-5 py-2.5 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 transition-colors shadow-sm"
+              >
+                <Github className="w-4 h-4 mr-2" /> {t.projects.viewSource}
+              </a>
+            </div>
           </div>
         </div>
 
@@ -68,7 +82,9 @@ export const ProjectDetailPage: React.FC = () => {
           {/* Problem */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
             <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-sm font-bold mr-3">1</span>
+              <span className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-sm font-bold mr-3">
+                <AlertCircle className="w-4 h-4" />
+              </span>
               {t.projects.problem}
             </h2>
             <p className="text-gray-600 leading-relaxed">{item.problem}</p>
@@ -77,44 +93,94 @@ export const ProjectDetailPage: React.FC = () => {
           {/* Approach */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
             <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold mr-3">2</span>
+              <span className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold mr-3">
+                <Lightbulb className="w-4 h-4" />
+              </span>
               {t.projects.approach}
             </h2>
             <p className="text-gray-600 leading-relaxed">{item.approach}</p>
           </div>
 
-          {/* Outcome */}
+          {/* My Role */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
             <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm font-bold mr-3">3</span>
-              {t.projects.outcome}
+              <span className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-sm font-bold mr-3">
+                <Briefcase className="w-4 h-4" />
+              </span>
+              {t.projects.myRole}
             </h2>
-            <p className="text-gray-600 leading-relaxed">{item.outcome}</p>
+            <p className="text-gray-600 leading-relaxed">{item.role}</p>
           </div>
 
-          {/* Screenshots placeholder */}
+          {/* Tech Stack */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <Camera className="w-5 h-5 text-gray-500 mr-3" />
-              {t.projects.screenshots}
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <span className="w-8 h-8 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-sm font-bold mr-3">
+                <Wrench className="w-4 h-4" />
+              </span>
+              {t.projects.techStack}
             </h2>
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center">
-              <Camera className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-400 text-sm">{t.projects.screenshotsPlaceholder}</p>
+            <div className="flex flex-wrap gap-2">
+              {item.tech.map((tech: string) => (
+                <span key={tech} className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg border border-gray-200">
+                  {tech}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* Live Demo link */}
+          {/* Outcomes */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <span className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm font-bold mr-3">
+                <Target className="w-4 h-4" />
+              </span>
+              {t.projects.outcome}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+              {item.metrics.map((m: { value: string; label: string }) => (
+                <div key={m.label} className={`rounded-xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-4 text-center`}>
+                  <p className="text-2xl font-bold text-gray-800 mb-1">{m.value}</p>
+                  <p className="text-xs text-gray-500">{m.label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-gray-600 leading-relaxed">{item.outcome}</p>
+          </div>
+
+          {/* What's Novel */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
+              <span className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-sm font-bold mr-3">
+                <TrendingUp className="w-4 h-4" />
+              </span>
+              {t.projects.whatsNovel}
+            </h2>
+            <p className="text-gray-600 leading-relaxed">{item.novel}</p>
+          </div>
+
+          {/* CTA */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 text-center">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">{t.projects.liveDemo}</h2>
-            <a
-              href={meta.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-yellow-600 transition-all shadow-md hover:shadow-lg"
-            >
-              {t.projects.viewProject} <ExternalLink className="w-5 h-5 ml-2" />
-            </a>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">{t.projects.liveDemo}</h2>
+            <p className="text-gray-500 text-sm mb-6">{t.projects.exploreLive}</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href={meta.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-yellow-600 transition-all shadow-md hover:shadow-lg"
+              >
+                {t.projects.viewProject} <ExternalLink className="w-5 h-5 ml-2" />
+              </a>
+              <a
+                href={meta.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 bg-gray-800 text-white font-semibold rounded-xl hover:bg-gray-900 transition-all shadow-md hover:shadow-lg"
+              >
+                <Github className="w-5 h-5 mr-2" /> {t.projects.viewSource}
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Code, ExternalLink, ArrowRight } from 'lucide-react';
+import { Code, ExternalLink, ArrowRight, Github } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
 const projectLinks = [
-  { slug: 'cleartrace', url: 'https://cleartrace-intelligence.vercel.app', color: 'from-blue-500 to-cyan-500' },
-  { slug: 'aegis', url: 'https://aegis-ai-enterprise.vercel.app', color: 'from-purple-500 to-indigo-500' },
-  { slug: 'gateway', url: 'https://ai-gateway-poc.vercel.app', color: 'from-amber-500 to-orange-500' },
-  { slug: 'agentic', url: 'https://b2b-mobile-agent.vercel.app', color: 'from-green-500 to-emerald-500' },
+  { slug: 'cleartrace', url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace', color: 'from-blue-500 to-cyan-500' },
+  { slug: 'aegis', url: 'https://aegis.aurimas.io', github: 'https://github.com/aurimas13/Aegis_AI', color: 'from-purple-500 to-indigo-500' },
+  { slug: 'gateway', url: 'https://gateway.aurimas.io', github: 'https://github.com/aurimas13/AI_Platform', color: 'from-amber-500 to-orange-500' },
+  { slug: 'agentic', url: 'https://agentic.aurimas.io', github: 'https://github.com/aurimas13/web_application', color: 'from-green-500 to-emerald-500' },
 ];
 
 export const ProjectsPage: React.FC = () => {
@@ -56,6 +56,14 @@ export const ProjectsPage: React.FC = () => {
                     >
                       {t.projects.viewCaseStudy} <ArrowRight className="w-4 h-4 ml-2" />
                     </Link>
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Github className="w-4 h-4 mr-2" /> GitHub
+                    </a>
                   </div>
                 </div>
               </div>
