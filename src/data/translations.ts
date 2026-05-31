@@ -151,7 +151,7 @@ export const translations = {
       fillAllFields: "Please fill in all fields"
     },
     footer: {
-      description: "Chemist-turned-AI/Technical Product Manager and Writer, passionate about the intersection of AI, science, technology, and creativity.",
+      description: "Chemist turned AI Engineer and Writer, passionate about the intersection of AI, science, technology, and creativity.",
       quickLinks: "Quick Links",
       connect: "Connect",
       madeWith: "Made with",
@@ -409,7 +409,7 @@ export const translations = {
       fillAllFields: "Prašome užpildyti visus laukus"
     },
     footer: {
-      description: "Chemikas, tapęs DI/techniniu produkto vadovu ir rašytoju, aistringas DI, mokslo, technologijų ir kūrybos sankirtos srityse.",
+      description: "Chemikas tapęs DI inžinieriumi ir rašytoju, aistringas DI, mokslo, technologijų ir kūrybos sankirtos srityse.",
       quickLinks: "Greitos nuorodos",
       connect: "Susisiekti",
       madeWith: "Sukurta su",
@@ -667,7 +667,7 @@ export const translations = {
       fillAllFields: "Veuillez remplir tous les champs"
     },
     footer: {
-      description: "Chimiste devenu Chef de Produit IA/Technique et écrivain, passionné par la croisée de l'IA, de la science, de la technologie et de la créativité.",
+      description: "Chimiste devenu Ingénieur IA et Écrivain, passionné par la croisée de l'IA, de la science, de la technologie et de la créativité.",
       quickLinks: "Liens rapides",
       connect: "Se connecter",
       madeWith: "Fait avec",
