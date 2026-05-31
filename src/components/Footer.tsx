@@ -100,7 +100,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Aurimas Aleksandras Nausėdas</h3>
+            <h3 className="text-lg font-semibold mb-4">Aurimas Nausėdas</h3>
             <p className="text-gray-700 text-sm leading-relaxed">
               {t.footer.description}
             </p>
@@ -252,7 +252,7 @@ export function Footer() {
             {t.footer.madeWith} <Heart size={16} className="mx-1 text-red-500" /> {t.footer.byAurimas}
           </p>
           <p className="text-gray-500 text-xs mt-2">
-            © {new Date().getFullYear()} Aurimas Aleksandras Nausėdas. {t.footer.allRights}
+            © {new Date().getFullYear()} Aurimas Nausėdas. {t.footer.allRights}
           </p>
         </div>
       </div>
