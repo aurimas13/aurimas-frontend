@@ -169,6 +169,26 @@ export const translations = {
       contact: "Contact",
       projects: "Projects"
     },
+    currently: {
+      title: "Currently",
+      openTo: "Open to",
+      openToValue: "AI Engineer roles",
+      basedIn: "Based in",
+      basedInValue: "Vilnius / Remote",
+      stack: "Stack",
+      stackValue: "Py · TS · LLMs",
+      reading: "Reading",
+      readingValue: "Yesteryear"
+    },
+    projectIndex: {
+      title: "The Project Index",
+      entries: "entries",
+      live: "live",
+      read: "Read ↗",
+      tip: "Tip:",
+      openLiveSite: "Open live site ↗",
+      allProjects: "All projects →"
+    },
     projects: {
       title: "Projects",
       subtitle: "End-to-end AI products — architected, built, and shipped. Each one solves a real enterprise problem.",
@@ -427,6 +447,26 @@ export const translations = {
       contact: "Kontaktai",
       projects: "Projektai"
     },
+    currently: {
+      title: "Šiuo metu",
+      openTo: "Atviras",
+      openToValue: "DI inžinieriaus pareigoms",
+      basedIn: "Įsikūręs",
+      basedInValue: "Vilnius / Nuotoliniu",
+      stack: "Stack",
+      stackValue: "Py · TS · LLMs",
+      reading: "Skaitau",
+      readingValue: "Yesteryear"
+    },
+    projectIndex: {
+      title: "Projektų sąrašas",
+      entries: "įrašai",
+      live: "gyvai",
+      read: "Skaityti ↗",
+      tip: "Patarimas:",
+      openLiveSite: "Atidaryti svetainę ↗",
+      allProjects: "Visi projektai →"
+    },
     projects: {
       title: "Projektai",
       subtitle: "DI produktai nuo A iki Z — suprojektuoti, sukurti ir paleisti. Kiekvienas sprendžia realią įmonių problemą.",
@@ -684,6 +724,26 @@ export const translations = {
       support: "Soutien",
       contact: "Contact",
       projects: "Projets"
+    },
+    currently: {
+      title: "Actuellement",
+      openTo: "Ouvert à",
+      openToValue: "Postes d'Ingénieur IA",
+      basedIn: "Basé à",
+      basedInValue: "Vilnius / À distance",
+      stack: "Stack",
+      stackValue: "Py · TS · LLMs",
+      reading: "Lecture",
+      readingValue: "Yesteryear"
+    },
+    projectIndex: {
+      title: "L'Index des Projets",
+      entries: "entrées",
+      live: "en ligne",
+      read: "Lire ↗",
+      tip: "Astuce :",
+      openLiveSite: "Voir le site ↗",
+      allProjects: "Tous les projets →"
     },
     projects: {
       title: "Projets",

@@ -18,6 +18,8 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage];
   const items = (t.projects as any).items;
+  const currently = (t as any).currently;
+  const projectIndex = (t as any).projectIndex;
 
   const handleScrollTo = (id: string) => {
     onSectionChange(id);
@@ -93,11 +95,11 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
 
               {/* Caption / margin-note below */}
               <aside className="marginnote mt-8 ml-0">
-                <h4>Currently</h4>
-                <div className="row"><span>Open to</span><b>AI Engineer roles</b></div>
-                <div className="row"><span>Based in</span><b>Vilnius / Remote</b></div>
-                <div className="row"><span>Stack</span><b>Py · TS · LLMs</b></div>
-                <div className="row"><span>Reading</span><b>Stoner</b></div>
+                <h4>{currently.title}</h4>
+                <div className="row"><span>{currently.openTo}</span><b>{currently.openToValue}</b></div>
+                <div className="row"><span>{currently.basedIn}</span><b>{currently.basedInValue}</b></div>
+                <div className="row"><span>{currently.stack}</span><b>{currently.stackValue}</b></div>
+                <div className="row"><span>{currently.reading}</span><b>{currently.readingValue}</b></div>
               </aside>
             </div>
           </div>
@@ -107,9 +109,9 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
         <div className="mt-28 reveal reveal-d7">
           <div className="flex items-baseline justify-between mb-8 pb-3 border-b border-[rgba(26,22,18,0.32)]">
             <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
-              The Project Index
+              {projectIndex.title}
             </h2>
-            <span className="meta uppercase tracking-[0.2em]">{projectLinks.length} entries · live</span>
+            <span className="meta uppercase tracking-[0.2em]">{projectLinks.length} {projectIndex.entries} · {projectIndex.live}</span>
           </div>
 
           <div className="index-list">
@@ -128,16 +130,16 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
                   </div>
                   <div className="desc">{item.tagline}</div>
                   <div className="stack">{p.stack}</div>
-                  <div className="go">Read ↗</div>
+                  <div className="go">{projectIndex.read}</div>
                 </Link>
               );
             })}
           </div>
 
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
-            <span>Tip:</span>
-            <a href={projectLinks[0].url} target="_blank" rel="noopener noreferrer" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">Open live site ↗</a>
-            <Link to="/projects" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">All projects →</Link>
+            <span>{projectIndex.tip}</span>
+            <a href={projectLinks[0].url} target="_blank" rel="noopener noreferrer" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.openLiveSite}</a>
+            <Link to="/projects" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.allProjects}</Link>
           </div>
         </div>
       </div>
