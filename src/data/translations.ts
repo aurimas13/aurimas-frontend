@@ -81,7 +81,7 @@ export const translations = {
       explore: "Explore"
     },
     gallery: {
-      eyebrow: "No. 04 · Plates",
+      eyebrow: "No. 04 · Places",
       title: "Gallery",
       subtitle: "Visual moments from my journey",
       viewAll: "View All",
@@ -371,7 +371,7 @@ export const translations = {
       explore: "Tyrinėti"
     },
     gallery: {
-      eyebrow: "Nr. 04 · Iliustracijos",
+      eyebrow: "Nr. 04 · Vietos",
       title: "Galerija",
       subtitle: "Vizualinės akimirkos iš mano kelionės",
       viewAll: "Peržiūrėti viską",
@@ -385,7 +385,7 @@ export const translations = {
     },
     support: {
       eyebrow: "Nr. 05",
-      patronage: "Darbo globa",
+      patronage: "Rankos ištiesimas",
       title: "Paremkite jei norite",
       subtitle: "Ir padėkite man toliau kurti meną",
       description: "Ir padėkite man toliau kurti meną",
@@ -661,7 +661,7 @@ export const translations = {
       explore: "Explorer"
     },
     gallery: {
-      eyebrow: "N° 04 · Planches",
+      eyebrow: "N° 04 · Lieux",
       title: "Galerie",
       subtitle: "Moments visuels de mon parcours",
       viewAll: "Voir tout",
@@ -675,7 +675,7 @@ export const translations = {
     },
     support: {
       eyebrow: "N° 05",
-      patronage: "Mécénat de l'œuvre",
+      patronage: "La main tendue",
       title: "Soutenez si vous voulez",
       subtitle: "Aidez-moi s'il vous plaît à continuer à créer de l'art",
       description: "Aidez-moi s'il vous plaît à continuer à créer de l'art",
