@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
-import { BlogPost } from '../types';
+import { BlogPost, BlogCategory, LocalizedText } from '../types';
 import { subscribeToNewsletter } from '../lib/newsletter';
 import { Calendar, Clock, User, Lock, ExternalLink, ArrowLeft } from 'lucide-react';
 import { blogCategories } from '../data/blogCategories';
 import { LanguageCode } from '../contexts/LanguageContext';
 import { loadSamplePosts } from '../data/samplePosts';
+
+// Helper to extract a string from a localized-or-plain value for the current language.
+const localized = (
+  value: string | number | LocalizedText | undefined | null,
+  lang: LanguageCode,
+): string => {
+  if (value === undefined || value === null) return '';
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return String(value);
+  return value[lang] ?? value.en ?? '';
+};
 
 // Title cache for YouTube and Spotify
 const titleCache = new Map<string, string>();
@@ -1042,7 +1053,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             <div className="mb-6">
               <div className="flex items-center space-x-2 mb-4">
                 <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                  {blogCategories[selectedPost.category]?.title[currentLanguage as LanguageCode] || selectedPost.category}
+                  {(blogCategories as Record<string, BlogCategory>)[selectedPost.category]?.title[currentLanguage as LanguageCode] || selectedPost.category}
                 </span>
                 {selectedPost.isPremium && (
                   <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium flex items-center">
@@ -1053,21 +1064,21 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               </div>
               
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {selectedPost.title}
+                {localized(selectedPost.title, currentLanguage as LanguageCode)}
               </h1>
               
               <div className="flex items-center space-x-4 text-sm text-gray-500 mb-6">
                 <div className="flex items-center">
                   <User className="w-4 h-4 mr-1" />
-                  {selectedPost.author}
+                  {localized(selectedPost.author, currentLanguage as LanguageCode)}
                 </div>
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />
-                  {formatDate(selectedPost.publishedAt)}
+                  {formatDate(selectedPost.publishedAt || '')}
                 </div>
                 <div className="flex items-center">
                   <Clock className="w-4 h-4 mr-1" />
-                  {selectedPost.readTime} min read
+                  {localized(selectedPost.readTime, currentLanguage as LanguageCode)} min read
                 </div>
               </div>
 
@@ -1083,7 +1094,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
             </div>
 
             <div className="prose prose-lg max-w-none">
-              {renderContent(selectedPost.content)}
+              {renderContent(localized(selectedPost.content, currentLanguage as LanguageCode))}
             </div>
           </article>
         </div>
@@ -1122,35 +1133,35 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               <div className="border-t border-[rgba(26,22,18,0.32)]">
                 {posts
                   .filter(post => post.status === 'published')
-                  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+                  .sort((a, b) => new Date(b.publishedAt || 0).getTime() - new Date(a.publishedAt || 0).getTime())
                   .slice(0, isAuthenticated || showMorePosts ? undefined : 3)
                   .map((post) => (
                     <article key={post.id} className="border-b border-[rgba(26,22,18,0.14)] hover:bg-paper-deep/60 transition-colors">
                       <button onClick={() => handleReadMore(post)} className="block w-full text-left py-8 px-2">
                         <div className="flex items-baseline gap-4 mb-3 flex-wrap">
                           <span className="meta uppercase tracking-[0.22em]">
-                            {blogCategories[post.category]?.title[currentLanguage as LanguageCode] || post.category}
+                            {(blogCategories as Record<string, BlogCategory>)[post.category]?.title[currentLanguage as LanguageCode] || post.category}
                           </span>
                           {post.isPremium && (
                             <span className="meta uppercase tracking-[0.22em] text-oxblood inline-flex items-center gap-1">
                               <Lock className="w-3 h-3" /> Premium
                             </span>
                           )}
-                          <time className="meta uppercase tracking-[0.22em]">{formatDate(post.publishedAt)}</time>
-                          <span className="meta uppercase tracking-[0.22em]">{post.readTime} min read</span>
+                          <time className="meta uppercase tracking-[0.22em]">{formatDate(post.publishedAt || '')}</time>
+                          <span className="meta uppercase tracking-[0.22em]">{localized(post.readTime, currentLanguage as LanguageCode)} min read</span>
                         </div>
                         <h2 className="display-sm text-ink mb-3 hover:text-oxblood transition-colors" style={{ fontSize: 'clamp(24px, 3.4vw, 36px)', fontVariationSettings: '"opsz" 48, "wght" 480' }}>
-                          {post.title}
+                          {localized(post.title, currentLanguage as LanguageCode)}
                         </h2>
                         <div className="text-ink-soft leading-relaxed text-[15px] mb-4 max-w-[72ch]">
                           {post.excerpt ? (
-                            <p>{post.excerpt}</p>
+                            <p>{localized(post.excerpt, currentLanguage as LanguageCode)}</p>
                           ) : (
-                            <div className="line-clamp-3">{renderContent(truncateContent(post.content, 300))}</div>
+                            <div className="line-clamp-3">{renderContent(truncateContent(localized(post.content, currentLanguage as LanguageCode), 300))}</div>
                           )}
                         </div>
                         <div className="flex items-center gap-5 flex-wrap">
-                          <span className="meta uppercase tracking-[0.22em] inline-flex items-center gap-1"><User className="w-3 h-3" /> {post.author}</span>
+                          <span className="meta uppercase tracking-[0.22em] inline-flex items-center gap-1"><User className="w-3 h-3" /> {localized(post.author, currentLanguage as LanguageCode)}</span>
                           {post.tags && post.tags.length > 0 && (
                             <span className="font-mono text-[11px] text-ink-mute">{post.tags.map((t: string) => `#${t}`).join('  ')}</span>
                           )}

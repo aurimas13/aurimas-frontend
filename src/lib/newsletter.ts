@@ -155,7 +155,7 @@ export const subscribeToNewsletter = async (email: string): Promise<{ success: b
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('newsletter_subscribers')
       .insert([{ email }])
       .select()
@@ -201,7 +201,7 @@ export const getNewsletterSubscribers = async (): Promise<NewsletterSubscriber[]
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('newsletter_subscribers')
       .select('*')
       .eq('is_active', true)
@@ -222,7 +222,7 @@ export const unsubscribeFromNewsletter = async (token: string): Promise<{ succes
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('newsletter_subscribers')
       .update({ is_active: false })
       .eq('unsubscribe_token', token)
@@ -275,7 +275,7 @@ export const sendNewsletterCampaign = async (blogPostId: string, subject: string
     console.log('Recipients:', subscribers.map(s => s.email));
 
     // Save campaign record
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('newsletter_campaigns')
       .insert([{
         blog_post_id: blogPostId,
