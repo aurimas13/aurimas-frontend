@@ -452,7 +452,7 @@ export const translations = {
       openTo: "Atviras",
       openToValue: "DI inžinieriaus pareigoms",
       basedIn: "Įsikūręs",
-      basedInValue: "Vilnius / Nuotoliniu",
+      basedInValue: "Vilniuje / Nuotoliniu",
       stack: "Stack",
       stackValue: "Py · TS · LLMs",
       reading: "Skaitau",
