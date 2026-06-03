@@ -11,8 +11,7 @@ const projectMeta: Record<string, { url: string; github: string; index: string }
   agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '04' },
 };
 
-const Section: React.FC<{ label: string; title: string; children: React.ReactNode; index: string }> = ({
-  label,
+const Section: React.FC<{ title: string; children: React.ReactNode; index: string }> = ({
   title,
   children,
   index,
@@ -20,7 +19,6 @@ const Section: React.FC<{ label: string; title: string; children: React.ReactNod
   <section className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6 md:gap-12 py-10 border-t border-[rgba(26,22,18,0.14)]">
     <div>
       <p className="meta uppercase tracking-[0.2em]">{index}</p>
-      <p className="meta uppercase tracking-[0.2em] mt-1">{label}</p>
     </div>
     <div>
       <h2
@@ -122,19 +120,19 @@ export const ProjectDetailPage: React.FC = () => {
 
         {/* Sections */}
         <div>
-          <Section index="i" label={t.projects.problem} title={t.projects.problem}>
+          <Section index="i" title={t.projects.problem}>
             <p>{item.problem}</p>
           </Section>
 
-          <Section index="ii" label={t.projects.approach} title={t.projects.approach}>
+          <Section index="ii" title={t.projects.approach}>
             <p>{item.approach}</p>
           </Section>
 
-          <Section index="iii" label={t.projects.myRole} title={t.projects.myRole}>
+          <Section index="iii" title={t.projects.myRole}>
             <p>{item.role}</p>
           </Section>
 
-          <Section index="iv" label={t.projects.techStack} title={t.projects.techStack}>
+          <Section index="iv" title={t.projects.techStack}>
             <div className="flex flex-wrap gap-2 not-prose">
               {item.tech.map((tech: string) => (
                 <span key={tech} className="tag">{tech}</span>
@@ -142,7 +140,7 @@ export const ProjectDetailPage: React.FC = () => {
             </div>
           </Section>
 
-          <Section index="v" label={t.projects.outcome} title={t.projects.outcome}>
+          <Section index="v" title={t.projects.outcome}>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[rgba(26,22,18,0.14)] border border-[rgba(26,22,18,0.14)] mb-6">
               {item.metrics.map((m: { value: string; label: string }) => (
                 <div key={m.label} className="bg-paper p-5 text-center">
@@ -159,7 +157,7 @@ export const ProjectDetailPage: React.FC = () => {
             <p>{item.outcome}</p>
           </Section>
 
-          <Section index="vi" label={t.projects.whatsNovel} title={t.projects.whatsNovel}>
+          <Section index="vi" title={t.projects.whatsNovel}>
             <p>{item.novel}</p>
           </Section>
         </div>

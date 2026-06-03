@@ -41,8 +41,10 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
               className="reveal reveal-d3 display-xl text-ink"
               style={{ fontSize: 'clamp(56px, 9vw, 132px)', fontVariationSettings: '"opsz" 144, "wght" 360, "SOFT" 30, "WONK" 1' }}
             >
-              {t.hero.greeting} <span className="italic-accent" style={{ fontVariationSettings: '"opsz" 144, "wght" 380, "SOFT" 100, "WONK" 1' }}>I'm</span><br />
-              <span style={{ display: 'inline-block' }}>Aurimas.</span>
+              {t.hero.greeting}<br />
+              <span className="italic-accent" style={{ fontVariationSettings: '"opsz" 144, "wght" 380, "SOFT" 100, "WONK" 1', display: 'inline-block' }}>
+                Aurimas.
+              </span>
             </h1>
 
             <p
