@@ -1187,7 +1187,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
         {/* Section header */}
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
           <div>
-            <p className="eyebrow mb-3">No. 03 · The Newsletter</p>
+            <p className="eyebrow mb-3">{(t.blogs as any).newsletterEyebrow}</p>
             <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
               {t.blogs.title}
             </h2>
@@ -1205,7 +1205,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               <h4 className="display-sm text-ink" style={{ fontSize: '24px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
                 {t.blogs.beFirstToKnow}
               </h4>
-              <span className="meta uppercase tracking-[0.2em]">— Subscribe</span>
+              <span className="meta uppercase tracking-[0.2em]">{(t.blogs as any).subscribe}</span>
             </div>
             <p className="text-ink-soft text-[15px] mb-6 max-w-[60ch]">{t.blogs.joinWaitlist}</p>
 
@@ -1243,7 +1243,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
 
           {/* Molecule To Machine card */}
           <aside className="border border-[rgba(26,22,18,0.32)] p-8 self-start">
-            <p className="meta uppercase tracking-[0.22em] mb-4">Original Substack</p>
+            <p className="meta uppercase tracking-[0.22em] mb-4">{(t.blogs as any).originalSubstackLabel}</p>
             <h4 className="display-sm text-ink mb-3" style={{ fontSize: '22px', fontVariationSettings: '"opsz" 36, "wght" 500' }}>
               {currentLanguage === 'lt' ? 'Molekulė į Mašiną' : currentLanguage === 'fr' ? 'De la Molécule à la Machine' : 'Molecule To Machine'}
             </h4>

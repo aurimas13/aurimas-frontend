@@ -58,7 +58,7 @@ export const ContactSection: React.FC = () => {
         {/* Section header */}
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
           <div>
-            <p className="eyebrow mb-3">No. 06</p>
+            <p className="eyebrow mb-3">{(t.contact as any).eyebrow}</p>
             <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
               {t.contact.title}
             </h2>
@@ -102,7 +102,7 @@ export const ContactSection: React.FC = () => {
             <h3 className="display-sm text-ink mb-2" style={{ fontSize: '24px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
               {t.contact.sendMessage}
             </h3>
-            <p className="text-ink-soft text-[14px] mb-7">A note arrives at my inbox; I reply within a day or two.</p>
+            <p className="text-ink-soft text-[14px] mb-7">{(t.contact as any).noteArrives}</p>
 
             {showSuccess && (
               <div className="mb-6 p-4 border border-moss/40 bg-moss/5">

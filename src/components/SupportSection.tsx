@@ -27,14 +27,14 @@ export const SupportSection: React.FC = () => {
         {/* Header */}
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
           <div>
-            <p className="eyebrow mb-3">No. 05</p>
+            <p className="eyebrow mb-3">{(t.support as any).eyebrow}</p>
             <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
               {t.support.title}
             </h2>
           </div>
           <div className="hidden md:block self-end">
             <div className="hairline-strong w-full" />
-            <p className="meta uppercase tracking-[0.2em] mt-3">Patronage of the work</p>
+            <p className="meta uppercase tracking-[0.2em] mt-3">{(t.support as any).patronage}</p>
           </div>
         </div>
 

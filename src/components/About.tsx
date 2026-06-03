@@ -43,7 +43,7 @@ export const About: React.FC = () => {
         {/* Section header */}
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
           <div>
-            <p className="eyebrow mb-3">No. 02</p>
+            <p className="eyebrow mb-3">{t.about.eyebrow}</p>
             <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
               {t.about.title}
             </h2>
@@ -62,9 +62,9 @@ export const About: React.FC = () => {
               className="font-display italic text-ink-soft"
               style={{ fontVariationSettings: '"opsz" 36, "wght" 400, "SOFT" 80, "WONK" 1', fontSize: 'clamp(20px, 2.2vw, 26px)', lineHeight: 1.4 }}
             >
-              "Upside Down to Upside Down."
+              "{t.about.quoteMantra}"
             </p>
-            <p className="meta uppercase tracking-[0.2em] mt-4">From the desk of A. Nausėdas</p>
+            <p className="meta uppercase tracking-[0.2em] mt-4">{t.about.fromTheDesk}</p>
           </aside>
 
           {/* Right: text + CV card */}

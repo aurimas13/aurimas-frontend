@@ -320,7 +320,7 @@ export const Gallery: React.FC = () => {
         {/* Section header */}
         <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
           <div>
-            <p className="eyebrow mb-3">No. 04 · Plates</p>
+            <p className="eyebrow mb-3">{(t.gallery as any).eyebrow}</p>
             <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
               {t.gallery.title}
             </h2>

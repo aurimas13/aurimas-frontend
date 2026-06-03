@@ -36,7 +36,7 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
           <div>
             <div className="reveal reveal-d2 flex items-center gap-3 mb-7">
               <span className="w-1.5 h-1.5 rounded-full bg-oxblood shadow-[0_0_0_4px_rgba(122,31,31,0.12)]" />
-              <span className="eyebrow">— Field notes from the lab bench</span>
+              <span className="eyebrow">{t.hero.fieldNotes}</span>
             </div>
 
             <h1

@@ -5,9 +5,13 @@ export const translations = {
       name: "Aurimas Aleksandras Nausėdas",
       subtitle: "Chemist turned AI Engineer & Writer",
       description: "Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.",
-      cta: "Explore My Work"
+      cta: "Explore My Work",
+      fieldNotes: "— Field notes from the lab bench"
     },
     about: {
+      eyebrow: "No. 02",
+      quoteMantra: "Upside Down to Upside Down.",
+      fromTheDesk: "From the desk of A. Nausėdas",
       title: "About Me",
       myStory: "My Story",
       bio: "I am disciplined, empathetic, strategic, eager, and devoted to what I do. I am to make the changes. Upside Down to Upside Down.\n\nSince high school, I assumed I would work as a scientist, but life is far from being figured out when you're sitting at a school desk. Then, the university and numerous internships came along, deepening my self-doubt and prompting me to question everything, which has given me the confidence to never be afraid to change my career path. Having not taken many risks over the last decade, I am now.\n\nI am a chemist from the University of Edinburgh who re-specialized to become an expert in Computer Science and Artificial Intelligence (AI).\n\nI was drawn to computing relatively late, in 2010, during my time at the university. It was then that I realized I didn't fancy wet lab at all. However, it took me until late 2021 to close my pursuit of a scientific career and concentrate on Computer Science, Artificial Intelligence, and Technical Leadership roles. I devoted myself entirely to computing and to leading from the start of 2022. To build up to that, I took numerous Computer Science online courses and joined several professional organizations, including the Artificial Intelligence Association of Lithuania and the IEEE Computer Society. Although I worked in biology and bioinformatics from 2015 to 2021, I prefer to solve chemistry and real-world problems by coding, finding AI solutions, and leading technical teams rather than continuing in biological research without AI. This brings me to the present day, when I have also returned to my other passion – writing.\n\nOn this website, you will find my scribbles, as I have been writing for over 16 years and continue to do so. You are welcome to subscribe to my blog and support my work, but please only if you want to. If you become a subscriber, that's golden, as it's the ultimate affirmation that what I do matters beyond my professional career.\n\nFor which - my specialties include quickly learning new skills, programming languages, problem-solving, applying the first-principle approach, managing, and leading teams. I am enthusiastically exploring computational core principles, strategic thinking methods, management tools, support engineering, and other programming engines, frameworks, modules, and principles that I can integrate and make work in my head, then implement in real life.",
@@ -18,6 +22,9 @@ export const translations = {
       download: "Download CV"
     },
     blogs: {
+      newsletterEyebrow: "No. 03 · The Newsletter",
+      subscribe: "— Subscribe",
+      originalSubstackLabel: "Original Substack",
       title: "Blog",
       subtitle: "Upcoming from Substack: Weekly AI, Technology, Music & Healthcare Newsletter",
       readMore: "Read More",
@@ -74,6 +81,7 @@ export const translations = {
       explore: "Explore"
     },
     gallery: {
+      eyebrow: "No. 04 · Plates",
       title: "Gallery",
       subtitle: "Visual moments from my journey",
       viewAll: "View All",
@@ -86,6 +94,8 @@ export const translations = {
       }
     },
     support: {
+      eyebrow: "No. 05",
+      patronage: "Patronage of the work",
       title: "Support If Want To",
       subtitle: "Help me continue creating art",
       description: "Help me continue creating art",
@@ -127,6 +137,8 @@ export const translations = {
       visitKofiBtn: "Visit Ko-fi"
     },
     contact: {
+      eyebrow: "No. 06",
+      noteArrives: "A note arrives at my inbox; I reply within a day or two.",
       title: "Get In Touch",
       subtitle: "Feel free to reach out for collaborations or just to say hello",
       getInTouch: "Contact Information",
@@ -283,9 +295,13 @@ export const translations = {
       name: "Aurimas Aleksandras Nausėdas",
       subtitle: "Chemikas tapęs DI inžinieriumi ir rašytoju",
       description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, DI duoda rezultatus, o istorijos atgyja ant lapo.",
-      cta: "Tyrinėti mano darbus"
+      cta: "Tyrinėti mano darbus",
+      fieldNotes: "— Užrašai iš laboratorijos"
     },
     about: {
+      eyebrow: "Nr. 02",
+      quoteMantra: "Aukštyn kojomis į aukštyn kojomis.",
+      fromTheDesk: "Nuo A. Nausėdo stalo",
       title: "Apie mane",
       myStory: "Mano istorija",
       bio: "Esu disciplinuotas, empatiškas, strategiškas, žingeidus ir atsidavęs tam, ką darau. Esu tam, kad daryčiau pokyčius. Aukštyn kojomis į aukštyn kojomis.\n\nNuo vidurinės mokyklos maniau, kad dirbsiu mokslininku, bet gyvenimas toli gražu nėra nuspręstas, kai sėdi mokyklos suole. Tada atėjo universitetas ir daugybė stažuočių, kurios pagilino mano abejones savimi ir paskatino viską kvestionuoti, o tai davė man pasitikėjimo niekada nebijoti keisti karjeros kelio. Neprisiėmęs daug rizikos per pastaruosius dešimt metų, dabar tai darau.\n\nEsu chemikas, baigęs Edinburgo universitetą, kuris persikvalifikavo, kad taptų kompiuterių mokslo ir dirbtinio intelekto (DI) ekspertu.\n\nPrie kompiuterijos prisijungiau gana vėlai, 2010 metais, studijų universitete metu. Būtent tada supratau, kad laboratorijos darbas man visai nepatinka. Tačiau man prireikė iki 2021 metų pabaigos, kad užbaigčiau mokslinės karjeros siekius ir susitelkčiau į kompiuterių mokslą, dirbtinį intelektą ir techninio vadovavimo vaidmenis. Visiškai atsidaviau kompiuterijai ir vadovavimui nuo 2022 metų pradžios. Tam pasiruošti lankiau daugybę kompiuterių mokslo internetinių kursų ir prisijungiau prie kelių profesinių organizacijų, tokių kaip Lietuvos Dirbtinio Intelekto Asociacija ir IEEE kompiuterių draugija. Nors nuo 2015 iki 2021 metų dirbau biologijos ir bioinformatikos srityse, man labiau patinka spręsti chemijos ir realaus pasaulio problemas programuojant, ieškant DI sprendimų ir vadovaujant techninėms komandoms, nei tęsti biologijos tyrimus be DI. Tai mane atveda į šiandienos dieną, kai taip pat grįžau prie kitos savo aistros – rašymo.\n\nŠioje svetainėje rasite mano keverziojimus, nes rašau jau daugiau nei 16 metų ir tęsiu toliau. Kviečiu prenumeruoti mano tinklaraštį ir paremti mano darbą, bet tik jei norite. Jei tapsite prenumeratoriumi – tai aukso vertės, nes tai yra geriausias patvirtinimas, kad tai, ką darau, yra svarbu, ne tik mano profesinėje karjeroje.\n\nMano specialybės apima greitą naujų įgūdžių mokymąsi, programavimo kalbas, problemų sprendimą, pirmųjų principų taikymą, valdymą ir komandų vadovavimą. Entuziastingai tyrinėju kompiuterijos pagrindinius principus, strateginio mąstymo metodus, valdymo įrankius, palaikymo inžineriją ir kitus programavimo variklius, karkasus, modulius ir principus, kuriuos galiu integruoti ir priversti veikti savo galvoje, o tada įgyvendinti realybėje.",
@@ -296,6 +312,9 @@ export const translations = {
       download: "Atsisiųsti CV"
     },
     blogs: {
+      newsletterEyebrow: "Nr. 03 · Naujienlaiškis",
+      subscribe: "— Prenumeruoti",
+      originalSubstackLabel: "Originalus Substack",
       title: "Tinkliaraštis",
       subtitle: "Netrukus iš Substack: Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis",
       readMore: "Skaityti daugiau",
@@ -352,6 +371,7 @@ export const translations = {
       explore: "Tyrinėti"
     },
     gallery: {
+      eyebrow: "Nr. 04 · Iliustracijos",
       title: "Galerija",
       subtitle: "Vizualinės akimirkos iš mano kelionės",
       viewAll: "Peržiūrėti viską",
@@ -364,6 +384,8 @@ export const translations = {
       }
     },
     support: {
+      eyebrow: "Nr. 05",
+      patronage: "Darbo globa",
       title: "Paremkite jei norite",
       subtitle: "Ir padėkite man toliau kurti meną",
       description: "Ir padėkite man toliau kurti meną",
@@ -405,6 +427,8 @@ export const translations = {
       visitKofiBtn: "Apsilankyk Ko-fi"
     },
     contact: {
+      eyebrow: "Nr. 06",
+      noteArrives: "Žinutė atkeliauja į mano pašto dėžutę; atsakau per dieną ar dvi.",
       title: "Susisiekite",
       subtitle: "Drąsiai kreipkitės dėl bendradarbiavimo ar tiesiog pasisveikinti",
       getInTouch: "Kontaktinė informacija",
@@ -561,9 +585,13 @@ export const translations = {
       name: "Aurimas Aleksandras Nausėdas",
       subtitle: "Chimiste devenu Ingénieur IA et Écrivain",
       description: "Bienvenue dans mon espace virtuel, où la chimie devient code, l'IA produit des résultats et les histoires reprennent vie.",
-      cta: "Explorer mon travail"
+      cta: "Explorer mon travail",
+      fieldNotes: "— Notes de paillasse"
     },
     about: {
+      eyebrow: "N° 02",
+      quoteMantra: "Sens dessus dessous vers sens dessus dessous.",
+      fromTheDesk: "Du bureau d'A. Nausėdas",
       title: "À propos de moi",
       myStory: "Mon histoire",
       bio: "Je suis discipliné, empathique, stratégique, motivé et dévoué à ce que je fais. Je suis déterminé à changer les choses. Sens dessus dessous vers sens dessus dessous.\n\nAu lycée, je pensais devenir scientifique, mais la vie est loin d'être toute tracée quand on est assis sur les bancs de l'école. Puis sont arrivés l'université et de nombreux stages qui ont approfondi mes doutes et m'ont poussé à tout remettre en question, ce qui m'a donné la confiance de ne jamais avoir peur de changer de carrière. Après avoir pris peu de risques au cours de la dernière décennie, je me lance aujourd'hui.\n\nJe suis un chimiste diplômé de l'université d'Édimbourg qui s'est reconverti pour devenir expert en informatique et en intelligence artificielle (IA).\n\nJe me suis intéressé à l'informatique relativement tard, en 2010, pendant mes études universitaires. C'est à cette époque que j'ai réalisé que je n'aimais pas du tout les laboratoires. Il m'a toutefois fallu attendre la fin de l'année 2021 pour mettre un terme à ma carrière scientifique et me consacrer à l'informatique, à l'intelligence artificielle et aux rôles de direction technique. Je me consacre entièrement à l'informatique et au leadership depuis le début de l'année 2022. Pour y parvenir, j'ai suivi de nombreux cours d'informatique en ligne et j'ai rejoint plusieurs organisations professionnelles, dont l'Association lituanienne pour l'intelligence artificielle et la Computer Society de l'IEEE. Bien que j'aie travaillé en biologie et en bio-informatique de 2015 à 2021, je préfère résoudre des problèmes de chimie et du monde réel en codant, en trouvant des solutions d'IA et en dirigeant des équipes techniques, plutôt que de poursuivre la recherche biologique sans IA. Cela m'amène à aujourd'hui, où je suis également revenu à mon autre passion – l'écriture.\n\nSur ce site, vous trouverez mes écrits, que je rédige depuis plus de 16 ans et que je continue à écrire. Je vous invite à vous abonner à mon blog et à soutenir mon travail, mais uniquement si vous le souhaitez. Si vous devenez abonné, c'est en or, car c'est la meilleure preuve que ce que je fais compte au-delà de ma carrière professionnelle.\n\nMes spécialités sont l'apprentissage rapide de nouvelles compétences, les langages de programmation, la résolution de problèmes, l'application de l'approche par principes fondamentaux, la gestion et la direction d'équipes. J'explore avec enthousiasme les principes fondamentaux de l'informatique, les méthodes de réflexion stratégique, les outils de gestion, l'ingénierie de support et d'autres moteurs de programmation, frameworks, modules et principes que je peux intégrer et faire fonctionner dans ma tête, puis mettre en œuvre dans la vie réelle.",
@@ -574,6 +602,9 @@ export const translations = {
       download: "Télécharger CV"
     },
     blogs: {
+      newsletterEyebrow: "N° 03 · La Newsletter",
+      subscribe: "— S'abonner",
+      originalSubstackLabel: "Substack d'origine",
       title: "Blog",
       subtitle: "Prochainement depuis Substack : Newsletter hebdomadaire sur l'IA, la technologie, la musique et la santé",
       readMore: "Lire la suite",
@@ -630,6 +661,7 @@ export const translations = {
       explore: "Explorer"
     },
     gallery: {
+      eyebrow: "N° 04 · Planches",
       title: "Galerie",
       subtitle: "Moments visuels de mon parcours",
       viewAll: "Voir tout",
@@ -642,6 +674,8 @@ export const translations = {
       }
     },
     support: {
+      eyebrow: "N° 05",
+      patronage: "Mécénat de l'œuvre",
       title: "Soutenez si vous voulez",
       subtitle: "Aidez-moi s'il vous plaît à continuer à créer de l'art",
       description: "Aidez-moi s'il vous plaît à continuer à créer de l'art",
@@ -683,6 +717,8 @@ export const translations = {
       visitKofiBtn: "Visitez Ko-fi"
     },
     contact: {
+      eyebrow: "N° 06",
+      noteArrives: "Un mot arrive dans ma boîte ; je réponds sous un ou deux jours.",
       title: "Contactez-moi",
       subtitle: "N'hésitez pas à me contacter pour des collaborations ou simplement pour dire bonjour",
       getInTouch: "Informations de contact",
