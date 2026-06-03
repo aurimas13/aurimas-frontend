@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
@@ -9,121 +9,125 @@ export const About: React.FC = () => {
 
   const handlePDFDownload = async (pdfPath: string, filename: string) => {
     try {
-      console.log(`Attempting to download: ${pdfPath}`);
-      
-      // Fetch the PDF as a blob to ensure proper handling
       const response = await fetch(pdfPath, {
         method: 'GET',
-        headers: {
-          'Accept': 'application/pdf,*/*',
-          'Cache-Control': 'no-cache'
-        }
+        headers: { Accept: 'application/pdf,*/*', 'Cache-Control': 'no-cache' },
       });
-      
-      if (!response.ok) {
-        console.error(`HTTP error! status: ${response.status}`);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const contentType = response.headers.get('content-type');
-      console.log(`Content-Type: ${contentType}`);
-      console.log(`Content-Length: ${response.headers.get('content-length')}`);
-      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const blob = await response.blob();
-      console.log(`Blob size: ${blob.size}, type: ${blob.type}`);
-      
-      // For TeXShop PDFs, ensure proper MIME type
-      const pdfBlob = new Blob([blob], { 
-        type: 'application/pdf'
-      });
-      
-      // Create download link
+      const pdfBlob = new Blob([blob], { type: 'application/pdf' });
       const link = document.createElement('a');
       const url = window.URL.createObjectURL(pdfBlob);
       link.href = url;
       link.download = filename;
       link.style.display = 'none';
-      
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
-      // Clean up the object URL after a delay to ensure download completes
-      setTimeout(() => {
-        window.URL.revokeObjectURL(url);
-      }, 1000);
-      
-      console.log(`Successfully downloaded: ${filename}`);
-      
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
     } catch (error) {
       console.error('Error downloading PDF:', error);
-      
-      // TeXShop PDF fallback - try opening in new tab instead of download
-      console.log('Trying fallback: opening in new tab');
       const newWindow = window.open(pdfPath, '_blank');
       if (!newWindow) {
-        alert('Please allow popups to view the PDF, or try right-clicking the download button and selecting "Save link as..."');
+        alert('Please allow popups to view the PDF, or right-click the button and "Save link as…".');
       }
     }
   };
 
-
+  const paragraphs = t.about.bio.split('\n\n');
+  const [firstParagraph, ...restParagraphs] = paragraphs;
 
   return (
-    <section id="about" className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
-      <div className="w-screen px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            {t.about.title}
-          </h2>
+    <section id="about" className="relative py-28 surface-deep border-t border-b border-[rgba(26,22,18,0.32)]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Section header */}
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
+          <div>
+            <p className="eyebrow mb-3">No. 02</p>
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
+              {t.about.title}
+            </h2>
+          </div>
+          <div className="hidden md:block self-end">
+            <div className="hairline-strong w-full" />
+            <p className="meta uppercase tracking-[0.2em] mt-3">{t.about.myStory}</p>
+          </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-              <div className="flex items-center mb-6">
-                <BookOpen className="w-8 h-8 text-green-600 mr-3" />
-                <h3 className="text-2xl font-bold text-gray-800">{t.about.myStory}</h3>
-              </div>
-              <div className="prose prose-gray max-w-none">
-                {t.about.bio.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="text-gray-600 leading-relaxed mb-4 text-sm sm:text-base">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl p-4 sm:p-6 text-white text-center">
-              <h4 className="text-xl font-bold mb-2">{t.about.downloadCVShort}</h4>
-              <p className="mb-4 text-sm sm:text-base">{t.about.downloadDescription}</p>
-              <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-3">
-                <button
-                  onClick={() => handlePDFDownload('/Aurimas_Resume_AI_Engineer.pdf', 'Aurimas_Nausedas_CV_English.pdf')}
-                  className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
+        {/* Letter body */}
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-10 lg:gap-16">
+          {/* Left: pull-quote */}
+          <aside className="md:sticky md:top-28 self-start">
+            <p
+              className="font-display italic text-ink-soft"
+              style={{ fontVariationSettings: '"opsz" 36, "wght" 400, "SOFT" 80, "WONK" 1', fontSize: 'clamp(20px, 2.2vw, 26px)', lineHeight: 1.4 }}
+            >
+              "Upside Down to Upside Down."
+            </p>
+            <p className="meta uppercase tracking-[0.2em] mt-4">From the desk of A. Nausėdas</p>
+          </aside>
+
+          {/* Right: text + CV card */}
+          <div>
+            <div className="space-y-5">
+              <p
+                className="drop-cap font-display text-ink"
+                style={{ fontSize: '19px', lineHeight: 1.6, fontVariationSettings: '"opsz" 14, "wght" 400' }}
+              >
+                {firstParagraph}
+              </p>
+              {restParagraphs.map((para, i) => (
+                <p
+                  key={i}
+                  className="font-display text-ink"
+                  style={{ fontSize: '19px', lineHeight: 1.6, fontVariationSettings: '"opsz" 14, "wght" 400' }}
                 >
-                  <Download className="w-4 h-4" />
-                  <span>{t.about.download} (EN)</span>
+                  {para}
+                </p>
+              ))}
+            </div>
+
+            {/* CV download — sober box, not a gradient */}
+            <div className="mt-12 panel-strong p-6 sm:p-8">
+              <div className="flex items-baseline justify-between mb-2 flex-wrap gap-2">
+                <h4 className="display-sm" style={{ fontVariationSettings: '"opsz" 36, "wght" 500' }}>
+                  {t.about.downloadCVShort}
+                </h4>
+                <span className="meta uppercase tracking-[0.2em]">PDF · 19 Apr 2026</span>
+              </div>
+              <p className="text-ink-soft text-[15px] mb-6">{t.about.downloadDescription}</p>
+
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() =>
+                    handlePDFDownload('/Aurimas_Resume_AI_Engineer.pdf', 'Aurimas_Nausedas_CV_English.pdf')
+                  }
+                  className="btn btn-primary"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  {t.about.download} (EN)
                 </button>
                 <button
-                  onClick={() => handlePDFDownload('/Aurimas_Resume_AI_Engineer_LT.pdf', 'Aurimas_Nausedas_CV_Lithuanian.pdf')}
-                  className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
+                  onClick={() =>
+                    handlePDFDownload('/Aurimas_Resume_AI_Engineer_LT.pdf', 'Aurimas_Nausedas_CV_Lithuanian.pdf')
+                  }
+                  className="btn btn-ghost"
                 >
-                  <Download className="w-4 h-4" />
-                  <span>{t.about.download} (LT)</span>
+                  <Download className="w-3.5 h-3.5" />
+                  {t.about.download} (LT)
                 </button>
                 <button
-                  onClick={() => handlePDFDownload('/Aurimas_Resume_AI_Engineer_FR.pdf', 'Aurimas_Nausedas_CV_French.pdf')}
-                  className="bg-white px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-800"
+                  onClick={() =>
+                    handlePDFDownload('/Aurimas_Resume_AI_Engineer_FR.pdf', 'Aurimas_Nausedas_CV_French.pdf')
+                  }
+                  className="btn btn-ghost"
                 >
-                  <Download className="w-4 h-4" />
-                  <span>{t.about.download} (FR)</span>
+                  <Download className="w-3.5 h-3.5" />
+                  {t.about.download} (FR)
                 </button>
               </div>
-                </div>
             </div>
           </div>
-
-        </div>
         </div>
       </div>
     </section>

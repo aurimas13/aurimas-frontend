@@ -1,57 +1,63 @@
-import React, { useState } from 'react';
-import { Globe, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
 
 export const LanguageSwitcher: React.FC = () => {
   const { currentLanguage, changeLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const languages = [
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'lt', name: 'Lietuvių', flag: '🇱🇹' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' }
-  ];
+    { code: 'en', name: 'English' },
+    { code: 'lt', name: 'Lietuvių' },
+    { code: 'fr', name: 'Français' },
+  ] as const;
 
-  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
-
-  const handleLanguageChange = (langCode: string) => {
-    changeLanguage(langCode as 'en' | 'lt' | 'fr');
-    setIsOpen(false);
-  };
+  useEffect(() => {
+    if (!isOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false);
+    };
+    window.addEventListener('mousedown', onClick);
+    return () => window.removeEventListener('mousedown', onClick);
+  }, [isOpen]);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-700 hover:text-yellow-600 hover:bg-yellow-50 transition-colors"
+        className="font-mono uppercase text-[11px] tracking-[0.22em] text-ink-soft hover:text-ink transition-colors py-2 px-1"
+        aria-label="Switch language"
       >
-        <Globe className="w-4 h-4" />
-        <span className="text-sm font-medium">{currentLang.flag} {currentLang.code.toUpperCase()}</span>
-        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        {languages.map((l, i) => (
+          <span key={l.code}>
+            <span className={l.code === currentLanguage ? 'text-ink' : ''}>{l.code.toUpperCase()}</span>
+            {i < languages.length - 1 && <span className="text-ink-faint mx-1">·</span>}
+          </span>
+        ))}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+        <div className="absolute right-0 top-full mt-2 w-44 bg-paper border border-[rgba(26,22,18,0.32)] py-1 shadow-[0_18px_40px_-20px_rgba(26,22,18,0.35)] z-50">
           {languages.map((language) => (
             <button
               key={language.code}
-              onClick={() => handleLanguageChange(language.code)}
-              className={`w-full text-left px-4 py-2 text-sm hover:bg-yellow-50 transition-colors flex items-center space-x-2 ${
-                currentLanguage === language.code ? 'bg-yellow-100 text-yellow-700' : 'text-gray-700'
+              onClick={() => {
+                changeLanguage(language.code as 'en' | 'lt' | 'fr');
+                setIsOpen(false);
+              }}
+              className={`w-full text-left px-4 py-2.5 flex items-baseline justify-between transition-colors hover:bg-paper-deep ${
+                currentLanguage === language.code ? 'text-ink' : 'text-ink-soft'
               }`}
             >
-              <span>{language.flag}</span>
-              <span>{language.name}</span>
+              <span className="font-display text-[15px]" style={{ fontVariationSettings: '"opsz" 18, "wght" 480' }}>
+                {language.name}
+              </span>
+              <span className="font-mono uppercase text-[10px] tracking-[0.22em] text-ink-mute">
+                {language.code}
+              </span>
             </button>
           ))}
         </div>
-      )}
-
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setIsOpen(false)}
-        />
       )}
     </div>
   );

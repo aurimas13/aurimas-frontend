@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { blogCategories } from '../data/blogCategories';
 import { translations } from '../data/translations';
@@ -12,287 +13,246 @@ export const BlogsPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedDestination, setSelectedDestination] = useState<string>('all');
 
-    // Get published posts from localStorage
   const posts: BlogPost[] = JSON.parse(localStorage.getItem('blog-posts') || '[]');
 
-  // Helper function to get localized text
   const getLocalizedText = (text: string | LocalizedText | undefined): string => {
     if (!text) return '';
     if (typeof text === 'string') return text;
     return text[currentLanguage as keyof LocalizedText] || text.en || '';
   };
 
-  // Filter posts based on selected category and destination
   const filteredPosts = posts.filter((post: BlogPost) => {
     if (selectedCategory !== 'all' && post.category !== selectedCategory) return false;
     if (selectedDestination !== 'all' && post.category !== selectedDestination) return false;
     return true;
   });
 
+  const filterButton = (active: boolean, onClick: () => void, label: string) => (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1.5 font-mono uppercase text-[11px] tracking-[0.18em] border transition-colors ${
+        active
+          ? 'border-ink bg-ink text-paper'
+          : 'border-[rgba(26,22,18,0.32)] text-ink-soft hover:border-ink hover:text-ink'
+      }`}
+    >
+      {label}
+    </button>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-12">
+    <div className="pt-32 pb-24 min-h-screen">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-            {t.blogs.title}
+        <div className="mb-16 reveal reveal-d2">
+          <p className="eyebrow mb-3">No. 04 · Writing</p>
+          <h1 className="display-lg text-ink" style={{ fontSize: 'clamp(48px, 7vw, 96px)', fontVariationSettings: '"opsz" 96, "wght" 420' }}>
+            {t.blogs.title}.
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p
+            className="font-display text-ink-soft mt-6 max-w-[640px]"
+            style={{ fontSize: 'clamp(18px, 2vw, 22px)', lineHeight: 1.5, fontVariationSettings: '"opsz" 18, "wght" 400' }}
+          >
             {t.blogs.subtitle}
           </p>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="mb-12">
-          {/* Category Filters */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">📚 {t.blogs.filterByCategory}</h3>
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => setSelectedCategory('all')}
-                className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                  selectedCategory === 'all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {t.blogs.allCategories}
-              </button>
-              {Object.entries(blogCategories).map(([categoryKey, category]) => (
-                <button
-                  key={categoryKey}
-                  onClick={() => setSelectedCategory(categoryKey)}
-                  className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                    selectedCategory === categoryKey
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category.title[currentLanguage as LanguageCode]}
-                </button>
-              ))}
+        {/* Filters */}
+        <div className="mb-12 reveal reveal-d3 space-y-6">
+          <div>
+            <h3 className="meta uppercase tracking-[0.22em] mb-3">{t.blogs.filterByCategory}</h3>
+            <div className="flex flex-wrap gap-2">
+              {filterButton(selectedCategory === 'all', () => setSelectedCategory('all'), t.blogs.allCategories)}
+              {Object.entries(blogCategories).map(([key, category]) =>
+                filterButton(
+                  selectedCategory === key,
+                  () => setSelectedCategory(key),
+                  category.title[currentLanguage as LanguageCode],
+                )
+              )}
             </div>
           </div>
 
-          {/* Destination Filters */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">📍 {t.blogs.filterByDestination}</h3>
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => setSelectedDestination('all')}
-                className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                  selectedDestination === 'all'
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {t.blogs.allDestinations}
-              </button>
-              {Object.entries(blogCategories).map(([categoryKey, category]) => (
-                <button
-                  key={`dest-${categoryKey}`}
-                  onClick={() => setSelectedDestination(categoryKey)}
-                  className={`px-4 py-2 rounded-full font-medium transition-colors duration-200 ${
-                    selectedDestination === categoryKey
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category.title[currentLanguage as LanguageCode]}
-                </button>
-              ))}
+          <div>
+            <h3 className="meta uppercase tracking-[0.22em] mb-3">{t.blogs.filterByDestination}</h3>
+            <div className="flex flex-wrap gap-2">
+              {filterButton(selectedDestination === 'all', () => setSelectedDestination('all'), t.blogs.allDestinations)}
+              {Object.entries(blogCategories).map(([key, category]) =>
+                filterButton(
+                  selectedDestination === key,
+                  () => setSelectedDestination(key),
+                  category.title[currentLanguage as LanguageCode],
+                )
+              )}
             </div>
           </div>
         </div>
 
-        {/* All Blog Posts */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">{t.blogs.allBlogPosts}</h2>
+        {/* All posts */}
+        <div className="mb-20">
+          <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[rgba(26,22,18,0.32)]">
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
+              {t.blogs.allBlogPosts}
+            </h2>
+            <span className="meta uppercase tracking-[0.2em]">{filteredPosts.length} entries</span>
+          </div>
+
           {filteredPosts.length > 0 ? (
-            <div className="grid gap-8 md:gap-12">
+            <div>
               {filteredPosts.map((post: BlogPost, index: number) => {
                 const categoryData = blogCategories[post.category as keyof typeof blogCategories];
                 const categoryTitle = categoryData?.title[currentLanguage as LanguageCode] || post.category;
-                
+
                 return (
-                  <article 
+                  <article
                     key={`${post.category}-${index}`}
-                    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                    className="border-b border-[rgba(26,22,18,0.14)] hover:bg-paper-deep/60 transition-colors"
                   >
-                    <div className="p-8">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">📚</span>
-                          <span className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
-                            {categoryTitle}
-                          </span>
-                          {post.status === 'published' && (
-                            <span className="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">
-                              ✓ {t.blogs.published}
-                            </span>
-                          )}
-                        </div>
-                        <time className="text-sm text-gray-500">
+                    <Link to={`/blogs/${post.category}/${post.id}`} className="block py-8 px-2">
+                      <div className="flex items-baseline gap-4 mb-3 flex-wrap">
+                        <span className="meta uppercase tracking-[0.22em]">{categoryTitle}</span>
+                        {post.status === 'published' && (
+                          <span className="meta uppercase tracking-[0.22em] text-moss">✓ {t.blogs.published}</span>
+                        )}
+                        <time className="meta uppercase tracking-[0.22em]">
                           {new Date(post.publishedAt || post.date || '').toLocaleDateString(
-                            currentLanguage === 'en' ? 'en-US' : 
-                            currentLanguage === 'lt' ? 'lt-LT' : 'fr-FR',
-                            { 
-                              year: 'numeric', 
-                              month: 'long', 
-                              day: 'numeric' 
-                            }
+                            currentLanguage === 'en' ? 'en-US' : currentLanguage === 'lt' ? 'lt-LT' : 'fr-FR',
+                            { year: 'numeric', month: 'long', day: 'numeric' },
                           )}
                         </time>
                       </div>
 
-                      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                      <h2
+                        className="display-sm text-ink mb-3"
+                        style={{ fontSize: 'clamp(24px, 3.4vw, 36px)', fontVariationSettings: '"opsz" 48, "wght" 480' }}
+                      >
                         {getLocalizedText(post.title)}
                       </h2>
 
                       {post.subtitle && (
-                        <p className="text-lg text-gray-600 mb-4 leading-relaxed">
+                        <p className="font-display text-ink-soft mb-3" style={{ fontSize: '18px', lineHeight: 1.45, fontVariationSettings: '"opsz" 18, "wght" 400' }}>
                           {getLocalizedText(post.subtitle)}
                         </p>
                       )}
 
-                      <p className="text-gray-600 leading-relaxed mb-6 line-clamp-3">
-                        {getLocalizedText(post.excerpt) || 
-                         (getLocalizedText(post.content)?.substring(0, 200) + '...')}
+                      <p className="text-ink-soft leading-relaxed text-[15px] mb-4 line-clamp-3 max-w-[72ch]">
+                        {getLocalizedText(post.excerpt) || (getLocalizedText(post.content)?.substring(0, 220) + '…')}
                       </p>
 
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-sm text-gray-500">
-                          <span>👤 {getLocalizedText(post.author)}</span>
-                          {post.readTime && (
-                            <span>⏱️ {typeof post.readTime === 'string' || typeof post.readTime === 'number' ? post.readTime : getLocalizedText(post.readTime as LocalizedText)}</span>
-                          )}
-                        </div>
-                        
-                        <Link
-                          to={`/blogs/${post.category}/${post.id}`}
-                          className="inline-flex items-center bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-3 rounded-lg font-medium hover:from-orange-500 hover:to-red-600 transition-all duration-200 transform hover:scale-105"
-                        >
-                          {t.blogs.readMore}
-                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </Link>
+                      <div className="flex items-center gap-5 flex-wrap">
+                        <span className="meta uppercase tracking-[0.22em]">{getLocalizedText(post.author)}</span>
+                        {post.readTime && (
+                          <span className="meta uppercase tracking-[0.22em]">
+                            {typeof post.readTime === 'string' || typeof post.readTime === 'number'
+                              ? post.readTime
+                              : getLocalizedText(post.readTime as LocalizedText)}{' '}
+                            min read
+                          </span>
+                        )}
+                        <span className="ml-auto inline-flex items-center gap-1.5 font-mono uppercase text-[11px] tracking-[0.22em] text-ink border-b border-ink pb-0.5">
+                          {t.blogs.readMore} <ArrowRight className="w-3 h-3" />
+                        </span>
                       </div>
-                    </div>
+                    </Link>
                   </article>
                 );
               })}
             </div>
           ) : (
-            <div className="text-center py-16">
-              <div className="text-6xl mb-6">📚</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <div className="py-16 text-center">
+              <p className="display-sm text-ink mb-3" style={{ fontVariationSettings: '"opsz" 36, "wght" 480' }}>
                 {t.blogs.noBlogPosts}
-              </h3>
-              <p className="text-gray-600 text-lg">
-                {selectedCategory !== 'all' || selectedDestination !== 'all' 
-                  ? t.blogs.noBlogPostsInCategory
-                  : t.blogs.checkBack}
+              </p>
+              <p className="text-ink-soft">
+                {selectedCategory !== 'all' || selectedDestination !== 'all' ? t.blogs.noBlogPostsInCategory : t.blogs.checkBack}
               </p>
             </div>
           )}
         </div>
 
-        {/* Blog Categories Grid */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">{t.blogs.browseByCategoryTitle}</h2>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2 max-w-6xl mx-auto">
+        {/* Categories */}
+        <div className="mb-20">
+          <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[rgba(26,22,18,0.32)]">
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
+              {t.blogs.browseByCategoryTitle}
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[rgba(26,22,18,0.14)] border border-[rgba(26,22,18,0.14)]">
             {Object.entries(blogCategories).map(([categoryKey, category]) => {
-              const categoryPosts = posts.filter((post: BlogPost) => post.category === categoryKey);
+              const categoryPosts = posts.filter((p: BlogPost) => p.category === categoryKey);
               const postCount = categoryPosts.length;
-
               return (
                 <Link
                   key={categoryKey}
                   to={`/blogs/${categoryKey}`}
-                  className="group block bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+                  className="group block bg-paper p-8 hover:bg-paper-deep transition-colors"
                 >
-                  <div className="p-8">
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
-                        {category.title[currentLanguage as LanguageCode]}
-                      </h3>
-                      <div className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                        {postCount} {postCount === 1 ? t.blogs.post : t.blogs.posts}
-                      </div>
-                    </div>
-
-                    <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                      {category.description[currentLanguage as LanguageCode]}
-                    </p>
-
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500">
-                        <span className="font-medium">{t.blogs.languages}:</span> {category.languages[currentLanguage as LanguageCode]}
-                      </div>
-                      
-                      <div className="flex items-center text-blue-600 group-hover:text-blue-800 transition-colors duration-200">
-                        <span className="font-medium mr-2">{t.blogs.explore}</span>
-                        <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
+                  <div className="flex items-baseline justify-between mb-4">
+                    <h3
+                      className="display-sm text-ink group-hover:text-oxblood transition-colors"
+                      style={{ fontSize: '26px', fontVariationSettings: '"opsz" 36, "wght" 480' }}
+                    >
+                      {category.title[currentLanguage as LanguageCode]}
+                    </h3>
+                    <span className="meta uppercase tracking-[0.2em]">
+                      {postCount} {postCount === 1 ? t.blogs.post : t.blogs.posts}
+                    </span>
                   </div>
-
-                  {/* Bottom gradient accent */}
-                  <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                  <p className="text-ink-soft leading-relaxed text-[15px] mb-5">
+                    {category.description[currentLanguage as LanguageCode]}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="meta uppercase tracking-[0.2em]">
+                      {t.blogs.languages}: {category.languages[currentLanguage as LanguageCode]}
+                    </span>
+                    <span className="font-mono uppercase text-[11px] tracking-[0.22em] text-ink border-b border-transparent group-hover:border-ink pb-0.5 transition-colors inline-flex items-center gap-1">
+                      {t.blogs.explore}
+                      <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
                 </Link>
               );
             })}
           </div>
         </div>
-        {/* Original Substack Links */}
-        <div className="mt-16 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            {t.blogs.originalSubstack || 'Original Substack Blogs'}
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4">
+
+        {/* Substack original */}
+        <div className="mb-20">
+          <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[rgba(26,22,18,0.32)]">
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
+              {t.blogs.originalSubstack || 'Original Substack Blogs'}
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3">
             {Object.entries(blogCategories).map(([categoryKey, category]) => (
               <a
                 key={`${categoryKey}-substack`}
                 href={category.originalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-700 transition-colors duration-200"
+                className="btn btn-ghost"
               >
-                {t.blogs.visitSubstack || 'Visit Substack'} {category.title[currentLanguage as LanguageCode]}
-                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
+                <ExternalLink className="w-3.5 h-3.5" />
+                {category.title[currentLanguage as LanguageCode]}
               </a>
             ))}
           </div>
         </div>
 
-        {/* Newsletter Subscription */}
-        <div className="mt-16 max-w-2xl mx-auto text-center">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+        {/* Newsletter */}
+        <div className="panel-strong p-8 sm:p-12 max-w-3xl mx-auto">
+          <div className="flex items-baseline justify-between mb-3 flex-wrap gap-2">
+            <h3 className="display-sm text-ink" style={{ fontSize: '24px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
               {t.blogs.stayUpdated}
             </h3>
-            <p className="text-gray-600 mb-6">
-              {t.blogs.newsletterDescription}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <input
-                type="email"
-                placeholder={t.blogs.enterEmail || 'Enter your email'}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">
-                {t.blogs.subscribe}
-              </button>
-            </div>
-            <p className="text-sm text-gray-500 mt-4">
-              {t.blogs.noSpam || 'No spam, unsubscribe anytime.'}
-            </p>
+            <span className="meta uppercase tracking-[0.2em]">— Subscribe</span>
           </div>
+          <p className="text-ink-soft text-[15px] mb-6">{t.blogs.newsletterDescription}</p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input type="email" placeholder={t.blogs.enterEmail || 'Enter your email'} className="field flex-1" />
+            <button className="btn btn-primary">{t.blogs.subscribe}</button>
+          </div>
+          <p className="meta uppercase tracking-[0.2em] mt-4">{t.blogs.noSpam || 'No spam · unsubscribe anytime'}</p>
         </div>
       </div>
     </div>

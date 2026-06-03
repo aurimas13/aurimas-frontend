@@ -1,15 +1,43 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, AlertCircle, Github, Briefcase, Wrench, Target, Lightbulb, TrendingUp } from 'lucide-react';
+import { ArrowLeft, ExternalLink, AlertCircle, Github } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
-const projectMeta: Record<string, { url: string; github: string; color: string; accent: string }> = {
-  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace', color: 'from-blue-500 to-cyan-500', accent: 'blue' },
-  aegis: { url: 'https://aegis.aurimas.io', github: 'https://github.com/aurimas13/Aegis_AI', color: 'from-purple-500 to-indigo-500', accent: 'purple' },
-  gateway: { url: 'https://gateway.aurimas.io', github: 'https://github.com/aurimas13/AI_Platform', color: 'from-amber-500 to-orange-500', accent: 'amber' },
-  agentic: { url: 'https://agentic.aurimas.io', github: 'https://github.com/aurimas13/web_application', color: 'from-green-500 to-emerald-500', accent: 'green' },
+const projectMeta: Record<string, { url: string; github: string; index: string }> = {
+  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '01' },
+  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '02' },
+  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '03' },
+  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '04' },
 };
+
+const Section: React.FC<{ label: string; title: string; children: React.ReactNode; index: string }> = ({
+  label,
+  title,
+  children,
+  index,
+}) => (
+  <section className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6 md:gap-12 py-10 border-t border-[rgba(26,22,18,0.14)]">
+    <div>
+      <p className="meta uppercase tracking-[0.2em]">{index}</p>
+      <p className="meta uppercase tracking-[0.2em] mt-1">{label}</p>
+    </div>
+    <div>
+      <h2
+        className="display-sm text-ink mb-4"
+        style={{ fontSize: 'clamp(24px, 3vw, 32px)', fontVariationSettings: '"opsz" 36, "wght" 480' }}
+      >
+        {title}
+      </h2>
+      <div
+        className="font-display text-ink leading-[1.65]"
+        style={{ fontSize: '18px', fontVariationSettings: '"opsz" 14, "wght" 400' }}
+      >
+        {children}
+      </div>
+    </div>
+  </section>
+);
 
 export const ProjectDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -19,12 +47,12 @@ export const ProjectDetailPage: React.FC = () => {
 
   if (!slug || !projects[slug]) {
     return (
-      <section className="py-20 min-h-screen flex items-center justify-center">
+      <section className="pt-32 pb-20 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Project not found</h1>
-          <Link to="/projects" className="text-amber-600 hover:text-amber-700 font-medium">
-            {t.projects.backToProjects}
+          <AlertCircle className="w-10 h-10 text-ink-mute mx-auto mb-4" />
+          <h1 className="display-md text-ink mb-3">Project not found</h1>
+          <Link to="/projects" className="link-ink font-mono uppercase text-[12px] tracking-[0.18em]">
+            ← {t.projects.backToProjects}
           </Link>
         </div>
       </section>
@@ -33,154 +61,130 @@ export const ProjectDetailPage: React.FC = () => {
 
   const item = projects[slug];
   const meta = projectMeta[slug];
+  const [first, ...rest] = item.name.split(' ');
 
   return (
-    <section className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25 min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back link */}
+    <section className="pt-28 pb-24 min-h-screen">
+      <div className="max-w-5xl mx-auto px-5 sm:px-8 lg:px-12">
         <Link
           to="/projects"
-          className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-8 transition-colors"
+          className="inline-flex items-center gap-2 mb-12 font-mono uppercase text-[11px] tracking-[0.22em] text-ink-mute hover:text-ink transition-colors"
         >
-          <ArrowLeft className="w-4 h-4 mr-1" /> {t.projects.backToProjects}
+          <ArrowLeft className="w-3 h-3" />
+          {t.projects.backToProjects}
         </Link>
 
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-8">
-          <div className={`h-3 bg-gradient-to-r ${meta.color}`}></div>
-          <div className="p-6 sm:p-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium mb-4">
-              <Briefcase className="w-3.5 h-3.5" />
-              {t.projects.caseStudyLabel}
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">{item.name}</h1>
-            <p className="text-lg text-gray-500 mb-4">{item.tagline}</p>
-            <p className="text-gray-600 leading-relaxed mb-6">{item.description}</p>
-            <div className="flex flex-wrap gap-3">
-              <a
-                href={meta.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-5 py-2.5 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
-              >
-                {t.projects.viewProject} <ExternalLink className="w-4 h-4 ml-2" />
-              </a>
-              <a
-                href={meta.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-5 py-2.5 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 transition-colors shadow-sm"
-              >
-                <Github className="w-4 h-4 mr-2" /> {t.projects.viewSource}
-              </a>
-            </div>
+        <div className="reveal reveal-d2 mb-12">
+          <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[rgba(26,22,18,0.32)]">
+            <span className="meta uppercase tracking-[0.2em]">{meta.index} · {t.projects.caseStudyLabel}</span>
+            <span className="meta uppercase tracking-[0.2em]">{slug}.aurimas.io</span>
+          </div>
+
+          <h1
+            className="display-xl text-ink"
+            style={{ fontSize: 'clamp(48px, 8vw, 112px)', fontVariationSettings: '"opsz" 144, "wght" 360, "SOFT" 30, "WONK" 1' }}
+          >
+            {first}
+            {rest.length > 0 && (
+              <>
+                {' '}
+                <span className="italic-accent" style={{ fontVariationSettings: '"opsz" 144, "wght" 380, "SOFT" 100, "WONK" 1' }}>
+                  {rest.join(' ')}
+                </span>
+              </>
+            )}
+            .
+          </h1>
+
+          <p
+            className="font-display text-ink-soft mt-7 max-w-[680px]"
+            style={{ fontSize: 'clamp(20px, 2.4vw, 24px)', lineHeight: 1.45, fontVariationSettings: '"opsz" 18, "wght" 400' }}
+          >
+            {item.tagline}
+          </p>
+
+          <p className="mt-6 max-w-[680px] text-ink leading-relaxed text-[17px]">
+            {item.description}
+          </p>
+
+          <div className="mt-9 flex flex-wrap gap-3">
+            <a href={meta.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+              {t.projects.viewProject}
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <a href={meta.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              <Github className="w-3.5 h-3.5" />
+              {t.projects.viewSource}
+            </a>
           </div>
         </div>
 
-        {/* Case Study */}
-        <div className="space-y-6">
-          {/* Problem */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-sm font-bold mr-3">
-                <AlertCircle className="w-4 h-4" />
-              </span>
-              {t.projects.problem}
-            </h2>
-            <p className="text-gray-600 leading-relaxed">{item.problem}</p>
-          </div>
+        {/* Sections */}
+        <div>
+          <Section index="i" label={t.projects.problem} title={t.projects.problem}>
+            <p>{item.problem}</p>
+          </Section>
 
-          {/* Approach */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold mr-3">
-                <Lightbulb className="w-4 h-4" />
-              </span>
-              {t.projects.approach}
-            </h2>
-            <p className="text-gray-600 leading-relaxed">{item.approach}</p>
-          </div>
+          <Section index="ii" label={t.projects.approach} title={t.projects.approach}>
+            <p>{item.approach}</p>
+          </Section>
 
-          {/* My Role */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-sm font-bold mr-3">
-                <Briefcase className="w-4 h-4" />
-              </span>
-              {t.projects.myRole}
-            </h2>
-            <p className="text-gray-600 leading-relaxed">{item.role}</p>
-          </div>
+          <Section index="iii" label={t.projects.myRole} title={t.projects.myRole}>
+            <p>{item.role}</p>
+          </Section>
 
-          {/* Tech Stack */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-sm font-bold mr-3">
-                <Wrench className="w-4 h-4" />
-              </span>
-              {t.projects.techStack}
-            </h2>
-            <div className="flex flex-wrap gap-2">
+          <Section index="iv" label={t.projects.techStack} title={t.projects.techStack}>
+            <div className="flex flex-wrap gap-2 not-prose">
               {item.tech.map((tech: string) => (
-                <span key={tech} className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg border border-gray-200">
-                  {tech}
-                </span>
+                <span key={tech} className="tag">{tech}</span>
               ))}
             </div>
-          </div>
+          </Section>
 
-          {/* Outcomes */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm font-bold mr-3">
-                <Target className="w-4 h-4" />
-              </span>
-              {t.projects.outcome}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+          <Section index="v" label={t.projects.outcome} title={t.projects.outcome}>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[rgba(26,22,18,0.14)] border border-[rgba(26,22,18,0.14)] mb-6">
               {item.metrics.map((m: { value: string; label: string }) => (
-                <div key={m.label} className={`rounded-xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-4 text-center`}>
-                  <p className="text-2xl font-bold text-gray-800 mb-1">{m.value}</p>
-                  <p className="text-xs text-gray-500">{m.label}</p>
+                <div key={m.label} className="bg-paper p-5 text-center">
+                  <p
+                    className="display-sm text-ink mb-1"
+                    style={{ fontSize: '32px', fontVariationSettings: '"opsz" 36, "wght" 520' }}
+                  >
+                    {m.value}
+                  </p>
+                  <p className="meta uppercase tracking-[0.2em]">{m.label}</p>
                 </div>
               ))}
             </div>
-            <p className="text-gray-600 leading-relaxed">{item.outcome}</p>
-          </div>
+            <p>{item.outcome}</p>
+          </Section>
 
-          {/* What's Novel */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-              <span className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-sm font-bold mr-3">
-                <TrendingUp className="w-4 h-4" />
-              </span>
-              {t.projects.whatsNovel}
+          <Section index="vi" label={t.projects.whatsNovel} title={t.projects.whatsNovel}>
+            <p>{item.novel}</p>
+          </Section>
+        </div>
+
+        {/* CTA */}
+        <div className="mt-16 surface-deep p-8 sm:p-12 border border-[rgba(26,22,18,0.14)]">
+          <div className="flex items-baseline justify-between mb-3 flex-wrap gap-2">
+            <h2
+              className="display-md text-ink"
+              style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontVariationSettings: '"opsz" 60, "wght" 440' }}
+            >
+              {t.projects.liveDemo}
             </h2>
-            <p className="text-gray-600 leading-relaxed">{item.novel}</p>
+            <span className="meta uppercase tracking-[0.2em]">colophon</span>
           </div>
-
-          {/* CTA */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 text-center">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">{t.projects.liveDemo}</h2>
-            <p className="text-gray-500 text-sm mb-6">{t.projects.exploreLive}</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href={meta.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-yellow-600 transition-all shadow-md hover:shadow-lg"
-              >
-                {t.projects.viewProject} <ExternalLink className="w-5 h-5 ml-2" />
-              </a>
-              <a
-                href={meta.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-gray-800 text-white font-semibold rounded-xl hover:bg-gray-900 transition-all shadow-md hover:shadow-lg"
-              >
-                <Github className="w-5 h-5 mr-2" /> {t.projects.viewSource}
-              </a>
-            </div>
+          <p className="text-ink-soft mb-6 max-w-[560px]">{t.projects.exploreLive}</p>
+          <div className="flex flex-wrap gap-3">
+            <a href={meta.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+              {t.projects.viewProject}
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+            <a href={meta.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              <Github className="w-3.5 h-3.5" />
+              {t.projects.viewSource}
+            </a>
           </div>
         </div>
       </div>

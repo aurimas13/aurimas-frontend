@@ -25,7 +25,7 @@
     
     <!-- Additional SEO and Performance -->
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#f59e0b" />
+    <meta name="theme-color" content="#f4efe6" />
     <link rel="canonical" href="https://aurimas.io/" />
 
     <!-- Structured Data for Google -->
@@ -51,87 +51,92 @@
     }
     </script>
     
-    <!-- Fonts -->
+    <!-- Fonts: Fraunces (display, variable opsz/wght/SOFT/WONK), General Sans (body), JetBrains Mono (signature) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
     
-    <!-- Critical CSS and fallback styles -->
+    <!-- Critical CSS: editorial paper, prevents FOUC -->
     <style>
-      /* Critical CSS to prevent FOUC and ensure styling loads */
-      body { 
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #ffffff;
-        line-height: 1.5;
+      body {
+        font-family: 'General Sans', 'Helvetica Neue', Arial, sans-serif;
+        margin: 0; padding: 0;
+        background-color: #f4efe6;
+        color: #1a1612;
+        line-height: 1.55;
       }
-      #root {
-        min-height: 100vh;
-        width: 100%;
-      }
-      /* Ensure Tailwind base styles are applied */
-      *, ::before, ::after {
-        box-sizing: border-box;
-        border-width: 0;
-        border-style: solid;
-        border-color: #e5e7eb;
-      }
-      /* Hide static fallback once React app mounts */
-      body.app-loaded #static-fallback {
-        display: none !important;
-      }
+      #root { min-height: 100vh; width: 100%; }
+      *, ::before, ::after { box-sizing: border-box; border-width: 0; border-style: solid; border-color: rgba(26,22,18,0.14); }
+      body.app-loaded #static-fallback { display: none !important; }
     </style>
   </head>
   <body>
     <!-- Static fallback for crawlers & non-JS users. Hidden once React mounts (body.app-loaded). -->
-    <div id="static-fallback" style="font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; color: #1f2937; max-width: 960px; margin: 0 auto; padding: 40px 20px;">
-      <header style="text-align: center; padding: 40px 0 20px;">
-        <img src="/basketball.jpg" alt="Aurimas Nausėdas" width="160" height="160" style="border-radius: 50%; border: 4px solid #fbbf24; object-fit: cover;" />
-        <h1 style="font-size: 2.5rem; margin: 24px 0 8px;">Hi, I'm Aurimas</h1>
-        <p style="font-size: 1.25rem; color: #374151; margin: 0 0 8px;">Chemist turned AI Engineer &amp; Writer</p>
-        <p style="font-size: 1rem; color: #6b7280; max-width: 600px; margin: 0 auto;">Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.</p>
+    <div id="static-fallback" style="max-width: 1080px; margin: 0 auto; padding: 32px 28px; color: #1a1612;">
+      <header style="display:flex; align-items:center; justify-content:space-between; padding: 18px 0; border-bottom: 1px solid rgba(26,22,18,0.32);">
+        <span style="font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 18px;">A · Nausėdas</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #8a7f72;">Vol. 01 — aurimas.io</span>
       </header>
 
-      <section style="padding: 30px 0;">
-        <h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 24px;">Featured Projects</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-            <h3 style="font-size: 1rem; margin: 0 0 4px;">ClearTrace Intelligence</h3>
-            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">AI Fraud &amp; AML Platform</p>
-            <a href="https://cleartrace.aurimas.io" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-          </div>
-          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-            <h3 style="font-size: 1rem; margin: 0 0 4px;">Aegis AI Enterprise</h3>
-            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">LLM Governance Platform</p>
-            <a href="https://aegis.aurimas.io" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-          </div>
-          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-            <h3 style="font-size: 1rem; margin: 0 0 4px;">Gateway PoC</h3>
-            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">Product-Led Growth Prototype</p>
-            <a href="https://gateway.aurimas.io" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-          </div>
-          <div style="border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-            <h3 style="font-size: 1rem; margin: 0 0 4px;">Agentic Mobile MVP</h3>
-            <p style="font-size: 0.875rem; color: #6b7280; margin: 0 0 12px;">Creative Agentic Platform</p>
-            <a href="https://agentic.aurimas.io" style="color: #d97706; font-size: 0.875rem;">View Project →</a>
-          </div>
+      <section style="display: grid; grid-template-columns: 1fr 320px; gap: 56px; padding: 72px 0 48px; align-items: end;">
+        <div>
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #8a7f72; margin: 0 0 20px;">— Field notes from the lab bench</p>
+          <h1 style="font-family: Fraunces, Georgia, serif; font-weight: 360; font-size: clamp(48px, 8vw, 112px); line-height: 0.94; letter-spacing: -0.02em; margin: 0;">
+            Chemist <em style="color:#7a1f1f; font-style:italic;">turned</em><br/>
+            AI <span style="background: linear-gradient(transparent 60%, rgba(232,181,0,0.55) 60%); padding: 0 4px;">Engineer</span><br/>
+            &amp; Writer.
+          </h1>
+          <p style="font-family: Fraunces, Georgia, serif; font-size: 21px; line-height: 1.5; color: #5a5048; margin: 28px 0 0; max-width: 620px;">Hi, I'm Aurimas — a chemist from the University of Edinburgh who re-specialised in AI. I build things that ship: fraud detection, LLM governance, agentic mobile workflows. On the side, I write.</p>
         </div>
+        <aside style="border-left: 1px solid rgba(26,22,18,0.32); padding: 4px 0 4px 22px; font-size: 14px; line-height: 1.55; color: #5a5048;">
+          <h4 style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em; color: #8a7f72; margin: 0 0 14px;">Currently</h4>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(26,22,18,0.14);"><span>Open to</span><b style="color:#1a1612; font-family: 'JetBrains Mono', monospace; font-size: 12px;">AI Engineer roles</b></div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(26,22,18,0.14);"><span>Based in</span><b style="color:#1a1612; font-family: 'JetBrains Mono', monospace; font-size: 12px;">Vilnius / Remote</b></div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0;"><span>Stack</span><b style="color:#1a1612; font-family: 'JetBrains Mono', monospace; font-size: 12px;">Py · TS · LLMs</b></div>
+        </aside>
       </section>
 
-      <section style="padding: 30px 0;">
-        <h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 12px;">About</h2>
-        <p style="color: #374151; line-height: 1.7;">I am a chemist from the University of Edinburgh who re-specialized in Computer Science and AI. I lead cross-functional teams across product delivery, technical architecture, and stakeholder communication. On this website you will find my projects, blog posts, and creative writing.</p>
+      <section style="padding: 56px 0; border-top: 1px solid rgba(26,22,18,0.32);">
+        <h2 style="font-family: Fraunces, Georgia, serif; font-weight: 440; font-size: 36px; letter-spacing: -0.01em; margin: 0 0 28px;">The Project Index</h2>
+        <a href="https://cleartrace.aurimas.io" style="display:grid; grid-template-columns: 56px 1.4fr 2fr 1fr 100px; gap: 24px; align-items:baseline; padding: 22px 6px; border-bottom: 1px solid rgba(26,22,18,0.14); color:#1a1612; text-decoration:none;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color:#8a7f72;">01</span>
+          <span style="font-family: Fraunces, serif; font-size: 26px;">ClearTrace <em style="color:#7a1f1f;">Intelligence</em></span>
+          <span style="font-size: 14px; color:#5a5048;">AI fraud &amp; AML platform — LLM-orchestrated SAR drafts.</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color:#8a7f72; letter-spacing: 0.06em;">PY · NEO4J</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; justify-self:end; border-bottom: 1px solid #1a1612;">Open ↗</span>
+        </a>
+        <a href="https://aegis.aurimas.io" style="display:grid; grid-template-columns: 56px 1.4fr 2fr 1fr 100px; gap: 24px; align-items:baseline; padding: 22px 6px; border-bottom: 1px solid rgba(26,22,18,0.14); color:#1a1612; text-decoration:none;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color:#8a7f72;">02</span>
+          <span style="font-family: Fraunces, serif; font-size: 26px;">Aegis <em style="color:#7a1f1f;">AI</em></span>
+          <span style="font-size: 14px; color:#5a5048;">Enterprise LLM governance — embedded approvals &amp; ITSM copilot.</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color:#8a7f72; letter-spacing: 0.06em;">NEXT.JS · PG</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; justify-self:end; border-bottom: 1px solid #1a1612;">Open ↗</span>
+        </a>
+        <a href="https://gateway.aurimas.io" style="display:grid; grid-template-columns: 56px 1.4fr 2fr 1fr 100px; gap: 24px; align-items:baseline; padding: 22px 6px; border-bottom: 1px solid rgba(26,22,18,0.14); color:#1a1612; text-decoration:none;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color:#8a7f72;">03</span>
+          <span style="font-family: Fraunces, serif; font-size: 26px;">Gateway <em style="color:#7a1f1f;">PoC</em></span>
+          <span style="font-size: 14px; color:#5a5048;">Product-led growth prototype solving the empty-chat cold start.</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color:#8a7f72; letter-spacing: 0.06em;">REACT · A/B</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; justify-self:end; border-bottom: 1px solid #1a1612;">Open ↗</span>
+        </a>
+        <a href="https://agentic.aurimas.io" style="display:grid; grid-template-columns: 56px 1.4fr 2fr 1fr 100px; gap: 24px; align-items:baseline; padding: 22px 6px; border-bottom: 1px solid rgba(26,22,18,0.14); color:#1a1612; text-decoration:none;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color:#8a7f72;">04</span>
+          <span style="font-family: Fraunces, serif; font-size: 26px;">Agentic <em style="color:#7a1f1f;">Mobile</em></span>
+          <span style="font-size: 14px; color:#5a5048;">Multi-agent creative workflows on mobile with generative UI.</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color:#8a7f72; letter-spacing: 0.06em;">EXPO · GPT</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; justify-self:end; border-bottom: 1px solid #1a1612;">Open ↗</span>
+        </a>
       </section>
 
-      <footer style="border-top: 1px solid #e5e7eb; padding: 24px 0; text-align: center; font-size: 0.875rem; color: #6b7280;">
-        <p>Aurimas Nausėdas — AI Engineer, Writer, and former chemist.</p>
-        <p style="margin-top: 8px;">
-          <a href="https://github.com/aurimas13" style="color: #d97706; margin: 0 8px;">GitHub</a>
-          <a href="https://www.linkedin.com/in/aurimasnausedas/" style="color: #d97706; margin: 0 8px;">LinkedIn</a>
-          <a href="mailto:aurimas.nausedas@proton.me" style="color: #d97706; margin: 0 8px;">Email</a>
-        </p>
-        <p style="margin-top: 8px;">© 2025 Aurimas Aleksandras Nausėdas. All rights reserved.</p>
+      <footer style="padding: 36px 0; border-top: 1px solid rgba(26,22,18,0.32); display:flex; justify-content:space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color:#8a7f72;">
+        <span>Aurimas Nausėdas — AI Engineer, Writer, former chemist</span>
+        <span>
+          <a href="https://github.com/aurimas13" style="color:#1a1612; margin-right: 14px;">GitHub</a>
+          <a href="https://www.linkedin.com/in/aurimasnausedas/" style="color:#1a1612; margin-right: 14px;">LinkedIn</a>
+          <a href="mailto:aurimas.nausedas@proton.me" style="color:#1a1612;">Email</a>
+        </span>
       </footer>
     </div>
 

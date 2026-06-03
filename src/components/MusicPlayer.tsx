@@ -255,37 +255,32 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ videoId, title, artist
   };
 
   return (
-    <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm z-40">
+    <div className="fixed bottom-5 right-5 bg-paper border border-[rgba(26,22,18,0.32)] px-4 py-3 max-w-[320px] z-40 shadow-[0_18px_40px_-20px_rgba(26,22,18,0.35)]">
       <div ref={playerContainerRef} className="hidden"></div>
-      
-      <div className="flex items-center space-x-3">
+
+      <div className="flex items-center gap-3">
         <button
           onClick={togglePlayPause}
           disabled={!isPlayerReady}
-          className="flex-shrink-0 w-10 h-10 bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-300 rounded-full flex items-center justify-center transition-colors"
+          className="flex-shrink-0 w-9 h-9 bg-ink text-paper hover:bg-oxblood disabled:bg-ink-faint disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+          aria-label={isPlaying ? 'Pause' : 'Play'}
         >
-          {isPlaying ? (
-            <Pause className="w-5 h-5 text-white" />
-          ) : (
-            <Play className="w-5 h-5 text-white ml-0.5" />
-          )}
+          {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
         </button>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 truncate">{title}</p>
-          <p className="text-xs text-gray-500 truncate">{artist}</p>
+          <p className="font-mono uppercase text-[10px] tracking-[0.22em] text-ink-mute">Now playing</p>
+          <p className="font-display text-ink truncate" style={{ fontSize: '15px', fontVariationSettings: '"opsz" 18, "wght" 500' }}>{title}</p>
+          <p className="text-[11px] text-ink-soft truncate">{artist}</p>
         </div>
 
         <button
           onClick={toggleMute}
           disabled={!isPlayerReady}
-          className="flex-shrink-0 w-8 h-8 text-gray-600 hover:text-gray-800 disabled:text-gray-300 transition-colors"
+          className="flex-shrink-0 w-7 h-7 text-ink-soft hover:text-ink disabled:text-ink-faint transition-colors"
+          aria-label={isMuted ? 'Unmute' : 'Mute'}
         >
-          {isMuted ? (
-            <VolumeX className="w-5 h-5" />
-          ) : (
-            <Volume2 className="w-5 h-5" />
-          )}
+          {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </button>
       </div>
     </div>

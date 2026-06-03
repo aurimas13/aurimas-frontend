@@ -1,108 +1,4 @@
-// import React, { useState } from 'react';
-// import { Menu, X, Edit, FileText, Image, Heart, Mail } from 'lucide-react';
-// import { LanguageSwitcher } from './LanguageSwitcher';
-// import { useLanguage } from '../hooks/useLanguage';
-// import { translations } from '../data/translations';
-
-// interface HeaderProps {
-//   currentSection: string;
-//   onSectionChange: (section: string) => void;
-// }
-
-// export const Header: React.FC<HeaderProps> = ({ currentSection, onSectionChange }) => {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//   const { currentLanguage } = useLanguage();
-//   const t = translations[currentLanguage];
-
-//   const navItems = [
-//     { id: 'home', label: t.nav.home, icon: Image },
-//     { id: 'about', label: t.nav.about, icon: FileText },
-//     { id: 'blogs', label: t.nav.blogs, icon: Edit },
-//     { id: 'gallery', label: t.nav.gallery, icon: Image },
-//     { id: 'support', label: t.nav.support, icon: Heart },
-//     { id: 'contact', label: 'Contact', icon: Mail }
-//   ];
-
-//   return (
-//     <header className="fixed top-0 w-screen bg-white/95 backdrop-blur-md z-50 shadow-sm border-b border-yellow-200">
-//       <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-12 py-4">
-//         <div className="flex items-center justify-between">
-//           {/* Logo */}
-//           <div className="flex items-center space-x-2">
-//             <img src="/UoE.png" alt="University of Edinburgh" className="w-8 h-8 rounded-full" />
-//             <span className="text-2xl font-bold text-gray-800">
-//               <span className="text-yellow-300">Au</span><span className="text-black">rimas</span>
-//             </span>
-//           </div>
-
-//           {/* Desktop Navigation */}
-//           <nav className="hidden md:flex items-center space-x-8">
-//             {navItems.map((item) => {
-//               const Icon = item.icon;
-//               return (
-//                 <button
-//                   key={item.id}
-//                   onClick={() => onSectionChange(item.id)}
-//                   className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-300 ${
-//                     currentSection === item.id
-//                       ? 'bg-yellow-100 text-yellow-700 shadow-sm'
-//                       : 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50'
-//                   }`}
-//                 >
-//                   <Icon className="w-4 h-4" />
-//                   <span className="font-medium">{item.label}</span>
-//                 </button>
-//               );
-//             })}
-//           </nav>
-
-//           {/* Right side controls */}
-//           <div className="flex items-center space-x-4">
-//             <LanguageSwitcher />
-            
-//             {/* Mobile Menu Button */}
-//             <button
-//               onClick={() => setIsMenuOpen(!isMenuOpen)}
-//               className="md:hidden text-gray-800 hover:text-yellow-600 transition-colors"
-//             >
-//               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Mobile Navigation */}
-//         {isMenuOpen && (
-//           <nav className="md:hidden mt-4 pb-4 border-t border-yellow-200">
-//             <div className="flex flex-col space-y-3 pt-4">
-//               {navItems.map((item) => {
-//                 const Icon = item.icon;
-//                 return (
-//                   <button
-//                     key={item.id}
-//                     onClick={() => {
-//                       onSectionChange(item.id);
-//                       setIsMenuOpen(false);
-//                     }}
-//                     className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
-//                       currentSection === item.id
-//                         ? 'bg-yellow-100 text-yellow-700'
-//                         : 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50'
-//                     }`}
-//                   >
-//                     <Icon className="w-4 h-4" />
-//                     <span className="font-medium">{item.label}</span>
-//                   </button>
-//                 );
-//               })}
-//             </div>
-//           </nav>
-//         )}
-//       </div>
-//     </header>
-//   );
-// };
-
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -115,19 +11,25 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [projectsDropdownOpen, setProjectsDropdownOpen] = useState(false);
   const [mobileProjectsOpen, setMobileProjectsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { currentLanguage } = useLanguage();
   const t = translations[currentLanguage];
   const location = useLocation();
   const projects = (t.projects as any).items;
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const scrollToSection = (sectionId: string) => {
-    // If we're not on the home page, navigate to home first
     if (location.pathname !== '/') {
       window.location.href = `/#${sectionId}`;
       return;
     }
-    
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -137,82 +39,62 @@ export function Header() {
 
   const handleNavigation = (sectionId: string) => {
     setIsMenuOpen(false);
-
     if (typeof window === 'undefined') {
       scrollToSection(sectionId);
       return;
     }
-
     const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
     const targetHash = `#${sectionId}`;
-
     if (!isHomePage) {
       window.location.href = `/${targetHash}`;
       return;
     }
-
     if (window.location.hash !== targetHash) {
       window.history.replaceState(null, '', targetHash);
     }
-
     scrollToSection(sectionId);
   };
 
-  return (
-    <header className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-gray-200 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center space-x-2">
-              <img 
-                src="/UoE.png" 
-                alt="University of Edinburgh" 
-                className="w-8 h-8 object-contain"
-              />
-              <h1 className="text-xl font-bold text-gray-900">Aurimas</h1>
-            </Link>
-          </div>
-          
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            <button
-              onClick={() => handleNavigation('hero')}
-              className="text-gray-700 hover:text-amber-600 transition-colors"
-            >
-              {t.navigation.home}
-            </button>
-            <button
-              onClick={() => handleNavigation('about')}
-              className="text-gray-700 hover:text-amber-600 transition-colors"
-            >
-              {t.navigation.about}
-            </button>
-            <button
-              onClick={() => handleNavigation('blog')}
-              className="text-gray-700 hover:text-amber-600 transition-colors"
-            >
-              {t.navigation.blog}
-            </button>
-            <button
-              onClick={() => handleNavigation('gallery')}
-              className="text-gray-700 hover:text-amber-600 transition-colors"
-            >
-              {t.navigation.gallery}
-            </button>
-            <button
-              onClick={() => handleNavigation('contact')}
-              className="text-gray-700 hover:text-amber-600 transition-colors"
-            >
-              {t.navigation.contact}
-            </button>
-            <button
-              onClick={() => handleNavigation('support')}
-              className="text-gray-700 hover:text-amber-600 transition-colors"
-            >
-              {t.navigation.support}
-            </button>
+  const navItem = (label: string, onClick: () => void) => (
+    <button
+      onClick={onClick}
+      className="relative font-mono uppercase text-[11px] tracking-[0.18em] text-ink-soft hover:text-ink transition-colors py-2 group"
+    >
+      {label}
+      <span className="absolute left-0 right-0 -bottom-0.5 h-px bg-ink scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
+    </button>
+  );
 
-            {/* Projects dropdown */}
+  return (
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-paper/90 backdrop-blur-md border-b border-[rgba(26,22,18,0.14)]'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="flex justify-between items-center h-16">
+          {/* Mark */}
+          <Link to="/" className="flex items-baseline gap-2 group">
+            <span className="font-display text-[18px] font-semibold text-ink" style={{ fontVariationSettings: '"opsz" 14, "wght" 600, "SOFT" 50, "WONK" 1' }}>
+              A
+            </span>
+            <span className="font-mono uppercase text-[10px] tracking-[0.22em] text-ink-mute group-hover:text-ink transition-colors">
+              · Nausėdas
+            </span>
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-7">
+            {navItem(t.navigation.home, () => handleNavigation('hero'))}
+            {navItem(t.navigation.about, () => handleNavigation('about'))}
+            {navItem(t.navigation.blog, () => handleNavigation('blog'))}
+            {navItem(t.navigation.gallery, () => handleNavigation('gallery'))}
+            {navItem(t.navigation.contact, () => handleNavigation('contact'))}
+            {navItem(t.navigation.support, () => handleNavigation('support'))}
+
+            {/* Projects */}
             <div
               className="relative"
               onMouseEnter={() => {
@@ -225,32 +107,42 @@ export function Header() {
             >
               <Link
                 to="/projects"
-                className="text-gray-700 hover:text-amber-600 transition-colors inline-flex items-center"
+                className="relative font-mono uppercase text-[11px] tracking-[0.18em] text-ink-soft hover:text-ink transition-colors py-2 inline-flex items-center group"
               >
                 {t.navigation.projects}
-                <ChevronDown className={`w-3.5 h-3.5 ml-0.5 transition-transform duration-200 ${projectsDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3 h-3 ml-1 transition-transform duration-200 ${projectsDropdownOpen ? 'rotate-180' : ''}`} />
+                <span className="absolute left-0 right-0 -bottom-0.5 h-px bg-ink scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
               </Link>
               {projectsDropdownOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
-                  <div className="bg-white rounded-xl shadow-lg border border-gray-100 py-2 w-56">
-                    {projectSlugs.map((slug) => (
+                <div className="absolute top-full right-0 pt-3 z-50">
+                  <div className="bg-paper border border-[rgba(26,22,18,0.32)] py-2 w-72 shadow-[0_18px_40px_-20px_rgba(26,22,18,0.35)]">
+                    <div className="px-4 py-2 font-mono uppercase text-[10px] tracking-[0.22em] text-ink-mute border-b border-[rgba(26,22,18,0.14)]">
+                      The Project Index
+                    </div>
+                    {projectSlugs.map((slug, i) => (
                       <Link
                         key={slug}
                         to={`/projects/${slug}`}
-                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                        className="flex items-baseline gap-3 px-4 py-3 hover:bg-paper-deep transition-colors group/item"
                         onClick={() => setProjectsDropdownOpen(false)}
                       >
-                        <span className="font-medium">{projects[slug].name}</span>
-                        <span className="block text-xs text-gray-400 mt-0.5">{projects[slug].tagline}</span>
+                        <span className="font-mono text-[11px] text-ink-mute w-5">{String(i + 1).padStart(2, '0')}</span>
+                        <span>
+                          <span className="font-display text-[16px] text-ink block leading-tight" style={{ fontVariationSettings: '"opsz" 24, "wght" 500' }}>
+                            {projects[slug].name}
+                          </span>
+                          <span className="text-[12px] text-ink-mute block mt-0.5">{projects[slug].tagline}</span>
+                        </span>
                       </Link>
                     ))}
-                    <div className="border-t border-gray-100 mt-1 pt-1">
+                    <div className="border-t border-[rgba(26,22,18,0.14)] mt-1">
                       <Link
                         to="/projects"
-                        className="block px-4 py-2 text-sm font-medium text-amber-600 hover:bg-amber-50 transition-colors"
+                        className="flex items-center justify-between px-4 py-2.5 font-mono uppercase text-[11px] tracking-[0.18em] text-ink hover:bg-paper-deep transition-colors"
                         onClick={() => setProjectsDropdownOpen(false)}
                       >
-                        {t.projects.title} &rarr;
+                        <span>All Projects</span>
+                        <span>↗</span>
                       </Link>
                     </div>
                   </div>
@@ -259,86 +151,73 @@ export function Header() {
             </div>
           </nav>
 
-          <div className="flex items-center space-x-4">
+          {/* Right side */}
+          <div className="flex items-center gap-3">
             <LanguageSwitcher />
-            
-            {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-md text-gray-700 hover:text-amber-600 hover:bg-gray-100"
+              className="md:hidden p-2 text-ink-soft hover:text-ink transition-colors"
+              aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile nav */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-              <button
-                onClick={() => handleNavigation('hero')}
-                className="block w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
-              >
-                {t.navigation.home}
-              </button>
-              <button
-                onClick={() => handleNavigation('about')}
-                className="block w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
-              >
-                {t.navigation.about}
-              </button>
-              <button
-                onClick={() => handleNavigation('blog')}
-                className="block w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
-              >
-                {t.navigation.blog}
-              </button>
-              <button
-                onClick={() => handleNavigation('gallery')}
-                className="block w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
-              >
-                {t.navigation.gallery}
-              </button>
-              <button
-                onClick={() => handleNavigation('contact')}
-                className="block w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
-              >
-                {t.navigation.contact}
-              </button>
-              <button
-                onClick={() => handleNavigation('support')}
-                className="block w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
-              >
-                {t.navigation.support}
-              </button>
-
-              {/* Mobile Projects */}
+          <div className="md:hidden border-t border-[rgba(26,22,18,0.14)] py-3">
+            <div className="flex flex-col">
+              {[
+                ['hero', t.navigation.home],
+                ['about', t.navigation.about],
+                ['blog', t.navigation.blog],
+                ['gallery', t.navigation.gallery],
+                ['contact', t.navigation.contact],
+                ['support', t.navigation.support],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  onClick={() => handleNavigation(id as string)}
+                  className="text-left font-mono uppercase text-[11px] tracking-[0.18em] text-ink-soft hover:text-ink py-3 border-b border-[rgba(26,22,18,0.06)] transition-colors"
+                >
+                  {label}
+                </button>
+              ))}
               <button
                 onClick={() => setMobileProjectsOpen(!mobileProjectsOpen)}
-                className="flex items-center justify-between w-full text-left px-3 py-2 text-gray-700 hover:text-amber-600 hover:bg-gray-50 rounded-md"
+                className="flex items-center justify-between font-mono uppercase text-[11px] tracking-[0.18em] text-ink-soft hover:text-ink py-3 border-b border-[rgba(26,22,18,0.06)] transition-colors"
               >
                 {t.navigation.projects}
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileProjectsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${mobileProjectsOpen ? 'rotate-180' : ''}`} />
               </button>
               {mobileProjectsOpen && (
-                <div className="pl-4 space-y-1">
-                  {projectSlugs.map((slug) => (
+                <div className="pl-4 py-2 border-b border-[rgba(26,22,18,0.06)]">
+                  {projectSlugs.map((slug, i) => (
                     <Link
                       key={slug}
                       to={`/projects/${slug}`}
-                      className="block px-3 py-2 text-sm text-gray-600 hover:text-amber-600 hover:bg-gray-50 rounded-md"
-                      onClick={() => { setIsMenuOpen(false); setMobileProjectsOpen(false); }}
+                      className="flex items-baseline gap-3 py-2 group"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setMobileProjectsOpen(false);
+                      }}
                     >
-                      {projects[slug].name}
+                      <span className="font-mono text-[10px] text-ink-mute">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="font-display text-[15px] text-ink group-hover:text-oxblood transition-colors" style={{ fontVariationSettings: '"opsz" 24, "wght" 500' }}>
+                        {projects[slug].name}
+                      </span>
                     </Link>
                   ))}
                   <Link
                     to="/projects"
-                    className="block px-3 py-2 text-sm font-medium text-amber-600 hover:bg-amber-50 rounded-md"
-                    onClick={() => { setIsMenuOpen(false); setMobileProjectsOpen(false); }}
+                    className="block py-2 font-mono uppercase text-[11px] tracking-[0.18em] text-ink"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setMobileProjectsOpen(false);
+                    }}
                   >
-                    {t.projects.title} &rarr;
+                    All Projects ↗
                   </Link>
                 </div>
               )}

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Code, ExternalLink, ArrowRight, Github } from 'lucide-react';
+import { ExternalLink, Github } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
 const projectLinks = [
-  { slug: 'cleartrace', url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace', color: 'from-blue-500 to-cyan-500' },
-  { slug: 'aegis', url: 'https://aegis.aurimas.io', github: 'https://github.com/aurimas13/Aegis_AI', color: 'from-purple-500 to-indigo-500' },
-  { slug: 'gateway', url: 'https://gateway.aurimas.io', github: 'https://github.com/aurimas13/AI_Platform', color: 'from-amber-500 to-orange-500' },
-  { slug: 'agentic', url: 'https://agentic.aurimas.io', github: 'https://github.com/aurimas13/web_application', color: 'from-green-500 to-emerald-500' },
+  { slug: 'cleartrace', url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',     stack: 'PYTHON · NEO4J · LLM' },
+  { slug: 'aegis',      url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',         stack: 'NEXT.JS · POSTGRES' },
+  { slug: 'gateway',    url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',      stack: 'REACT · SUPABASE · A/B' },
+  { slug: 'agentic',    url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application',  stack: 'EXPO · OPENAI' },
 ];
 
 export const ProjectsPage: React.FC = () => {
@@ -17,58 +17,83 @@ export const ProjectsPage: React.FC = () => {
   const projects = (t.projects as any).items;
 
   return (
-    <section className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">{t.projects.title}</h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">{t.projects.subtitle}</p>
+    <section className="pt-32 pb-24 min-h-screen">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Header */}
+        <div className="mb-16 reveal reveal-d2">
+          <p className="eyebrow mb-3">No. 03 · {projectLinks.length} entries</p>
+          <h1 className="display-lg text-ink" style={{ fontSize: 'clamp(48px, 7vw, 96px)', fontVariationSettings: '"opsz" 96, "wght" 420' }}>
+            {t.projects.title}.
+          </h1>
+          <p
+            className="font-display text-ink-soft mt-6 max-w-[640px]"
+            style={{ fontSize: 'clamp(18px, 2vw, 22px)', lineHeight: 1.5, fontVariationSettings: '"opsz" 18, "wght" 400' }}
+          >
+            {t.projects.subtitle}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projectLinks.map((project) => {
-            const item = projects[project.slug];
-            return (
-              <div key={project.slug} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className={`h-2 bg-gradient-to-r ${project.color}`}></div>
-                <div className="p-6 sm:p-8">
-                  <div className="flex items-start space-x-4 mb-4">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${project.color} flex items-center justify-center flex-shrink-0`}>
-                      <Code className="w-6 h-6 text-white" />
+        {/* Index */}
+        <div className="reveal reveal-d3">
+          <div className="flex items-baseline justify-between mb-2 pb-3 border-b border-[rgba(26,22,18,0.32)]">
+            <span className="meta uppercase tracking-[0.2em]">№</span>
+            <span className="meta uppercase tracking-[0.2em] hidden md:block">Project · Tagline</span>
+            <span className="meta uppercase tracking-[0.2em] hidden md:block">Description</span>
+            <span className="meta uppercase tracking-[0.2em] hidden md:block">Stack</span>
+            <span className="meta uppercase tracking-[0.2em]">Open</span>
+          </div>
+
+          <div>
+            {projectLinks.map((p, i) => {
+              const item = projects[p.slug];
+              const [first, ...rest] = item.name.split(' ');
+              return (
+                <div key={p.slug} className="border-b border-[rgba(26,22,18,0.14)]">
+                  <Link
+                    to={`/projects/${p.slug}`}
+                    className="index-row group !border-b-0"
+                  >
+                    <div className="num">{String(i + 1).padStart(2, '0')}</div>
+                    <div className="name">
+                      {first}{rest.length > 0 && <> <em>{rest.join(' ')}</em></>}
+                      <span className="block text-[12px] font-mono uppercase tracking-[0.18em] text-ink-mute mt-1">
+                        {item.tagline}
+                      </span>
                     </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-800">{item.name}</h2>
-                      <p className="text-sm text-gray-500">{item.tagline}</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6">{item.description}</p>
-                  <div className="flex flex-wrap gap-3">
+                    <div className="desc">{item.description}</div>
+                    <div className="stack">{p.stack}</div>
+                    <div className="go">Read ↗</div>
+                  </Link>
+                  <div className="px-2 pb-5 -mt-2 flex flex-wrap gap-3 text-[11px]">
                     <a
-                      href={project.url}
+                      href={p.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-amber-500 text-white text-sm font-medium rounded-lg hover:bg-amber-600 transition-colors"
+                      className="inline-flex items-center gap-1.5 font-mono uppercase tracking-[0.18em] text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors"
                     >
-                      {t.projects.viewProject} <ExternalLink className="w-4 h-4 ml-2" />
+                      <ExternalLink className="w-3 h-3" />
+                      {t.projects.viewProject}
+                    </a>
+                    <a
+                      href={p.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 font-mono uppercase tracking-[0.18em] text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors"
+                    >
+                      <Github className="w-3 h-3" />
+                      Source
                     </a>
                     <Link
-                      to={`/projects/${project.slug}`}
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                      to={`/projects/${p.slug}`}
+                      className="inline-flex items-center gap-1.5 font-mono uppercase tracking-[0.18em] text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors"
                     >
-                      {t.projects.viewCaseStudy} <ArrowRight className="w-4 h-4 ml-2" />
+                      {t.projects.viewCaseStudy}
                     </Link>
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <Github className="w-4 h-4 mr-2" /> GitHub
-                    </a>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

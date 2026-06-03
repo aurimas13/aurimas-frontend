@@ -8,7 +8,7 @@ export const Layout: React.FC = () => {
   const isBlogManager = location.pathname === '/blog-manager';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-paper">
       {!isBlogManager && <Header />}
       
       <main>

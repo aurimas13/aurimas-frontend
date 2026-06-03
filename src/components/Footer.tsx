@@ -1,93 +1,22 @@
-// import React from 'react';
-// import { Heart, Mail, MapPin, Sparkles } from 'lucide-react';
-// import { useLanguage } from '../hooks/useLanguage';
-// import { translations } from '../data/translations';
-// import { SocialLinks } from './SocialLinks';
-
-// export const Footer: React.FC = () => {
-//   const { currentLanguage } = useLanguage();
-//   const t = translations[currentLanguage];
-
-//   return (
-//     <footer className="bg-white py-16 border-t border-yellow-200">
-//       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//         {/* Connect With Me Section - Top */}
-//         <div className="text-center mb-12">
-//           <h3 className="text-3xl font-bold text-gray-800 mb-8">{t.footer.connectWithMe}</h3>
-//           <div className="bg-yellow-50 rounded-2xl p-8 border border-yellow-200">
-//             <SocialLinks />
-//           </div>
-//         </div>
-
-//         <div className="grid md:grid-cols-3 gap-8 mb-8">
-//           {/* Brand */}
-//           <div>
-//             <div className="flex items-center space-x-2 mb-4">
-//               <Sparkles className="w-8 h-8 text-yellow-500" />
-//               <span className="text-2xl font-bold">
-//                 <span className="text-yellow-300">Au</span><span className="text-black">rimas</span>
-//               </span>
-//             </div>
-//             <p className="text-gray-600 leading-relaxed">
-//               {t.footer.description}
-//             </p>
-//           </div>
-
-//           {/* Quick Links */}
-//           <div>
-//             <h3 className="text-xl font-bold text-gray-800 mb-4">{t.footer.quickLinks}</h3>
-//             <div className="space-y-2">
-//               <button className="block text-gray-600 hover:text-yellow-600 transition-colors text-left">
-//                 {t.footer.aboutMe}
-//               </button>
-//               <button className="block text-gray-600 hover:text-yellow-600 transition-colors text-left">
-//                 {t.footer.myBlogs}
-//               </button>
-//               <button className="block text-gray-600 hover:text-yellow-600 transition-colors text-left">
-//                 {t.nav.gallery}
-//               </button>
-//               <button className="block text-gray-600 hover:text-yellow-600 transition-colors text-left">
-//                 {t.footer.supportMyWork}
-//               </button>
-//             </div>
-//           </div>
-
-//           {/* Contact */}
-//           <div>
-//             <h3 className="text-xl font-bold text-gray-800 mb-4">{t.footer.contact}</h3>
-//             <div className="space-y-3">
-//               <div className="flex items-center space-x-3 text-gray-600">
-//                 <Mail className="w-5 h-5" />
-//                 <span>aurimas.nausedas@proton.me</span>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Bottom Bar */}
-//         <div className="border-t border-yellow-200 pt-8 pb-6">
-//           <div className="flex flex-col md:flex-row justify-between items-center">
-//             <p className="text-gray-600 text-sm">
-//               © 2025 Aurimas Aleksandras Nausėdas. {t.footer.rights}
-//             </p>
-//             <div className="flex items-center space-x-3 text-gray-600 text-sm mt-2 md:mt-0">
-//               <MapPin className="w-4 h-4" />
-//               <span>Edinburgh, Scotland / Vilnius, Lithuania</span>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </footer>
-//   );
-// };
-
 import React, { useState } from 'react';
-import { Heart, Github, Linkedin, Mail, Facebook, Instagram, Twitter, Youtube, Camera, Music, Activity, ChevronDown } from 'lucide-react';
+import { Github, Linkedin, Mail, Facebook, Instagram, Twitter, Youtube, Camera, Music, Activity, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
 const projectSlugs = ['cleartrace', 'aegis', 'gateway', 'agentic'];
+
+const socials = [
+  { Icon: Github,    url: 'https://github.com/aurimas13',                   label: 'GitHub' },
+  { Icon: Linkedin,  url: 'https://www.linkedin.com/in/aurimasnausedas/',   label: 'LinkedIn' },
+  { Icon: Twitter,   url: 'https://x.com/reksas13',                          label: 'X' },
+  { Icon: Instagram, url: 'https://www.instagram.com/reksas13/',             label: 'Instagram' },
+  { Icon: Facebook,  url: 'https://www.facebook.com/auris13/',               label: 'Facebook' },
+  { Icon: Youtube,   url: 'https://www.youtube.com/@aurimas13',              label: 'YouTube' },
+  { Icon: Camera,    url: 'https://unsplash.com/@aurimas13',                 label: 'Unsplash' },
+  { Icon: Music,     url: 'https://open.spotify.com/user/aurimas.n',         label: 'Spotify' },
+  { Icon: Activity,  url: 'https://www.strava.com/athletes/aurimas13',       label: 'Strava' },
+];
 
 export function Footer() {
   const { currentLanguage } = useLanguage();
@@ -95,165 +24,96 @@ export function Footer() {
   const [projectsOpen, setProjectsOpen] = useState(false);
 
   return (
-    <footer className="bg-gradient-to-br from-lime-25 to-yellow-25 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* About Section */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Aurimas Nausėdas</h3>
-            <p className="text-gray-700 text-sm leading-relaxed">
+    <footer className="border-t border-[rgba(26,22,18,0.32)] mt-12">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-16 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+          {/* Brand */}
+          <div className="md:col-span-5">
+            <h3
+              className="display-md text-ink mb-4"
+              style={{ fontSize: 'clamp(28px, 3vw, 36px)', fontVariationSettings: '"opsz" 60, "wght" 480' }}
+            >
+              Aurimas Nausėdas
+            </h3>
+            <p className="text-ink-soft max-w-[42ch] leading-relaxed text-[15px]">
               {t.footer.description}
             </p>
+
+            <div className="hairline-strong mt-8 mb-4 max-w-md" />
+            <a href="mailto:aurimas.nausedas@proton.me" className="link-ink font-mono uppercase text-[11px] tracking-[0.22em]">
+              aurimas.nausedas@proton.me ↗
+            </a>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">{t.footer.quickLinks}</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#about" className="text-gray-600 hover:text-amber-600 transition-colors text-sm">
-                  {t.navigation.about}
-                </a>
-              </li>
-              <li>
-                <a href="#blog" className="text-gray-600 hover:text-amber-600 transition-colors text-sm">
-                  {t.navigation.blog}
-                </a>
-              </li>
-              <li>
-                <a href="#gallery" className="text-gray-600 hover:text-amber-600 transition-colors text-sm">
-                  {t.navigation.gallery}
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-gray-600 hover:text-amber-600 transition-colors text-sm">
-                  {t.navigation.contact}
-                </a>
-              </li>
+          {/* Quick links */}
+          <div className="md:col-span-2">
+            <h5 className="meta uppercase tracking-[0.22em] mb-4">{t.footer.quickLinks}</h5>
+            <ul className="flex flex-col gap-2.5">
+              <li><a href="/#about" className="text-[14px] text-ink-soft hover:text-ink transition-colors">{t.navigation.about}</a></li>
+              <li><a href="/#blog" className="text-[14px] text-ink-soft hover:text-ink transition-colors">{t.navigation.blog}</a></li>
+              <li><a href="/#gallery" className="text-[14px] text-ink-soft hover:text-ink transition-colors">{t.navigation.gallery}</a></li>
+              <li><a href="/#contact" className="text-[14px] text-ink-soft hover:text-ink transition-colors">{t.navigation.contact}</a></li>
+              <li><a href="/#support" className="text-[14px] text-ink-soft hover:text-ink transition-colors">{t.navigation.support}</a></li>
             </ul>
           </div>
 
           {/* Projects */}
-          <div>
+          <div className="md:col-span-2">
             <button
               onClick={() => setProjectsOpen(!projectsOpen)}
-              className="text-lg font-semibold mb-4 flex items-center hover:text-amber-600 transition-colors"
+              className="meta uppercase tracking-[0.22em] mb-4 flex items-center gap-1.5 hover:text-ink transition-colors"
             >
               {t.navigation.projects}
-              <ChevronDown className={`w-4 h-4 ml-1 transition-transform duration-200 ${projectsOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${projectsOpen ? 'rotate-180' : ''}`} />
             </button>
             {projectsOpen && (
-              <ul className="space-y-2">
+              <ul className="flex flex-col gap-2.5">
                 {projectSlugs.map((slug) => {
                   const item = (t.projects as any).items[slug];
                   return (
                     <li key={slug}>
-                      <Link
-                        to={`/projects/${slug}`}
-                        className="text-gray-600 hover:text-amber-600 transition-colors text-sm"
-                      >
+                      <Link to={`/projects/${slug}`} className="text-[14px] text-ink-soft hover:text-ink transition-colors">
                         {item.name}
                       </Link>
                     </li>
                   );
                 })}
+                <li className="pt-1">
+                  <Link to="/projects" className="font-mono uppercase text-[11px] tracking-[0.18em] text-ink hover:text-oxblood transition-colors">
+                    All projects ↗
+                  </Link>
+                </li>
               </ul>
             )}
           </div>
 
-          {/* Social Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">{t.footer.connect}</h3>
-            <div className="flex space-x-4">
-              <a
-                href="https://github.com/aurimas13"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Github size={20} />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/aurimasnausedas/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="mailto:aurimas.nausedas@proton.me"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Mail size={20} />
-              </a>
-              <a
-                href="https://www.facebook.com/auris13/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="https://www.instagram.com/reksas13/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://x.com/reksas13"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="https://www.youtube.com/@aurimas13"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Youtube size={20} />
-              </a>
-              <a
-                href="https://unsplash.com/@aurimas13"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Camera size={20} />
-              </a>
-              <a
-                href="https://open.spotify.com/user/aurimas.n"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Music size={20} />
-              </a>
-              <a
-                href="https://www.strava.com/athletes/aurimas13"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-amber-600 transition-colors"
-              >
-                <Activity size={20} />
-              </a>
+          {/* Elsewhere */}
+          <div className="md:col-span-3">
+            <h5 className="meta uppercase tracking-[0.22em] mb-4">{t.footer.connect}</h5>
+            <div className="grid grid-cols-2 gap-y-2.5 gap-x-3">
+              {socials.map(({ Icon, url, label }) => (
+                <a
+                  key={label}
+                  href={url}
+                  target={url.startsWith('mailto:') ? undefined : '_blank'}
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-baseline gap-2 text-ink-soft hover:text-ink transition-colors"
+                >
+                  <Icon className="w-3.5 h-3.5 self-center" />
+                  <span className="text-[13px] border-b border-transparent group-hover:border-ink transition-colors">
+                    {label}
+                  </span>
+                </a>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-300 mt-8 pt-8 text-center">
-          <p className="text-gray-600 text-sm flex items-center justify-center">
-            {t.footer.madeWith} <Heart size={16} className="mx-1 text-red-500" /> {t.footer.byAurimas}
-          </p>
-          <p className="text-gray-500 text-xs mt-2">
-            © {new Date().getFullYear()} Aurimas Nausėdas. {t.footer.allRights}
-          </p>
+        {/* Colophon */}
+        <div className="mt-16 pt-6 border-t border-[rgba(26,22,18,0.14)] flex flex-col md:flex-row justify-between gap-4 font-mono uppercase text-[10px] tracking-[0.22em] text-ink-mute">
+          <span>© {new Date().getFullYear()} Aurimas Nausėdas · {t.footer.allRights}</span>
+          <span>Set in Fraunces · General Sans · JetBrains Mono</span>
+          <span>Vol. 01 · Cream paper edition</span>
         </div>
       </div>
     </footer>

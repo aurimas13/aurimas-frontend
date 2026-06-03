@@ -1094,107 +1094,71 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
   // If showing all blogs, render the blog list
   if (showAllBlogs) {
     return (
-      <section id="blogs" className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+      <section id="blogs" className="py-28">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12">
+          <div className="mb-16">
+            <p className="eyebrow mb-3">No. 03 · Writing</p>
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
               {t.blogs.title}
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="font-display text-ink-soft mt-5 max-w-[640px]" style={{ fontSize: '20px', lineHeight: 1.5, fontVariationSettings: '"opsz" 18, "wght" 400' }}>
               {t.blogs.subtitle}
             </p>
           </div>
 
           {/* Blog Posts List */}
-          <div className="max-w-4xl mx-auto">
+          <div>
             {posts.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                    {t.blogs.noPosts}
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    {t.blogs.checkBack}
-                  </p>
-                  <button 
-                    onClick={handleAuthentication}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Create First Post
-                  </button>
-                </div>
+              <div className="py-16 text-center panel-strong p-12">
+                <p className="display-sm text-ink mb-3" style={{ fontVariationSettings: '"opsz" 36, "wght" 480' }}>
+                  {t.blogs.noPosts}
+                </p>
+                <p className="text-ink-soft mb-6">{t.blogs.checkBack}</p>
+                <button onClick={handleAuthentication} className="btn btn-primary">
+                  Create First Post
+                </button>
               </div>
             ) : (
-              <div className="space-y-8">
+              <div className="border-t border-[rgba(26,22,18,0.32)]">
                 {posts
                   .filter(post => post.status === 'published')
                   .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
                   .slice(0, isAuthenticated || showMorePosts ? undefined : 3)
                   .map((post) => (
-                    <article key={post.id} className="bg-white rounded-2xl p-8 shadow-lg border border-yellow-200 hover:shadow-xl transition-shadow">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-3">
-                            <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                              {blogCategories[post.category]?.title[currentLanguage as LanguageCode] || post.category}
+                    <article key={post.id} className="border-b border-[rgba(26,22,18,0.14)] hover:bg-paper-deep/60 transition-colors">
+                      <button onClick={() => handleReadMore(post)} className="block w-full text-left py-8 px-2">
+                        <div className="flex items-baseline gap-4 mb-3 flex-wrap">
+                          <span className="meta uppercase tracking-[0.22em]">
+                            {blogCategories[post.category]?.title[currentLanguage as LanguageCode] || post.category}
+                          </span>
+                          {post.isPremium && (
+                            <span className="meta uppercase tracking-[0.22em] text-oxblood inline-flex items-center gap-1">
+                              <Lock className="w-3 h-3" /> Premium
                             </span>
-                            {post.isPremium && (
-                              <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium flex items-center">
-                                <Lock className="w-3 h-3 mr-1" />
-                                Premium
-                              </span>
-                            )}
-                          </div>
-                          <h2 className="text-2xl font-bold text-gray-900 mb-3 hover:text-yellow-600 transition-colors">
-                            {post.title}
-                          </h2>
-                          <div className="text-gray-600 mb-4 leading-relaxed">
-                            {post.excerpt ? (
-                              <p>{post.excerpt}</p>
-                            ) : (
-                              <div className="line-clamp-3">
-                                {renderContent(truncateContent(post.content, 300))}
-                              </div>
-                            )}
-                          </div>
+                          )}
+                          <time className="meta uppercase tracking-[0.22em]">{formatDate(post.publishedAt)}</time>
+                          <span className="meta uppercase tracking-[0.22em]">{post.readTime} min read</span>
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center">
-                            <User className="w-4 h-4 mr-1" />
-                            {post.author}
-                          </div>
-                          <div className="flex items-center">
-                            <Calendar className="w-4 h-4 mr-1" />
-                            {formatDate(post.publishedAt)}
-                          </div>
-                          <div className="flex items-center">
-                            <Clock className="w-4 h-4 mr-1" />
-                            {post.readTime} min read
-                          </div>
+                        <h2 className="display-sm text-ink mb-3 hover:text-oxblood transition-colors" style={{ fontSize: 'clamp(24px, 3.4vw, 36px)', fontVariationSettings: '"opsz" 48, "wght" 480' }}>
+                          {post.title}
+                        </h2>
+                        <div className="text-ink-soft leading-relaxed text-[15px] mb-4 max-w-[72ch]">
+                          {post.excerpt ? (
+                            <p>{post.excerpt}</p>
+                          ) : (
+                            <div className="line-clamp-3">{renderContent(truncateContent(post.content, 300))}</div>
+                          )}
                         </div>
-                      </div>
-
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {post.tags.map((tag, index) => (
-                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
-                              #{tag}
-                            </span>
-                          ))}
+                        <div className="flex items-center gap-5 flex-wrap">
+                          <span className="meta uppercase tracking-[0.22em] inline-flex items-center gap-1"><User className="w-3 h-3" /> {post.author}</span>
+                          {post.tags && post.tags.length > 0 && (
+                            <span className="font-mono text-[11px] text-ink-mute">{post.tags.map((t: string) => `#${t}`).join('  ')}</span>
+                          )}
+                          <span className="ml-auto inline-flex items-center gap-1.5 font-mono uppercase text-[11px] tracking-[0.22em] text-ink border-b border-ink pb-0.5">
+                            {t.blogs.readMore} →
+                          </span>
                         </div>
-                      )}
-
-                      <div className="border-t border-gray-200 pt-4">
-                        <button 
-                          onClick={() => handleReadMore(post)}
-                          className="text-yellow-600 hover:text-yellow-700 font-medium transition-colors"
-                        >
-                          {t.blogs.readMore} →
-                        </button>
-                      </div>
+                      </button>
                     </article>
                   ))}
               </div>
@@ -1205,93 +1169,89 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
     );
   }
 
-  // Default preview view
+  // Default preview view (homepage section)
   return (
-    <section id="blogs" className="py-20 bg-gradient-to-br from-lime-25 to-yellow-25">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            {t.blogs.title}
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t.blogs.subtitle}
-          </p>
+    <section id="blogs" className="py-28">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Section header */}
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
+          <div>
+            <p className="eyebrow mb-3">No. 03 · The Newsletter</p>
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
+              {t.blogs.title}
+            </h2>
+          </div>
+          <div className="hidden md:block self-end">
+            <div className="hairline-strong w-full" />
+            <p className="meta uppercase tracking-[0.2em] mt-3">{t.blogs.subtitle}</p>
+          </div>
         </div>
 
-        {/* Newsletter Section - Always Show */}
-        <div className="mb-12">
-          <div className="bg-yellow-100 rounded-xl px-12 py-8 border border-yellow-300 max-w-4xl mx-auto text-center">
-            <h4 className="text-lg font-bold mb-3 text-gray-800">🔔 {t.blogs.beFirstToKnow}</h4>
-            <p className="text-gray-600 mb-4">
-              {t.blogs.joinWaitlist}
-            </p>
-            
-            {/* Newsletter Status Messages */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-10 lg:gap-16 max-w-6xl">
+          {/* Newsletter waitlist */}
+          <div className="panel-strong p-8 sm:p-10">
+            <div className="flex items-baseline justify-between mb-3 flex-wrap gap-2">
+              <h4 className="display-sm text-ink" style={{ fontSize: '24px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
+                {t.blogs.beFirstToKnow}
+              </h4>
+              <span className="meta uppercase tracking-[0.2em]">— Subscribe</span>
+            </div>
+            <p className="text-ink-soft text-[15px] mb-6 max-w-[60ch]">{t.blogs.joinWaitlist}</p>
+
             {newsletterStatus === 'success' && (
-              <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
-                <p className="text-green-800 text-sm font-medium">✅ {newsletterMessage}</p>
+              <div className="mb-5 p-4 border border-moss/40 bg-moss/5">
+                <p className="font-mono uppercase text-[11px] tracking-[0.18em] text-moss">✓ {newsletterMessage}</p>
               </div>
             )}
-            
             {newsletterStatus === 'error' && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-300 rounded-lg">
-                <p className="text-red-800 text-sm font-medium">❌ {newsletterMessage}</p>
+              <div className="mb-5 p-4 border border-oxblood/40 bg-oxblood/5">
+                <p className="font-mono uppercase text-[11px] tracking-[0.18em] text-oxblood">{newsletterMessage}</p>
               </div>
             )}
-            
-            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <input 
-                type="email" 
+
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
                 value={newsletterEmail}
                 onChange={(e) => setNewsletterEmail(e.target.value)}
                 placeholder={t.blogs.enterEmail}
                 required
                 disabled={newsletterStatus === 'loading'}
-                className="px-4 py-2 rounded-lg bg-white text-gray-800 placeholder-gray-500 border border-yellow-300 focus:ring-2 focus:ring-yellow-400 outline-none flex-1 max-w-xs disabled:opacity-50"
+                className="field flex-1"
               />
-              <button 
+              <button
                 type="submit"
                 disabled={newsletterStatus === 'loading'}
-                className="bg-yellow-500 hover:bg-yellow-400 text-gray-800 font-bold px-6 py-2 rounded-lg transition-colors transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className={`btn ${newsletterStatus === 'loading' ? 'btn-ghost opacity-60 cursor-not-allowed' : 'btn-primary'}`}
               >
                 {newsletterStatus === 'loading' ? t.blogs.subscribing : t.blogs.joinWaitlistBtn}
               </button>
             </form>
-            <p className="text-xs text-gray-500 mt-2">
-              {t.blogs.noSpam}
-            </p>
+            <p className="meta uppercase tracking-[0.2em] mt-4">{t.blogs.noSpam}</p>
           </div>
-        </div>
 
-        {/* Molecule To Machine Newsletter Link */}
-        <div className="mb-12">
-          <div className="bg-white rounded-lg shadow-sm p-6 max-w-md mx-auto text-center border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="text-3xl mb-3">🧪</div>
-            <h4 className="text-lg font-semibold text-gray-800 mb-2">
-              {currentLanguage === 'lt' ? 'Molekulė į Mašiną' : 
-               currentLanguage === 'fr' ? 'De la Molécule à la Machine' : 
-               'Molecule To Machine'}
+          {/* Molecule To Machine card */}
+          <aside className="border border-[rgba(26,22,18,0.32)] p-8 self-start">
+            <p className="meta uppercase tracking-[0.22em] mb-4">Original Substack</p>
+            <h4 className="display-sm text-ink mb-3" style={{ fontSize: '22px', fontVariationSettings: '"opsz" 36, "wght" 500' }}>
+              {currentLanguage === 'lt' ? 'Molekulė į Mašiną' : currentLanguage === 'fr' ? 'De la Molécule à la Machine' : 'Molecule To Machine'}
             </h4>
-            <p className="text-gray-600 mb-2 text-sm">
-              {currentLanguage === 'lt' ? 'Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis' :
-               currentLanguage === 'fr' ? 'Newsletter hebdomadaire sur l\'IA, la technologie, la musique et la santé' :
-               'Weekly AI, Technology, Music & Healthcare Newsletter'}
+            <p className="text-ink-soft text-[14px] mb-2 leading-relaxed">
+              {currentLanguage === 'lt' ? 'Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis' : currentLanguage === 'fr' ? "Newsletter hebdomadaire sur l'IA, la technologie, la musique et la santé" : 'Weekly AI, Technology, Music & Healthcare Newsletter'}
             </p>
-            <p className="text-gray-500 mb-4 text-xs italic">
-              {t.blogs.inLanguage}
+            <p className="font-display italic text-ink-mute text-[13px] mb-6" style={{ fontVariationSettings: '"opsz" 14, "wght" 400, "SOFT" 80' }}>
+              {currentLanguage === 'lt' ? 'Originalo kalba' : currentLanguage === 'fr' ? "Dans la langue d'origine" : 'In the original language'}
             </p>
             <a
               href="https://moleculetomachine.substack.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm rounded-lg hover:bg-orange-700 transition-colors"
+              className="btn btn-ghost w-full !justify-center"
             >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              {currentLanguage === 'lt' ? 'Skaityti originalioje platformoje' : 
-               currentLanguage === 'fr' ? 'Lire sur la plateforme d\'origine' : 
-               'Read on Original Platform'}
+              <ExternalLink className="w-3.5 h-3.5" />
+              {currentLanguage === 'lt' ? 'Skaityti originalioje platformoje' : currentLanguage === 'fr' ? "Lire sur la plateforme d'origine" : 'Read on Original Platform'}
             </a>
-          </div>
+          </aside>
         </div>
       </div>
     </section>

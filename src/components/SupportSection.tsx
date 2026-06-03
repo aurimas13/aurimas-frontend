@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, CreditCard, Banknote, Coffee, Star, Shield, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { CreditCard, Banknote, CheckCircle, XCircle, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
@@ -9,169 +9,162 @@ export const SupportSection: React.FC = () => {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  // Check for payment success/cancel from URL params
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('payment') === 'success') {
       setPaymentSuccess(true);
-      // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
     if (urlParams.get('payment') === 'cancelled') {
       setPaymentError('Payment was canceled. Please try again.');
-      // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, []);
 
   return (
-    <section id="support" className="py-20 bg-gradient-to-br from-yellow-25 to-orange-25">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            {t.support.title}
-          </h2>
+    <section id="support" className="py-28 surface-deep border-t border-b border-[rgba(26,22,18,0.32)]">
+      <div className="max-w-5xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Header */}
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
+          <div>
+            <p className="eyebrow mb-3">No. 05</p>
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
+              {t.support.title}
+            </h2>
+          </div>
+          <div className="hidden md:block self-end">
+            <div className="hairline-strong w-full" />
+            <p className="meta uppercase tracking-[0.2em] mt-3">Patronage of the work</p>
+          </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          {/* Success Message */}
-          {paymentSuccess && (
-            <div className="mb-8 p-6 bg-green-100 border border-green-300 rounded-2xl text-center">
-              <div className="flex items-center justify-center mb-2">
-                <CheckCircle className="w-8 h-8 text-green-600 mr-2" />
-                <h3 className="text-2xl font-bold text-green-800">Payment Successful!</h3>
-              </div>
-              <p className="text-green-700">Thank you for supporting my work! Your contribution means a lot.</p>
+        {/* Status */}
+        {paymentSuccess && (
+          <div className="mb-8 p-5 border border-moss/40 bg-moss/5 flex items-baseline gap-3">
+            <CheckCircle className="w-4 h-4 text-moss self-center" />
+            <div>
+              <p className="font-mono uppercase text-[11px] tracking-[0.22em] text-moss mb-1">Payment received</p>
+              <p className="text-[14px] text-ink-soft">Thank you for supporting the work — your contribution means a lot.</p>
             </div>
-          )}
-
-          {/* Error Message */}
-          {paymentError && (
-            <div className="mb-8 p-6 bg-red-100 border border-red-300 rounded-2xl text-center">
-              <div className="flex items-center justify-center mb-2">
-                <XCircle className="w-6 h-6 text-red-600 mr-2" />
-                <h3 className="text-xl font-bold text-red-800">Payment Error</h3>
-              </div>
-              <p className="text-red-700">{paymentError}</p>
+          </div>
+        )}
+        {paymentError && (
+          <div className="mb-8 p-5 border border-oxblood/40 bg-oxblood/5 flex items-baseline gap-3">
+            <XCircle className="w-4 h-4 text-oxblood self-center" />
+            <div>
+              <p className="font-mono uppercase text-[11px] tracking-[0.22em] text-oxblood mb-1">Payment error</p>
+              <p className="text-[14px] text-ink-soft">{paymentError}</p>
             </div>
-          )}
+          </div>
+        )}
 
-          <div className="max-w-4xl mx-auto space-y-8">
-            {/* PayPal Payment */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 shadow-lg text-white">
-              <div className="flex items-center mb-6">
-                <CreditCard className="w-8 h-8 text-white mr-3" />
-                <h3 className="text-2xl font-bold text-white">{t.support.paypal}</h3>
-              </div>
-              <p className="text-blue-100 mb-6">
-                {t.support.paypalDirectMessage}
-              </p>
-              
-              {/* Quick Amount Buttons */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                {[5, 10, 25, 50].map((amount) => (
-                  <a
-                    key={amount}
-                    href={`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-white text-blue-600 py-3 px-4 rounded-lg font-bold text-center hover:bg-gray-100 transition-all duration-300 flex items-center justify-center"
-                  >
-                    €{amount}
-                  </a>
-                ))}
-              </div>
-              
-              {/* Custom Amount */}
-              <div className="bg-white rounded-lg p-4 mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t.support.customAmount}</label>
-                <div className="flex space-x-2">
-                  <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
-                    <input
-                      type="number"
-                      min="1"
-                      step="1"
-                      id="paypal-custom-amount"
-                      placeholder={t.support.enterAmount}
-                      className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          const input = e.target as HTMLInputElement;
-                          const amount = input.value;
-                          if (amount && parseFloat(amount) >= 1) {
-                            window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
-                          } else {
-                            alert('Please enter an amount of €1 or more');
-                          }
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* PayPal */}
+          <div className="panel-strong p-8">
+            <div className="flex items-baseline justify-between mb-3">
+              <h3 className="display-sm text-ink" style={{ fontSize: '22px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
+                {t.support.paypal}
+              </h3>
+              <CreditCard className="w-4 h-4 text-ink-soft" />
+            </div>
+            <p className="text-ink-soft text-[14px] mb-5">{t.support.paypalDirectMessage}</p>
+
+            <div className="grid grid-cols-4 gap-2 mb-5">
+              {[5, 10, 25, 50].map((amount) => (
+                <a
+                  key={amount}
+                  href={`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-[rgba(26,22,18,0.32)] py-3 text-center font-mono text-[13px] text-ink hover:bg-ink hover:text-paper transition-colors"
+                >
+                  €{amount}
+                </a>
+              ))}
+            </div>
+
+            <div className="mb-5">
+              <label className="field-label" htmlFor="paypal-custom-amount">{t.support.customAmount}</label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-mute font-mono">€</span>
+                  <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    id="paypal-custom-amount"
+                    placeholder={t.support.enterAmount}
+                    className="field pl-8"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        const input = e.target as HTMLInputElement;
+                        const amount = input.value;
+                        if (amount && parseFloat(amount) >= 1) {
+                          window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
+                        } else {
+                          alert('Please enter an amount of €1 or more');
                         }
-                      }}
-                    />
-                  </div>
-                  <button
-                    onClick={() => {
-                      const input = document.getElementById('paypal-custom-amount') as HTMLInputElement;
-                      const amount = input?.value;
-                      if (amount && parseFloat(amount) >= 1) {
-                        window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
-                      } else {
-                        alert('Please enter an amount of €1 or more');
                       }
                     }}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                  >
-                    Send
-                  </button>
+                  />
                 </div>
+                <button
+                  onClick={() => {
+                    const input = document.getElementById('paypal-custom-amount') as HTMLInputElement;
+                    const amount = input?.value;
+                    if (amount && parseFloat(amount) >= 1) {
+                      window.open(`https://www.paypal.com/paypalme/aurimasaleksandras/${amount}EUR`, '_blank');
+                    } else {
+                      alert('Please enter an amount of €1 or more');
+                    }
+                  }}
+                  className="btn btn-primary !px-5"
+                >
+                  Send
+                </button>
               </div>
-              
-              {/* General PayPal Link */}
-              <a
-                href="https://www.paypal.com/paypalme/aurimasaleksandras"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-white text-blue-600 py-3 rounded-lg font-bold text-center hover:bg-gray-100 transition-all duration-300 flex items-center justify-center space-x-2"
-              >
-                <CreditCard className="w-5 h-5" />
-                <span>Open PayPal.me</span>
-              </a>
             </div>
 
-            {/* Bank Transfer - N26 */}
-            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-8 shadow-lg text-white">
-              <div className="flex items-center mb-6">
-                <Banknote className="w-8 h-8 text-white mr-3" />
-                <h3 className="text-2xl font-bold text-white">{t.support.bankTransferTitle}</h3>
-              </div>
-              <p className="text-green-100 mb-6">
-                {t.support.bankTransferDescription}
-              </p>
-              <div className="bg-white rounded-lg p-6 text-gray-800">
-                <div className="space-y-3">
-                  <div>
-                    <span className="font-semibold text-gray-600">Account Holder:</span>
-                    <p className="font-mono text-sm">Aurimas Aleksandras Nausedas</p>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-gray-600">IBAN:</span>
-                    <p className="font-mono text-sm">DE50100110012072920439</p>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-gray-600">BIC:</span>
-                    <p className="font-mono text-sm">NTSBDEB1XXX</p>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-gray-600">Bank:</span>
-                    <p className="text-sm">N26 Bank</p>
-                  </div>
-                </div>
-                <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-                  <p className="text-xs text-yellow-800">
-                    {t.support.bankTransferNote}
-                  </p>
-                </div>
-              </div>
+            <a
+              href="https://www.paypal.com/paypalme/aurimasaleksandras"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-ghost w-full !justify-center"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              Open PayPal.me
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+
+          {/* Bank transfer */}
+          <div className="panel-strong p-8">
+            <div className="flex items-baseline justify-between mb-3">
+              <h3 className="display-sm text-ink" style={{ fontSize: '22px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
+                {t.support.bankTransferTitle}
+              </h3>
+              <Banknote className="w-4 h-4 text-ink-soft" />
             </div>
+            <p className="text-ink-soft text-[14px] mb-5">{t.support.bankTransferDescription}</p>
+
+            <dl className="border border-[rgba(26,22,18,0.32)]">
+              {[
+                ['Account', 'Aurimas Aleksandras Nausedas'],
+                ['IBAN',    'DE50100110012072920439'],
+                ['BIC',     'NTSBDEB1XXX'],
+                ['Bank',    'N26 Bank'],
+              ].map(([label, value], i, arr) => (
+                <div
+                  key={label}
+                  className={`grid grid-cols-[80px_1fr] gap-3 px-4 py-3 ${i < arr.length - 1 ? 'border-b border-[rgba(26,22,18,0.14)]' : ''}`}
+                >
+                  <dt className="meta uppercase tracking-[0.18em] self-center">{label}</dt>
+                  <dd className="font-mono text-[13px] text-ink break-all">{value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <p className="text-[12px] text-ink-mute mt-4 leading-relaxed">{t.support.bankTransferNote}</p>
           </div>
         </div>
       </div>

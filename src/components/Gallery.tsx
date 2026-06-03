@@ -315,27 +315,32 @@ export const Gallery: React.FC = () => {
   }, [selectedImage]);
 
   return (
-    <section id="gallery" className="py-20 bg-gradient-to-br from-lime-25 to-green-25">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            {t.gallery.title}
-          </h2>
-          <p className="text-xl text-gray-800">
-            {t.gallery.subtitle}
-          </p>
+    <section id="gallery" className="py-28">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Section header */}
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 mb-12">
+          <div>
+            <p className="eyebrow mb-3">No. 04 · Plates</p>
+            <h2 className="display-md text-ink" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>
+              {t.gallery.title}
+            </h2>
+          </div>
+          <div className="hidden md:block self-end">
+            <div className="hairline-strong w-full" />
+            <p className="meta uppercase tracking-[0.2em] mt-3">{t.gallery.subtitle}</p>
+          </div>
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap gap-2 mb-12">
           {Object.entries(t.gallery.categories).map(([key, label]) => (
             <button
               key={key}
               onClick={() => setSelectedCategory(key)}
-              className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+              className={`px-3 py-1.5 font-mono uppercase text-[11px] tracking-[0.18em] border transition-colors ${
                 selectedCategory === key
-                  ? 'bg-yellow-500 text-white shadow-lg transform scale-105'
-                  : 'bg-white text-gray-700 hover:bg-yellow-100 border border-gray-300'
+                  ? 'border-ink bg-ink text-paper'
+                  : 'border-[rgba(26,22,18,0.32)] text-ink-soft hover:border-ink hover:text-ink'
               }`}
             >
               {label}
@@ -344,17 +349,18 @@ export const Gallery: React.FC = () => {
         </div>
 
         {/* Image Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredImages.map((image, index) => (
             <div
               key={image.id}
-              className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="group relative overflow-hidden border border-[rgba(26,22,18,0.32)] bg-paper p-2 cursor-pointer transition-all hover:border-ink"
               onClick={() => setSelectedImage(index)}
             >
               <img
                 src={image.src}
                 alt={image.alt[currentLanguage as keyof LocalizedGalleryText]}
-                className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                style={{ filter: 'sepia(8%) contrast(1.02)' }}
                 loading="lazy"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -363,15 +369,21 @@ export const Gallery: React.FC = () => {
                   target.alt = 'Image not found';
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-white font-bold text-lg mb-1">{image.title[currentLanguage as keyof LocalizedGalleryText]}</h3>
-                  <div className="flex items-center text-yellow-400 text-sm mb-2">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {image.location[currentLanguage as keyof LocalizedGalleryText]}
-                  </div>
-                  <p className="text-gray-200 text-sm">{image.description[currentLanguage as keyof LocalizedGalleryText]}</p>
+              {/* Plate caption (always visible) */}
+              <div className="flex items-baseline justify-between pt-3 px-1 pb-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute">
+                <span>Plate {String(index + 1).padStart(2, '0')}</span>
+                <span className="text-ink-soft">{image.location[currentLanguage as keyof LocalizedGalleryText]}</span>
+              </div>
+              {/* Hover panel — paper, not black */}
+              <div className="absolute inset-2 bg-paper/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                <h3 className="display-sm text-ink mb-2" style={{ fontSize: '20px', fontVariationSettings: '"opsz" 24, "wght" 500' }}>
+                  {image.title[currentLanguage as keyof LocalizedGalleryText]}
+                </h3>
+                <div className="flex items-center gap-1.5 meta uppercase tracking-[0.22em] mb-2">
+                  <MapPin className="w-3 h-3" />
+                  {image.location[currentLanguage as keyof LocalizedGalleryText]}
                 </div>
+                <p className="text-[13px] text-ink-soft leading-relaxed">{image.description[currentLanguage as keyof LocalizedGalleryText]}</p>
               </div>
             </div>
           ))}
@@ -379,26 +391,28 @@ export const Gallery: React.FC = () => {
 
         {/* Lightbox Modal */}
         {selectedImage !== null && (
-          <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-            <div className="relative max-w-4xl w-full">
-              {/* Close Button */}
+          <div className="fixed inset-0 bg-ink/95 z-[60] flex items-center justify-center p-4">
+            <div className="relative max-w-5xl w-full">
+              {/* Close */}
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
+                className="absolute top-4 right-4 z-10 px-3 py-1.5 font-mono uppercase text-[11px] tracking-[0.22em] text-paper hover:text-sulfur border border-paper/40 hover:border-sulfur transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="w-3 h-3 inline-block mr-1" /> Close
               </button>
 
-              {/* Navigation Buttons */}
+              {/* Nav */}
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 text-paper hover:text-sulfur transition-colors"
+                aria-label="Previous"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 text-paper hover:text-sulfur transition-colors"
+                aria-label="Next"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -407,7 +421,7 @@ export const Gallery: React.FC = () => {
               <img
                 src={filteredImages[selectedImage].src}
                 alt={filteredImages[selectedImage].alt[currentLanguage as keyof LocalizedGalleryText]}
-                className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                className="w-full h-auto max-h-[80vh] object-contain"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   console.error('Failed to load lightbox image:', filteredImages[selectedImage].src, 'Full URL:', window.location.origin + filteredImages[selectedImage].src);
@@ -416,14 +430,23 @@ export const Gallery: React.FC = () => {
                 }}
               />
 
-              {/* Image Info */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white p-6 rounded-b-lg">
-                <h3 className="text-2xl font-bold mb-2">{filteredImages[selectedImage].title[currentLanguage as keyof LocalizedGalleryText]}</h3>
-                <div className="flex items-center mb-2 text-gray-300">
-                  <MapPin className="w-4 h-4 mr-2" />
-                  {filteredImages[selectedImage].location[currentLanguage as keyof LocalizedGalleryText]}
+              {/* Caption strip */}
+              <div className="mt-4 px-2 text-paper">
+                <div className="flex items-baseline justify-between mb-2">
+                  <span className="font-mono uppercase text-[10px] tracking-[0.22em] text-paper/60">
+                    Plate {String(selectedImage + 1).padStart(2, '0')} / {filteredImages.length}
+                  </span>
+                  <span className="font-mono uppercase text-[10px] tracking-[0.22em] text-paper/60 inline-flex items-center gap-1.5">
+                    <MapPin className="w-3 h-3" />
+                    {filteredImages[selectedImage].location[currentLanguage as keyof LocalizedGalleryText]}
+                  </span>
                 </div>
-                <p className="text-gray-200">{filteredImages[selectedImage].description[currentLanguage as keyof LocalizedGalleryText]}</p>
+                <h3 className="font-display text-paper" style={{ fontSize: '24px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
+                  {filteredImages[selectedImage].title[currentLanguage as keyof LocalizedGalleryText]}
+                </h3>
+                <p className="text-paper/70 text-[14px] mt-1.5 max-w-[72ch]">
+                  {filteredImages[selectedImage].description[currentLanguage as keyof LocalizedGalleryText]}
+                </p>
               </div>
             </div>
           </div>

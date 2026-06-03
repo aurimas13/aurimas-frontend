@@ -324,10 +324,9 @@ export const BlogPostPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-lime-25 to-yellow-25 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Loading post...</p>
+          <p className="meta uppercase tracking-[0.22em] text-ink-mute">Loading post…</p>
         </div>
       </div>
     );
@@ -335,10 +334,10 @@ export const BlogPostPage: React.FC = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-lime-25 to-yellow-25 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Post Not Found</h1>
-          <p className="text-gray-600 mb-6">The requested blog post could not be found.</p>
+          <h1 className="display-md text-ink mb-3" style={{ fontVariationSettings: '"opsz" 60, "wght" 440' }}>Post not found.</h1>
+          <p className="text-ink-soft mb-6">The requested blog post could not be found.</p>
           <Link
             to={`/blogs/${category}`}
             className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
@@ -605,118 +604,103 @@ export const BlogPostPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-lime-25 to-yellow-25">
-      <div className="container mx-auto px-4 py-12">
-        {/* Navigation */}
-        <div className="mb-8">
-          <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
-            <Link to="/#blogs" className="hover:text-blue-600 transition-colors">
-              Blog
-            </Link>
+    <div className="pt-28 pb-24 min-h-screen">
+      <div className="max-w-3xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Breadcrumb + back */}
+        <div className="mb-12">
+          <nav className="flex items-center gap-2 mb-4 font-mono uppercase text-[10px] tracking-[0.22em] text-ink-mute">
+            <Link to="/#blogs" className="hover:text-ink transition-colors">Writing</Link>
             <span>/</span>
-            <span className="text-gray-900">{getLocalizedText(post?.title)}</span>
+            <Link to={`/blogs/${category}`} className="hover:text-ink transition-colors">
+              {categoryData.title[currentLanguage as LanguageCode]}
+            </Link>
           </nav>
-          
-          <Link 
+
+          <Link
             to="/#blogs"
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
+            className="inline-flex items-center gap-2 font-mono uppercase text-[11px] tracking-[0.22em] text-ink-soft hover:text-ink transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to Blog
+            <ArrowLeft className="w-3 h-3" />
+            Back to Writing
           </Link>
         </div>
 
         {/* Article */}
-        <article className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="p-8 md:p-12">
-              {/* Article Header */}
-              <header className="mb-8">
-                <div className="flex items-center space-x-2 mb-4">
-                  <span className="text-2xl">📚</span>
-                  <span className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
-                    {categoryData.title[currentLanguage as LanguageCode]}
-                  </span>
-                </div>
+        <article>
+          <header className="mb-12">
+            <p className="meta uppercase tracking-[0.22em] mb-4">
+              {categoryData.title[currentLanguage as LanguageCode]}
+            </p>
 
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                  {getLocalizedText(post?.title)}
-                </h1>
+            <h1
+              className="display-lg text-ink"
+              style={{ fontSize: 'clamp(36px, 5.5vw, 72px)', fontVariationSettings: '"opsz" 96, "wght" 440' }}
+            >
+              {getLocalizedText(post?.title)}
+            </h1>
 
-                {post?.subtitle && (
-                  <p className="text-xl text-gray-600 mb-6 leading-relaxed">
-                    {getLocalizedText(post.subtitle)}
-                  </p>
+            {post?.subtitle && (
+              <p
+                className="font-display text-ink-soft mt-6"
+                style={{ fontSize: 'clamp(18px, 2vw, 22px)', lineHeight: 1.5, fontVariationSettings: '"opsz" 18, "wght" 400' }}
+              >
+                {getLocalizedText(post.subtitle)}
+              </p>
+            )}
+
+            <div className="flex flex-wrap items-center gap-5 mt-8 pb-6 border-b border-[rgba(26,22,18,0.32)]">
+              <span className="meta uppercase tracking-[0.22em] inline-flex items-center gap-1.5">
+                <User className="w-3 h-3" /> {getLocalizedText(post?.author)}
+              </span>
+              <span className="meta uppercase tracking-[0.22em] inline-flex items-center gap-1.5">
+                <Calendar className="w-3 h-3" />
+                {new Date(post?.publishedAt || post?.date || '').toLocaleDateString(
+                  currentLanguage === 'en' ? 'en-US' : currentLanguage === 'lt' ? 'lt-LT' : 'fr-FR',
+                  { year: 'numeric', month: 'long', day: 'numeric' },
                 )}
-
-                <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 border-b border-gray-200 pb-6">
-                  <div className="flex items-center space-x-2">
-                    <User className="w-4 h-4" />
-                    <span>{getLocalizedText(post?.author)}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4" />
-                    <time>
-                      {new Date(post?.publishedAt || post?.date || '').toLocaleDateString(
-                        currentLanguage === 'en' ? 'en-US' : 
-                        currentLanguage === 'lt' ? 'lt-LT' : 'fr-FR',
-                        { 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
-                        }
-                      )}
-                    </time>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4" />
-                    <span>{getLocalizedNumber(post?.readTime)}</span>
-                  </div>
-                </div>
-              </header>
-
-              {/* Article Content */}
-              <div className="prose prose-lg max-w-none blog-content">
-                {post && renderContent(getLocalizedText(post.content))}
-              </div>
-
-              {/* Article Footer */}
-              <footer className="mt-12 pt-8 border-t border-gray-200">
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {post?.tags?.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <Link
-                    to={`/blogs/${category}`}
-                    className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    More from {categoryData.title[currentLanguage as LanguageCode]}
-                  </Link>
-                  
-                  <a
-                    href={categoryData.originalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center text-orange-600 hover:text-orange-800 transition-colors duration-200"
-                  >
-                    Read on Substack
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                </div>
-              </footer>
+              </span>
+              <span className="meta uppercase tracking-[0.22em] inline-flex items-center gap-1.5">
+                <Clock className="w-3 h-3" /> {getLocalizedNumber(post?.readTime)} min read
+              </span>
             </div>
+          </header>
+
+          {/* Article Content */}
+          <div
+            className="prose prose-lg max-w-none blog-content font-display text-ink"
+            style={{ fontSize: '19px', lineHeight: 1.65, fontVariationSettings: '"opsz" 14, "wght" 400' }}
+          >
+            {post && renderContent(getLocalizedText(post.content))}
           </div>
+
+          {/* Article Footer */}
+          <footer className="mt-16 pt-8 border-t border-[rgba(26,22,18,0.32)]">
+            {post?.tags?.length ? (
+              <div className="flex flex-wrap gap-2 mb-8">
+                {post.tags.map((tag, index) => (
+                  <span key={index} className="tag">#{tag}</span>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <Link to={`/blogs/${category}`} className="btn btn-ghost">
+                <ArrowLeft className="w-3.5 h-3.5" />
+                More from {categoryData.title[currentLanguage as LanguageCode]}
+              </Link>
+              <a
+                href={categoryData.originalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                Read on Substack
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </div>
+          </footer>
         </article>
       </div>
     </div>
