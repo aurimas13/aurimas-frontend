@@ -16,6 +16,14 @@
       "source": "/(.*)",
       "headers": [
         {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com https://api.fontshare.com https://cdn.fontshare.com data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com; script-src 'self' https://js.stripe.com; connect-src 'self' https://*.supabase.co https://api.emailjs.com https://*.up.railway.app https://api.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com https://www.youtube.com https://youtube.com https://open.spotify.com https://www.paypal.com; form-action 'self' https://www.paypal.com https://checkout.stripe.com; manifest-src 'self'; worker-src 'self' blob:; upgrade-insecure-requests"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
         },
@@ -24,8 +32,20 @@
           "value": "DENY"
         },
         {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(self \"https://js.stripe.com\"), interest-cohort=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
           "key": "X-XSS-Protection",
-          "value": "1; mode=block"
+          "value": "0"
         }
       ]
     }

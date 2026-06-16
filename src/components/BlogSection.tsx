@@ -7,6 +7,7 @@ import { Calendar, Clock, User, Lock, ExternalLink, ArrowLeft } from 'lucide-rea
 import { blogCategories } from '../data/blogCategories';
 import { LanguageCode } from '../contexts/LanguageContext';
 import { loadSamplePosts } from '../data/samplePosts';
+import { sanitizeHtml } from '../utils/sanitize';
 
 // Helper to extract a string from a localized-or-plain value for the current language.
 const localized = (
@@ -597,7 +598,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
           // Handle underline _text_
           processedText = processedText.replace(/_(.*?)_/g, '<u>$1</u>');
           
-          return processedText;
+          return sanitizeHtml(processedText);
         };
 
         // Handle headers with enhanced markdown support (including links)

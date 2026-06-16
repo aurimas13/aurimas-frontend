@@ -19,6 +19,11 @@ const router = createBrowserRouter([
         element: <HomePage />
       },
       {
+        // Alias so the Stripe Checkout success/cancel redirect (/support?...) resolves.
+        path: "support",
+        element: <HomePage />
+      },
+      {
         path: "blogs",
         element: <BlogsPage />
       },
