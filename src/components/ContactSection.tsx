@@ -22,7 +22,12 @@ export const ContactSection: React.FC = () => {
     try {
       const response = await fetch('https://formspree.io/f/xzzvbzwg', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // Formspree requires `Accept: application/json` for AJAX/fetch submissions —
+        // otherwise it replies with a cross-origin redirect that fetch cannot read.
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -32,17 +37,20 @@ export const ContactSection: React.FC = () => {
           _subject: `Contact Form: ${formData.subject}`,
         }),
       });
+
       if (response.ok) {
         setShowSuccess(true);
         setFormData({ name: '', email: '', subject: '', message: '' });
         setTimeout(() => setShowSuccess(false), 5000);
       } else {
-        throw new Error('Failed to send message');
+        const data = await response.json().catch(() => null);
+        const detail = data?.errors?.map((e: { message: string }) => e.message).join(', ');
+        throw new Error(detail || `Formspree responded with ${response.status}`);
       }
     } catch (error) {
       console.error('Error sending message:', error);
       setShowError(true);
-      setTimeout(() => setShowError(false), 5000);
+      setTimeout(() => setShowError(false), 8000);
     } finally {
       setIsSubmitting(false);
     }
