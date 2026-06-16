@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { supabase, isSupabaseConfigured, createBlogPost, updateBlogPost, getBlogPosts, deleteBlogPost, uploadFile } from '../lib/supabase';
 import { getNewsletterSubscribers, sendNewPostNotification, type NewsletterSubscriber } from '../lib/newsletter';
 import { getBlogPostTemplates } from '../data/samplePosts';
+import { sanitizeHtml } from '../utils/sanitize';
 
 interface BlogManagerProps {
   onBack: () => void;
@@ -1986,7 +1987,7 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
     // Handle underline _text_
     processedText = processedText.replace(/_(.*?)_/g, '<u>$1</u>');
     
-    return processedText;
+    return sanitizeHtml(processedText);
   };
 
   const ContentPreview: React.FC<{ content: string }> = ({ content }) => {
@@ -2410,14 +2411,14 @@ export const BlogManager: React.FC<BlogManagerProps> = ({ onBack }) => {
       // Handle HTML div tags (like your centered text)
       if (line.includes('<div') && line.includes('</div>')) {
         return (
-          <div key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: line }} />
+          <div key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(line) }} />
         );
       }
       
       // Handle underline tags
       if (line.includes('<u>') && line.includes('</u>')) {
         return (
-          <div key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: line }} />
+          <div key={index} className="mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(line) }} />
         );
       }
       

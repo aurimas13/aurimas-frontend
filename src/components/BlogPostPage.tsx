@@ -6,6 +6,7 @@ import { translations } from '../data/translations';
 import { LanguageCode } from '../contexts/LanguageContext';
 import { BlogPost, LocalizedText } from '../types';
 import { Calendar, Clock, User, ArrowLeft } from 'lucide-react';
+import { sanitizeHtml } from '../utils/sanitize';
 
 // YouTube Embed Component (same as BlogSection)
 const YouTubeEmbed: React.FC<{ url: string; videoId: string }> = ({ url, videoId }) => {
@@ -270,7 +271,7 @@ const SimpleImage: React.FC<{
     // Handle underline _text_
     processedText = processedText.replace(/_(.*?)_/g, '<u>$1</u>');
     
-    return processedText;
+    return sanitizeHtml(processedText);
   };
 
 // MAIN COMPONENT - Named export to match import in AppRouter

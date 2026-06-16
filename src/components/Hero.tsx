@@ -30,8 +30,9 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
   return (
     <section className="relative pt-28 pb-24">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
-        {/* Hero — asymmetric grid: type column + portrait/margin-note column */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 lg:gap-20 items-end pt-10">
+        {/* Hero — asymmetric grid: type column + portrait/margin-note column.
+            Top-aligned so the portrait reads alongside the headline (F-pattern). */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 lg:gap-20 items-start pt-10">
           {/* Left: type */}
           <div>
             <div className="reveal reveal-d2 flex items-center gap-3 mb-7">

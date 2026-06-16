@@ -5,7 +5,7 @@ export const translations = {
       name: "Aurimas Aleksandras Nausėdas",
       subtitle: "Chemist turned AI Engineer & Writer",
       description: "Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.",
-      cta: "Explore My Work",
+      cta: "Read My Story",
       fieldNotes: "— Field notes from the lab bench"
     },
     about: {
@@ -295,7 +295,7 @@ export const translations = {
       name: "Aurimas Aleksandras Nausėdas",
       subtitle: "Chemikas tapęs DI inžinieriumi ir rašytoju",
       description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, DI duoda rezultatus, o istorijos atgyja ant lapo.",
-      cta: "Tyrinėti mano darbus",
+      cta: "Skaityti mano istoriją",
       fieldNotes: "— Užrašai iš laboratorijos"
     },
     about: {
@@ -585,7 +585,7 @@ export const translations = {
       name: "Aurimas Aleksandras Nausėdas",
       subtitle: "Chimiste devenu Ingénieur IA et Écrivain",
       description: "Bienvenue dans mon espace virtuel, où la chimie devient code, l'IA produit des résultats et les histoires reprennent vie.",
-      cta: "Explorer mon travail",
+      cta: "Lire mon histoire",
       fieldNotes: "— Notes de paillasse"
     },
     about: {

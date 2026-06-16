@@ -69,18 +69,18 @@ export const About: React.FC = () => {
 
           {/* Right: text + CV card */}
           <div>
-            <div className="space-y-5">
+            <div className="space-y-6 max-w-[68ch]">
               <p
-                className="drop-cap font-display text-ink"
-                style={{ fontSize: '19px', lineHeight: 1.6, fontVariationSettings: '"opsz" 14, "wght" 400' }}
+                className="font-sans text-ink-soft"
+                style={{ fontSize: '17px', lineHeight: 1.75, fontWeight: 400 }}
               >
                 {firstParagraph}
               </p>
               {restParagraphs.map((para, i) => (
                 <p
                   key={i}
-                  className="font-display text-ink"
-                  style={{ fontSize: '19px', lineHeight: 1.6, fontVariationSettings: '"opsz" 14, "wght" 400' }}
+                  className="font-sans text-ink-soft"
+                  style={{ fontSize: '17px', lineHeight: 1.75, fontWeight: 400 }}
                 >
                   {para}
                 </p>
