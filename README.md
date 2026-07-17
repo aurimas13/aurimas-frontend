@@ -1,6 +1,6 @@
 # aurimas-frontend
 
-Personal portfolio site for **Aurimas Aleksandras Nausėdas** — AI Engineer & Writer.
+Personal portfolio site for **Aurimas Aleksandras Nausėdas** — AI Architect, Engineer & Product Engineer.
 Live at [aurimas.io](https://aurimas.io). Deployed on Vercel.
 
 ## Stack
@@ -8,7 +8,7 @@ Live at [aurimas.io](https://aurimas.io). Deployed on Vercel.
 - React 18 + TypeScript + Vite
 - Tailwind CSS
 - React Router v7
-- Supabase (newsletter / blog persistence, optional)
+- Supabase (newsletter/blog persistence, optional)
 - Stripe (publishable key only, payments handled server-side)
 
 ## Scripts
@@ -31,5 +31,4 @@ browser SDK). Supabase keys are optional — the site falls back to
 
 ## Deployment
 
-Vercel auto-deploys from `main`. See `vercel.json` for SPA rewrite, asset
-caching, and security headers.
+Vercel auto-deploys from `main`. See `vercel.json` for SPA rewrite, asset caching, and security headers.
