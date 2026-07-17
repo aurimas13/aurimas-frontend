@@ -4,11 +4,14 @@ import { ArrowLeft, ExternalLink, AlertCircle, Github } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
-const projectMeta: Record<string, { url: string; github: string; index: string }> = {
-  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '01' },
-  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '02' },
-  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '03' },
-  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '04' },
+const projectMeta: Record<string, { url: string; github: string; index: string; domain?: string }> = {
+  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '01', domain: 'github.com/aurimas13' },
+  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '02' },
+  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '03' },
+  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '04' },
+  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '05' },
+  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '06', domain: 'github.com/aurimas13' },
+  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '07', domain: 'github.com/aurimas13' },
 };
 
 const Section: React.FC<{ title: string; children: React.ReactNode; index: string }> = ({
@@ -76,7 +79,7 @@ export const ProjectDetailPage: React.FC = () => {
         <div className="reveal reveal-d2 mb-12">
           <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[rgba(26,22,18,0.32)]">
             <span className="meta uppercase tracking-[0.2em]">{meta.index} · {t.projects.caseStudyLabel}</span>
-            <span className="meta uppercase tracking-[0.2em]">{slug}.aurimas.io</span>
+            <span className="meta uppercase tracking-[0.2em]">{meta.domain ?? `${slug}.aurimas.io`}</span>
           </div>
 
           <h1

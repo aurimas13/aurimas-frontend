@@ -4,10 +4,13 @@ import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
 const projectLinks = [
+  { slug: '100-days-with-ai', url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', stack: 'LLMs · AGENTS · DAILY' },
   { slug: 'cleartrace', url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace', stack: 'PYTHON · NEO4J · LLM' },
   { slug: 'aegis',      url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',      stack: 'NEXT.JS · POSTGRES' },
   { slug: 'gateway',    url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',   stack: 'REACT · SUPABASE · A/B' },
   { slug: 'agentic',    url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', stack: 'EXPO · OPENAI' },
+  { slug: 'machine-learning-goodness', url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', stack: 'PYTHON · ML/DL · 285★' },
+  { slug: 'solutions-to-problems', url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', stack: 'PY · JAVA · SQL' },
 ];
 
 interface HeroProps {
@@ -139,7 +142,7 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
 
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
             <span>{projectIndex.tip}</span>
-            <a href={projectLinks[0].url} target="_blank" rel="noopener noreferrer" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.openLiveSite}</a>
+            <a href={projectLinks[1].url} target="_blank" rel="noopener noreferrer" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.openLiveSite}</a>
             <Link to="/projects" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.allProjects}</Link>
           </div>
         </div>

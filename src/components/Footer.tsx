@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Github, Linkedin, Mail, Facebook, Instagram, Twitter, Youtube, Camera, Music, Activity, ChevronDown } from 'lucide-react';
+import { Github, Linkedin, Facebook, Instagram, Twitter, Youtube, Camera, Music, Activity, AtSign, Cloud, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
-const projectSlugs = ['cleartrace', 'aegis', 'gateway', 'agentic'];
+const projectSlugs = ['100-days-with-ai', 'cleartrace', 'aegis', 'gateway', 'agentic', 'machine-learning-goodness', 'solutions-to-problems'];
 
 const socials = [
   { Icon: Github,    url: 'https://github.com/aurimas13',                   label: 'GitHub' },
   { Icon: Linkedin,  url: 'https://www.linkedin.com/in/aurimasnausedas/',   label: 'LinkedIn' },
   { Icon: Twitter,   url: 'https://x.com/reksas13',                          label: 'X' },
+  { Icon: AtSign,    url: 'https://www.threads.com/@reksas13',               label: 'Threads' },
+  { Icon: Cloud,     url: 'https://bsky.app/profile/reksas13.bsky.social',   label: 'Bluesky' },
   { Icon: Instagram, url: 'https://www.instagram.com/reksas13/',             label: 'Instagram' },
   { Icon: Facebook,  url: 'https://www.facebook.com/auris13/',               label: 'Facebook' },
   { Icon: Youtube,   url: 'https://www.youtube.com/@aurimas13',              label: 'YouTube' },

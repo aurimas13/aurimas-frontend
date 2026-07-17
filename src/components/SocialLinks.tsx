@@ -10,6 +10,8 @@ import {
   Music,
   Activity,
   Coffee,
+  AtSign,
+  Cloud,
 } from 'lucide-react';
 import { socialLinks } from '../data/socialLinks';
 
@@ -24,6 +26,8 @@ const iconMap = {
   music: Music,
   activity: Activity,
   coffee: Coffee,
+  atSign: AtSign,
+  cloud: Cloud,
 };
 
 export const SocialLinks: React.FC = () => {

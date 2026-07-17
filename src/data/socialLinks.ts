@@ -22,6 +22,16 @@ export const socialLinks: SocialLink[] = [
     icon: 'twitter'
   },
   {
+    platform: 'Threads',
+    url: 'https://www.threads.com/@reksas13',
+    icon: 'atSign'
+  },
+  {
+    platform: 'Bluesky',
+    url: 'https://bsky.app/profile/reksas13.bsky.social',
+    icon: 'cloud'
+  },
+  {
     platform: 'Instagram',
     url: 'https://www.instagram.com/reksas13/',
     icon: 'instagram'

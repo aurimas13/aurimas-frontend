@@ -93,14 +93,14 @@ export const About: React.FC = () => {
                 <h4 className="display-sm" style={{ fontVariationSettings: '"opsz" 36, "wght" 500' }}>
                   {t.about.downloadCVShort}
                 </h4>
-                <span className="meta uppercase tracking-[0.2em]">PDF · 19 Apr 2026</span>
+                <span className="meta uppercase tracking-[0.2em]">PDF · 01 Jun 2026</span>
               </div>
               <p className="text-ink-soft text-[15px] mb-6">{t.about.downloadDescription}</p>
 
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() =>
-                    handlePDFDownload('/Aurimas_Resume_AI_Engineer.pdf', 'Aurimas_Nausedas_CV_English.pdf')
+                    handlePDFDownload('/Aurimas_Nausedas_CV_English.pdf', 'Aurimas_Nausedas_CV_English.pdf')
                   }
                   className="btn btn-primary"
                 >
@@ -109,7 +109,7 @@ export const About: React.FC = () => {
                 </button>
                 <button
                   onClick={() =>
-                    handlePDFDownload('/Aurimas_Resume_AI_Engineer_LT.pdf', 'Aurimas_Nausedas_CV_Lithuanian.pdf')
+                    handlePDFDownload('/Aurimas_Nausedas_CV_Lithuanian.pdf', 'Aurimas_Nausedas_CV_Lithuanian.pdf')
                   }
                   className="btn btn-ghost"
                 >
@@ -118,7 +118,7 @@ export const About: React.FC = () => {
                 </button>
                 <button
                   onClick={() =>
-                    handlePDFDownload('/Aurimas_Resume_AI_Engineer_FR.pdf', 'Aurimas_Nausedas_CV_French.pdf')
+                    handlePDFDownload('/Aurimas_Nausedas_CV_French.pdf', 'Aurimas_Nausedas_CV_French.pdf')
                   }
                   className="btn btn-ghost"
                 >

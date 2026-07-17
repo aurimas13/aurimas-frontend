@@ -1206,7 +1206,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onManageBlog }) => {
               <h4 className="display-sm text-ink" style={{ fontSize: '24px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
                 {t.blogs.beFirstToKnow}
               </h4>
-              <span className="meta uppercase tracking-[0.2em]">{(t.blogs as any).subscribe}</span>
+              <span className="meta uppercase tracking-[0.2em]">{(t.blogs as any).subscribeEyebrow}</span>
             </div>
             <p className="text-ink-soft text-[15px] mb-6 max-w-[60ch]">{t.blogs.joinWaitlist}</p>
 

@@ -3,8 +3,8 @@ export const translations = {
     hero: {
       greeting: "Hi, I'm",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemist turned AI Engineer & Writer",
-      description: "Welcome to my digital space where chemistry meets code, AI delivers and stories come to life.",
+      subtitle: "Chemist turned AI Trifecta",
+      description: "Welcome. Hope you'll enjoy the stay.",
       cta: "Read My Story",
       fieldNotes: "— Field notes from the lab bench"
     },
@@ -14,7 +14,7 @@ export const translations = {
       fromTheDesk: "From the desk of A. Nausėdas",
       title: "About Me",
       myStory: "My Story",
-      bio: "I am disciplined, empathetic, strategic, eager, and devoted to what I do. I am to make the changes. Upside Down to Upside Down.\n\nSince high school, I assumed I would work as a scientist, but life is far from being figured out when you're sitting at a school desk. Then, the university and numerous internships came along, deepening my self-doubt and prompting me to question everything, which has given me the confidence to never be afraid to change my career path. Having not taken many risks over the last decade, I am now.\n\nI am a chemist from the University of Edinburgh who re-specialized to become an expert in Computer Science and Artificial Intelligence (AI).\n\nI was drawn to computing relatively late, in 2010, during my time at the university. It was then that I realized I didn't fancy wet lab at all. However, it took me until late 2021 to close my pursuit of a scientific career and concentrate on Computer Science, Artificial Intelligence, and Technical Leadership roles. I devoted myself entirely to computing and to leading from the start of 2022. To build up to that, I took numerous Computer Science online courses and joined several professional organizations, including the Artificial Intelligence Association of Lithuania and the IEEE Computer Society. Although I worked in biology and bioinformatics from 2015 to 2021, I prefer to solve chemistry and real-world problems by coding, finding AI solutions, and leading technical teams rather than continuing in biological research without AI. This brings me to the present day, when I have also returned to my other passion – writing.\n\nOn this website, you will find my scribbles, as I have been writing for over 16 years and continue to do so. You are welcome to subscribe to my blog and support my work, but please only if you want to. If you become a subscriber, that's golden, as it's the ultimate affirmation that what I do matters beyond my professional career.\n\nFor which - my specialties include quickly learning new skills, programming languages, problem-solving, applying the first-principle approach, managing, and leading teams. I am enthusiastically exploring computational core principles, strategic thinking methods, management tools, support engineering, and other programming engines, frameworks, modules, and principles that I can integrate and make work in my head, then implement in real life.",
+      bio: "Upside Down to Upside Down.\n\nSince high school, I assumed I would work as a scientist, but life is far from being figured out when you're sitting at a school desk. Then, the university and numerous internships came along, deepening my self-doubt and prompting me to question everything, which has given me the confidence to never be afraid to change my career path. Having not taken many risks over the last decade, I am now.\n\nI am a chemist from the University of Edinburgh who re-specialized to become a trifecta in Computer Science and Artificial Intelligence (AI) - Architect, Engineer and Manager.\n\nI was drawn to computing relatively late, in 2010, during my time at the university. It was then that I realized I didn't fancy wet lab at all. However, it took me until late 2021 to close my pursuit of a scientific career and concentrate on Computer Science, Artificial Intelligence, and Managing, Leadership roles. I devoted myself entirely to computing and to leading from the start of 2022. To build up to that, I took numerous Computer Science online courses and joined several professional organizations, including the Artificial Intelligence Association of Lithuania and the IEEE Computer Society. Although I worked in biology and bioinformatics from 2015 to 2021, I prefer to solve chemistry and real-world problems by AI coding, finding AI solutions, and leading teams rather than continuing in biological research without AI. This brings me to the present day, when I have also returned to my other passion – writing.\n\nOn this website, you will find my technical scribbles, as I have been writing for over 16 years and continue to do so. You are welcome to subscribe to my blog and support my work, but please only if you want to. If you become a subscriber, that's golden, as it's the ultimate affirmation that what I do matters beyond my professional career.\n\nFor which - my specialties include quickly learning new skills, new types of engineering, problem-solving, applying the first-principle approach, managing, and leading teams. I am enthusiastically exploring computational core principles, strategic thinking methods, management tools, engineering, and other programming engines, frameworks, modules, and principles that I can integrate and make work in my head, then implement in real life.",
       skills: "Skills & Expertise",
       experience: "Experience Highlights",
       downloadCVShort: "Download CV",
@@ -23,7 +23,7 @@ export const translations = {
     },
     blogs: {
       newsletterEyebrow: "No. 03 · The Newsletter",
-      subscribe: "— Subscribe",
+      subscribeEyebrow: "— Subscribe",
       originalSubstackLabel: "Original Substack",
       title: "Blog",
       subtitle: "Upcoming from Substack: Weekly AI, Technology, Music & Healthcare Newsletter",
@@ -172,7 +172,7 @@ export const translations = {
       fillAllFields: "Please fill in all fields"
     },
     footer: {
-      description: "Chemist turned AI Engineer and Writer, passionate about the intersection of AI, science, technology, and creativity.",
+      description: "Chemist turned AI Architect, Engineer and Product Manager, passionate about the intersection of AI, science, technology, and creativity.",
       quickLinks: "Quick Links",
       connect: "Connect",
       madeWith: "Made with",
@@ -193,11 +193,11 @@ export const translations = {
     currently: {
       title: "Currently",
       openTo: "Open to",
-      openToValue: "AI Engineer roles",
+      openToValue: "AI roles",
       basedIn: "Based in",
       basedInValue: "Vilnius / Remote",
       stack: "Stack",
-      stackValue: "Py · TS · LLMs",
+      stackValue: "AIs · LLMs",
       reading: "Reading",
       readingValue: "Yesteryear"
     },
@@ -212,7 +212,7 @@ export const translations = {
     },
     projects: {
       title: "Projects",
-      subtitle: "End-to-end AI products — architected, built, and shipped. Each one solves a real enterprise problem.",
+      subtitle: "Most recent first: a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, architect, build, and ship.",
       featured: "Featured Projects",
       viewProject: "View Live Project",
       viewCaseStudy: "View Case Study",
@@ -231,6 +231,22 @@ export const translations = {
       backToProjects: "Back to Projects",
       screenshotsPlaceholder: "Screenshots will be added soon.",
       items: {
+        "100-days-with-ai": {
+          name: "100 Days With AI",
+          tagline: "One source a day. One honest note. For 100 days.",
+          description: "A daily public learning log of modern AI — transformers, LLMs, agentic AI, RAG, fine-tuning, evals and MLOps. One carefully chosen source a day, studied and logged with an honest note, then shared daily on X, Bluesky, Threads and LinkedIn under #100DaysWithAI until the campaign ends.",
+          problem: "Most learning disappears the moment the tab closes. Reading about AI is easy; retaining it, questioning it, and turning it into working intuition is not. And learning alone leaves no receipt — no public record of what was actually understood, what was tried, and what didn't land.",
+          approach: "One carefully chosen source per day — a paper, course, repo, post or tool, marked Advanced or Medium — studied properly, never skimmed. Each day produces a logged entry with 3–5 takeaways, why it matters, and what I actually tried. The same note, compressed, ships daily at ~9:00 EEST to X (@reksas13), Bluesky (@reksas13.bsky.social), Threads (@reksas13) and LinkedIn, with the day's card. No skipped numbers. No faked expertise.",
+          role: "Author and maintainer. I pick each source the evening before, study it the same morning, write the day note, keep the progress log, and publish across four networks daily — treating the discipline of the unbroken streak as the product itself.",
+          tech: ["LLMs", "Agentic AI", "RAG", "Fine-tuning", "Evals", "MLOps", "GitHub", "X · Bluesky · Threads · LinkedIn"],
+          metrics: [
+            { value: "100", label: "Days · one source each" },
+            { value: "4", label: "Networks, posted daily ~9:00 EEST" },
+            { value: "0", label: "Skipped days · unbroken streak" }
+          ],
+          outcome: "A growing, level-marked list of 100 curated entry points into modern AI with honest working notes — including the parts that did not land. MIT-licensed, so the sources list and the format double as a working template for anyone who wants to run their own 100 days.",
+          novel: "Learning in public beats learning alone — and it leaves a receipt. A source I do not understand still gets an honest note saying so. I read these sources as an AI engineer who came from chemistry: looking for the mechanism, not the headline."
+        },
         cleartrace: {
           name: "ClearTrace Intelligence",
           tagline: "Agentic AML Investigation Platform",
@@ -294,6 +310,38 @@ export const translations = {
           ],
           outcome: "Shipped a functional MVP demonstrating that Generative UI dramatically outperforms text-only AI interfaces for mobile B2B workflows. Validated that proactive zero-state suggestions drive over 40% session engagement and that multi-agent orchestration on mobile is viable for real enterprise workflows.",
           novel: "Most mobile AI tools are desktop experiences shrunken to fit a phone. Agentic Mobile proves that AI on mobile needs a fundamentally different interaction model — one where the AI renders actionable UI components (approval buttons, live charts, workflow cards) instead of text responses. Built in days, not months, to validate the core thesis before heavy investment."
+        },
+        "machine-learning-goodness": {
+          name: "Machine Learning Goodness",
+          tagline: "An open ML/DL archive — 285+ stars on GitHub.",
+          description: "A community-starred Machine Learning archive grown out of the #100DaysOfMLCode challenge — Jupyter notebooks, ML/DL projects, cheat sheets, and curated tables of worthy books, tools and repositories, maintained and expanded since 2023.",
+          problem: "Machine Learning knowledge is scattered across courses, papers, blog posts and toolboxes. Beginners drown in options; practitioners waste hours re-finding the same reference for the third time. Most 'awesome lists' are link dumps — nobody checked whether the material is actually worth the reader's evening.",
+          approach: "Built through daily discipline: during #100DaysOfMLCode every day produced a completed notebook, project or vetted resource, and the curation continued long after the challenge through FinishYearWithML. Everything is organized into navigable tables — Worthy Books, Worthy Tools, Worthy Repositories — alongside runnable notebooks and notes, with each addition shared publicly as it landed.",
+          role: "Creator and sole maintainer. I read, ran or tested every resource before it earned a row in a table, wrote the notebooks and projects, and kept the daily cadence through two public challenges — the same learning-in-public discipline that 100 Days With AI now continues for the LLM era.",
+          tech: ["Python", "Jupyter", "TensorFlow", "Keras", "PyTorch", "scikit-learn", "Pandas", "NumPy"],
+          metrics: [
+            { value: "285+", label: "GitHub stars" },
+            { value: "45+", label: "Forks by practitioners" },
+            { value: "100", label: "Days of ML code · daily streak" }
+          ],
+          outcome: "A reference archive that hundreds of practitioners have starred and forked as a working entry point into ML/DL — from mathematics-for-ML books to production MLOps tools. MIT-licensed and still growing whenever material worth sharing is found.",
+          novel: "Not a link dump. Every entry was read, run or tested before inclusion, and the archive doubles as a public record of the learning itself — the notebooks and challenge logs show the path, not just the destination."
+        },
+        "solutions-to-problems": {
+          name: "Solutions To Problems",
+          tagline: "Interview-grade algorithms — solved, explained, maintained.",
+          description: "A curated collection of solutions in Python, Java, SQL and Pandas to LeetCode and HackerRank problems asked in high-tier tech interviews — with preparation advice — built and maintained since 2022.",
+          problem: "Interview preparation is noisy: solutions found online are often unexplained, inefficient or simply wrong, and algorithmic fundamentals fade fast without deliberate practice. What's missing is a trustworthy, organized set of solutions you can learn the reasoning from — not just copy.",
+          approach: "Solve first, then explain. Each problem is worked through in the language that fits it best — Python, Java, SQL or Pandas — organized by platform and topic so patterns (two pointers, dynamic programming, joins and window functions) become visible across problems rather than memorized one at a time. Preparation advice distilled from real interview cycles sits alongside the code.",
+          role: "Author and maintainer. I solved every problem, kept the solutions idiomatic per language, and organized the collection so it works both as daily practice material and as a pre-interview refresher.",
+          tech: ["Python", "Java", "SQL", "Pandas", "LeetCode", "HackerRank"],
+          metrics: [
+            { value: "94+", label: "GitHub stars" },
+            { value: "30+", label: "Forks" },
+            { value: "4", label: "Languages · Python, Java, SQL, Pandas" }
+          ],
+          outcome: "A steadily starred and forked resource that others use to prepare for high-tier interviews — and the sharpened algorithmic base I carry into every AI engineering role. MIT-licensed.",
+          novel: "Multi-language by design: seeing the same problem solved in Python, Java and SQL exposes what is essential about the algorithm versus what is syntax. The collection favors readable, explained solutions over code-golf cleverness."
         }
       }
     }
@@ -302,8 +350,8 @@ export const translations = {
     hero: {
       greeting: "Laba, esu",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemikas tapęs DI inžinieriumi ir rašytoju",
-      description: "Sveiki užklidę į mano virtualią erdvę, kur chemija tapo kodais, DI duoda rezultatus, o istorijos atgyja ant lapo.",
+      subtitle: "Chemikas - dabar DI trys rolės",
+      description: "Sveiki. Tikiuosi patiks užklydimas.",
       cta: "Skaityti mano istoriją",
       fieldNotes: "— Užrašai iš laboratorijos"
     },
@@ -313,7 +361,7 @@ export const translations = {
       fromTheDesk: "Nuo A. Nausėdo stalo",
       title: "Apie mane",
       myStory: "Mano istorija",
-      bio: "Esu disciplinuotas, empatiškas, strategiškas, žingeidus ir atsidavęs tam, ką darau. Esu tam, kad daryčiau pokyčius. Aukštyn kojomis į aukštyn kojomis.\n\nNuo vidurinės mokyklos maniau, kad dirbsiu mokslininku, bet gyvenimas toli gražu nėra nuspręstas, kai sėdi mokyklos suole. Tada atėjo universitetas ir daugybė stažuočių, kurios pagilino mano abejones savimi ir paskatino viską kvestionuoti, o tai davė man pasitikėjimo niekada nebijoti keisti karjeros kelio. Neprisiėmęs daug rizikos per pastaruosius dešimt metų, dabar tai darau.\n\nEsu chemikas, baigęs Edinburgo universitetą, kuris persikvalifikavo, kad taptų kompiuterių mokslo ir dirbtinio intelekto (DI) ekspertu.\n\nPrie kompiuterijos prisijungiau gana vėlai, 2010 metais, studijų universitete metu. Būtent tada supratau, kad laboratorijos darbas man visai nepatinka. Tačiau man prireikė iki 2021 metų pabaigos, kad užbaigčiau mokslinės karjeros siekius ir susitelkčiau į kompiuterių mokslą, dirbtinį intelektą ir techninio vadovavimo vaidmenis. Visiškai atsidaviau kompiuterijai ir vadovavimui nuo 2022 metų pradžios. Tam pasiruošti lankiau daugybę kompiuterių mokslo internetinių kursų ir prisijungiau prie kelių profesinių organizacijų, tokių kaip Lietuvos Dirbtinio Intelekto Asociacija ir IEEE kompiuterių draugija. Nors nuo 2015 iki 2021 metų dirbau biologijos ir bioinformatikos srityse, man labiau patinka spręsti chemijos ir realaus pasaulio problemas programuojant, ieškant DI sprendimų ir vadovaujant techninėms komandoms, nei tęsti biologijos tyrimus be DI. Tai mane atveda į šiandienos dieną, kai taip pat grįžau prie kitos savo aistros – rašymo.\n\nŠioje svetainėje rasite mano keverziojimus, nes rašau jau daugiau nei 16 metų ir tęsiu toliau. Kviečiu prenumeruoti mano tinklaraštį ir paremti mano darbą, bet tik jei norite. Jei tapsite prenumeratoriumi – tai aukso vertės, nes tai yra geriausias patvirtinimas, kad tai, ką darau, yra svarbu, ne tik mano profesinėje karjeroje.\n\nMano specialybės apima greitą naujų įgūdžių mokymąsi, programavimo kalbas, problemų sprendimą, pirmųjų principų taikymą, valdymą ir komandų vadovavimą. Entuziastingai tyrinėju kompiuterijos pagrindinius principus, strateginio mąstymo metodus, valdymo įrankius, palaikymo inžineriją ir kitus programavimo variklius, karkasus, modulius ir principus, kuriuos galiu integruoti ir priversti veikti savo galvoje, o tada įgyvendinti realybėje.",
+      bio: "Aukštyn kojomis į aukštyn kojomis.\n\nNuo vidurinės mokyklos maniau, kad dirbsiu mokslininku, bet gyvenimas toli gražu nėra nuspręstas, kai sėdi mokyklos suole. Tada atėjo universitetas ir daugybė stažuočių, kurios pagilino mano abejones savimi ir paskatino viską kvestionuoti, o tai davė man pasitikėjimo niekada nebijoti keisti karjeros kelio. Neprisiėmęs daug rizikos per pastaruosius dešimt metų, dabar tai darau.\n\nEsu chemikas, baigęs Edinburgo universitetą, kuris persikvalifikavo, kad taptų kompiuterių mokslo ir dirbtinio intelekto (DI) architektu, inžinieriu ir vadybininku.\n\nPrie kompiuterijos prisijungiau gana vėlai, 2010 metais, studijų universitete metu. Būtent tada supratau, kad laboratorijos darbas man visai nepatinka. Tačiau man prireikė iki 2021 metų pabaigos, kad užbaigčiau mokslinės karjeros siekius ir susitelkčiau į kompiuterių mokslą, dirbtinį intelektą ir vadovavimo vaidmenis. Visiškai atsidaviau kompiuterijai ir vadovavimui nuo 2022 metų pradžios. Tam pasiruošti lankiau daugybę kompiuterių mokslo internetinių kursų ir prisijungiau prie kelių profesinių organizacijų, tokių kaip Lietuvos Dirbtinio Intelekto Asociacija ir IEEE kompiuterių draugija. Nors nuo 2015 iki 2021 metų dirbau biologijos ir bioinformatikos srityse, man labiau patinka spręsti chemijos ir realaus pasaulio problemas programuojant DI pagalba, ieškant DI sprendimų ir vadovaujant komandoms, nei tęsti biologijos tyrimus be DI. Tai mane atveda į šiandienos dieną, kai taip pat grįžau prie kitos savo aistros – rašymo.\n\nŠioje svetainėje rasite mano keverziojimus, nes rašau jau daugiau nei 16 metų ir tęsiu toliau. Kviečiu prenumeruoti mano tinklaraštį ir paremti mano darbą, bet tik jei norite. Jei tapsite prenumeratoriumi – tai aukso vertės, nes tai yra geriausias patvirtinimas, kad tai, ką darau, yra svarbu, ne tik mano profesinėje karjeroje.\n\nMano specialybės apima greitą naujų įgūdžių mokymąsi, programavimo kalbas, problemų sprendimą, pirmųjų principų taikymą, valdymą ir komandų vadovavimą. Entuziastingai tyrinėju kompiuterijos pagrindinius principus, strateginio mąstymo metodus, valdymo įrankius, inžinerijas ir kitus DI variklius, karkasus, modulius ir principus, kuriuos galiu integruoti ir priversti veikti savo galvoje, o tada įgyvendinti realybėje.",
       skills: "Įgūdžiai ir kompetencijos",
       experience: "Patirties akcentai",
       downloadCVShort: "Atsisiųsti CV",
@@ -322,7 +370,7 @@ export const translations = {
     },
     blogs: {
       newsletterEyebrow: "Nr. 03 · Naujienlaiškis",
-      subscribe: "— Prenumeruoti",
+      subscribeEyebrow: "— Prenumeruoti",
       originalSubstackLabel: "Originalus Substack",
       title: "Tinkliaraštis",
       subtitle: "Netrukus iš Substack: Savaitinis DI, technologijų, muzikos ir sveikatos naujienlaiškis",
@@ -471,7 +519,7 @@ export const translations = {
       fillAllFields: "Prašome užpildyti visus laukus"
     },
     footer: {
-      description: "Chemikas tapęs DI inžinieriumi ir rašytoju, aistringas DI, mokslo, technologijų ir kūrybos sankirtos srityse.",
+      description: "Chemikas tapęs DI architektu, inžinieriumi ir vadybininku, aistringas DI, mokslo, technologijų ir kūrybos sankirtos srityse.",
       quickLinks: "Greitos nuorodos",
       connect: "Susisiekti",
       madeWith: "Sukurta su",
@@ -492,11 +540,11 @@ export const translations = {
     currently: {
       title: "Šiuo metu",
       openTo: "Atviras",
-      openToValue: "DI inžinieriaus pareigoms",
+      openToValue: "DI pareigoms",
       basedIn: "Įsikūręs",
       basedInValue: "Vilniuje / Nuotoliniu",
       stack: "Stack",
-      stackValue: "Py · TS · LLMs",
+      stackValue: "AIs · LLMs",
       reading: "Skaitau",
       readingValue: "Yesteryear"
     },
@@ -511,7 +559,7 @@ export const translations = {
     },
     projects: {
       title: "Projektai",
-      subtitle: "DI produktai nuo A iki Z — suprojektuoti, sukurti ir paleisti. Kiekvienas sprendžia realią įmonių problemą.",
+      subtitle: "Naujausi pirmiausia: kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau.",
       featured: "Pagrindiniai projektai",
       viewProject: "Žiūrėti projektą",
       viewCaseStudy: "Žiūrėti atvejo analizę",
@@ -530,6 +578,22 @@ export const translations = {
       backToProjects: "Grįžti prie projektų",
       screenshotsPlaceholder: "Ekrano nuotraukos bus pridėtos netrukus.",
       items: {
+        "100-days-with-ai": {
+          name: "100 Days With AI",
+          tagline: "Vienas šaltinis per dieną. Vienas sąžiningas užrašas. 100 dienų.",
+          description: "Kasdienis viešas šiuolaikinio DI mokymosi žurnalas — transformeriai, DKM, agentinis DI, RAG, modelių derinimas, vertinimai ir MLOps. Kasdien vienas kruopščiai parinktas šaltinis, išstudijuotas ir užfiksuotas sąžiningu užrašu, tada kasdien dalinamasi X, Bluesky, Threads ir LinkedIn su #100DaysWithAI iki kampanijos pabaigos.",
+          problem: "Didžioji dalis mokymosi išnyksta vos užvėrus naršyklės kortelę. Skaityti apie DI lengva; įsiminti, kvestionuoti ir paversti veikiančia intuicija — ne. O mokantis vienam nelieka jokio įrodymo — jokio viešo įrašo, kas iš tiesų suprasta, kas išbandyta ir kas nepavyko.",
+          approach: "Vienas kruopščiai parinktas šaltinis per dieną — straipsnis, kursas, repozitorija, įrašas ar įrankis, pažymėtas kaip pažengusiems arba vidutinio lygio — išstudijuotas nuodugniai, ne prabėgomis. Kiekviena diena — užfiksuotas įrašas su 3–5 išvadomis, kodėl tai svarbu ir ką iš tiesų išbandžiau. Ta pati žinutė, suglaudinta, kasdien ~9:00 EEST keliauja į X (@reksas13), Bluesky (@reksas13.bsky.social), Threads (@reksas13) ir LinkedIn su dienos kortele. Jokių praleistų numerių. Jokios apsimestinės ekspertizės.",
+          role: "Autorius ir prižiūrėtojas. Kiekvieną šaltinį pasirenku vakare, studijuoju tą patį rytą, rašau dienos užrašą, pildau progreso žurnalą ir kasdien publikuoju keturiuose tinkluose — nenutrūkstamos serijos discipliną laikydamas pačiu produktu.",
+          tech: ["LLMs", "Agentic AI", "RAG", "Fine-tuning", "Evals", "MLOps", "GitHub", "X · Bluesky · Threads · LinkedIn"],
+          metrics: [
+            { value: "100", label: "Dienų · po vieną šaltinį" },
+            { value: "4", label: "Tinklai, publikuojama kasdien ~9:00 EEST" },
+            { value: "0", label: "Praleistų dienų · nenutrūkstama serija" }
+          ],
+          outcome: "Augantis, pagal lygį pažymėtas 100 kruopščiai atrinktų šiuolaikinio DI šaltinių sąrašas su sąžiningais darbo užrašais — įskaitant tai, kas nepavyko. MIT licencija, tad šaltinių sąrašas ir formatas kartu yra veikiantis šablonas kiekvienam, norinčiam pradėti savo 100 dienų.",
+          novel: "Mokytis viešai geriau nei mokytis vienam — ir lieka įrodymas. Šaltinis, kurio nesuprantu, vis tiek gauna sąžiningą užrašą apie tai. Šiuos šaltinius skaitau kaip DI inžinierius, atėjęs iš chemijos: ieškau mechanizmo, o ne antraštės."
+        },
         cleartrace: {
           name: "ClearTrace Intelligence",
           tagline: "Agentinė pinigų plovimo prevencijos tyrimo platforma",
@@ -593,6 +657,38 @@ export const translations = {
           ],
           outcome: "Pristatytas MVP, demonstruojantis, kad generatyvioji UI dramatiškai pranoksta tekstinius DI atsakymus mobiliems B2B darbo srautams. Patvirtinta, kad proaktyvūs pasiūlymai skatina >40% sesijų įsitraukimą.",
           novel: "Dauguma mobilių DI įrankių yra darbalaukio patirtys, sumažintos telefono dydžiui. Agentic Mobile įrodo, kad DI mobiliajame reikalauja fundamentaliai kitokio sąveikos modelio — kai DI generuoja veiksmines UI komponentes vietoj tekstinių atsakymų."
+        },
+        "machine-learning-goodness": {
+          name: "Machine Learning Goodness",
+          tagline: "Atviras ML/DL archyvas — 285+ žvaigždučių GitHub.",
+          description: "Bendruomenės įvertintas mašininio mokymosi archyvas, išaugęs iš #100DaysOfMLCode iššūkio — Jupyter užrašinės, ML/DL projektai, atmintinės ir kruopščiai atrinktos vertų knygų, įrankių bei repozitorijų lentelės, prižiūrimos ir plečiamos nuo 2023 metų.",
+          problem: "Mašininio mokymosi žinios išsibarsčiusios po kursus, straipsnius, tinklaraščius ir įrankius. Pradedantieji skęsta pasirinkimuose; praktikai gaišta valandas trečią kartą ieškodami tos pačios nuorodos. Dauguma „awesome“ sąrašų — tik nuorodų krūvos, kurių niekas nepatikrino.",
+          approach: "Sukurta kasdiene disciplina: per #100DaysOfMLCode kiekviena diena davė užbaigtą užrašinę, projektą ar patikrintą šaltinį, o kuravimas tęsėsi ir po iššūkio per FinishYearWithML. Viskas suskirstyta į naršomas lenteles — vertos knygos, verti įrankiai, vertos repozitorijos — greta paleidžiamų užrašinių ir užrašų, kiekvienu papildymu viešai pasidalinant.",
+          role: "Kūrėjas ir vienintelis prižiūrėtojas. Kiekvieną šaltinį perskaičiau, paleidau ar išbandžiau prieš įtraukdamas, parašiau užrašines bei projektus ir išlaikiau kasdienį ritmą per du viešus iššūkius — tą pačią mokymosi viešai discipliną, kurią DKM erai dabar tęsia 100 Days With AI.",
+          tech: ["Python", "Jupyter", "TensorFlow", "Keras", "PyTorch", "scikit-learn", "Pandas", "NumPy"],
+          metrics: [
+            { value: "285+", label: "GitHub žvaigždučių" },
+            { value: "45+", label: "Praktikų atšakų" },
+            { value: "100", label: "ML kodo dienų · kasdienė serija" }
+          ],
+          outcome: "Šimtų praktikų pažymėtas žvaigždute ir atšakotas archyvas — veikiantis įėjimo taškas į ML/DL: nuo matematikos knygų iki gamybinių MLOps įrankių. MIT licencija, vis dar auga radus vertos medžiagos.",
+          novel: "Ne nuorodų krūva. Kiekvienas įrašas buvo perskaitytas, paleistas ar išbandytas prieš įtraukiant, o archyvas kartu yra viešas paties mokymosi įrašas — užrašinės ir iššūkių žurnalai rodo kelią, ne tik rezultatą."
+        },
+        "solutions-to-problems": {
+          name: "Solutions To Problems",
+          tagline: "Pokalbių lygio algoritmai — išspręsti, paaiškinti, prižiūrimi.",
+          description: "Kruopščiai atrinkta LeetCode ir HackerRank uždavinių, užduodamų aukščiausio lygio technologijų pokalbiuose, sprendimų kolekcija Python, Java, SQL ir Pandas kalbomis — su pasiruošimo patarimais, kuriama ir prižiūrima nuo 2022 metų.",
+          problem: "Pasiruošimas pokalbiams pilnas triukšmo: internete randami sprendimai dažnai nepaaiškinti, neefektyvūs ar tiesiog klaidingi, o algoritmų pagrindai be sąmoningos praktikos greitai blėsta. Trūksta patikimo, organizuoto sprendimų rinkinio, iš kurio galima mokytis mąstymo, o ne tik kopijuoti.",
+          approach: "Pirma išspręsti, tada paaiškinti. Kiekvienas uždavinys sprendžiamas jam tinkamiausia kalba — Python, Java, SQL ar Pandas — suskirstytas pagal platformą ir temą, kad šablonai (du rodikliai, dinaminis programavimas, jungimai ir lango funkcijos) taptų matomi tarp uždavinių. Greta kodo — iš tikrų pokalbių ciklų išgryninti pasiruošimo patarimai.",
+          role: "Autorius ir prižiūrėtojas. Išsprendžiau kiekvieną uždavinį, išlaikiau sprendimus idiomatiškus kiekvienai kalbai ir organizavau kolekciją taip, kad ji tiktų ir kasdienei praktikai, ir pasikartojimui prieš pokalbį.",
+          tech: ["Python", "Java", "SQL", "Pandas", "LeetCode", "HackerRank"],
+          metrics: [
+            { value: "94+", label: "GitHub žvaigždučių" },
+            { value: "30+", label: "Atšakų" },
+            { value: "4", label: "Kalbos · Python, Java, SQL, Pandas" }
+          ],
+          outcome: "Nuolat žymimas žvaigždutėmis ir atšakojamas šaltinis, kurį kiti naudoja ruošdamiesi aukščiausio lygio pokalbiams — ir išgryninta algoritmų bazė, kurią nešuosi į kiekvieną DI inžinerijos vaidmenį. MIT licencija.",
+          novel: "Kelios kalbos pagal dizainą: matant tą patį uždavinį, išspręstą Python, Java ir SQL, tampa aišku, kas algoritme esminio, o kas — tik sintaksė. Kolekcijoje pirmenybė teikiama skaitomiems, paaiškintiems sprendimams."
         }
       }
     }
@@ -601,8 +697,8 @@ export const translations = {
     hero: {
       greeting: "Bonjour, je suis",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chimiste devenu Ingénieur IA et Écrivain",
-      description: "Bienvenue dans mon espace virtuel, où la chimie devient code, l'IA produit des résultats et les histoires reprennent vie.",
+      subtitle: "Chimiste — aujourd'hui trois rôles en IA",
+      description: "Bienvenue. J'espère que le séjour vous plaira.",
       cta: "Lire mon histoire",
       fieldNotes: "— Notes de paillasse"
     },
@@ -612,7 +708,7 @@ export const translations = {
       fromTheDesk: "Du bureau d'A. Nausėdas",
       title: "À propos de moi",
       myStory: "Mon histoire",
-      bio: "Je suis discipliné, empathique, stratégique, motivé et dévoué à ce que je fais. Je suis déterminé à changer les choses. Sens dessus dessous vers sens dessus dessous.\n\nAu lycée, je pensais devenir scientifique, mais la vie est loin d'être toute tracée quand on est assis sur les bancs de l'école. Puis sont arrivés l'université et de nombreux stages qui ont approfondi mes doutes et m'ont poussé à tout remettre en question, ce qui m'a donné la confiance de ne jamais avoir peur de changer de carrière. Après avoir pris peu de risques au cours de la dernière décennie, je me lance aujourd'hui.\n\nJe suis un chimiste diplômé de l'université d'Édimbourg qui s'est reconverti pour devenir expert en informatique et en intelligence artificielle (IA).\n\nJe me suis intéressé à l'informatique relativement tard, en 2010, pendant mes études universitaires. C'est à cette époque que j'ai réalisé que je n'aimais pas du tout les laboratoires. Il m'a toutefois fallu attendre la fin de l'année 2021 pour mettre un terme à ma carrière scientifique et me consacrer à l'informatique, à l'intelligence artificielle et aux rôles de direction technique. Je me consacre entièrement à l'informatique et au leadership depuis le début de l'année 2022. Pour y parvenir, j'ai suivi de nombreux cours d'informatique en ligne et j'ai rejoint plusieurs organisations professionnelles, dont l'Association lituanienne pour l'intelligence artificielle et la Computer Society de l'IEEE. Bien que j'aie travaillé en biologie et en bio-informatique de 2015 à 2021, je préfère résoudre des problèmes de chimie et du monde réel en codant, en trouvant des solutions d'IA et en dirigeant des équipes techniques, plutôt que de poursuivre la recherche biologique sans IA. Cela m'amène à aujourd'hui, où je suis également revenu à mon autre passion – l'écriture.\n\nSur ce site, vous trouverez mes écrits, que je rédige depuis plus de 16 ans et que je continue à écrire. Je vous invite à vous abonner à mon blog et à soutenir mon travail, mais uniquement si vous le souhaitez. Si vous devenez abonné, c'est en or, car c'est la meilleure preuve que ce que je fais compte au-delà de ma carrière professionnelle.\n\nMes spécialités sont l'apprentissage rapide de nouvelles compétences, les langages de programmation, la résolution de problèmes, l'application de l'approche par principes fondamentaux, la gestion et la direction d'équipes. J'explore avec enthousiasme les principes fondamentaux de l'informatique, les méthodes de réflexion stratégique, les outils de gestion, l'ingénierie de support et d'autres moteurs de programmation, frameworks, modules et principes que je peux intégrer et faire fonctionner dans ma tête, puis mettre en œuvre dans la vie réelle.",
+      bio: "Sens dessus dessous vers sens dessus dessous.\n\nAu lycée, je pensais devenir scientifique, mais la vie est loin d'être toute tracée quand on est assis sur les bancs de l'école. Puis sont arrivés l'université et de nombreux stages qui ont approfondi mes doutes et m'ont poussé à tout remettre en question, ce qui m'a donné la confiance de ne jamais avoir peur de changer de carrière. Après avoir pris peu de risques au cours de la dernière décennie, je me lance aujourd'hui.\n\nJe suis un chimiste diplômé de l'université d'Édimbourg qui s'est reconverti pour devenir architecte, ingénieur et manager en informatique et en intelligence artificielle (IA).\n\nJe me suis intéressé à l'informatique relativement tard, en 2010, pendant mes études universitaires. C'est à cette époque que j'ai réalisé que je n'aimais pas du tout les laboratoires. Il m'a toutefois fallu attendre la fin de l'année 2021 pour mettre un terme à ma carrière scientifique et me consacrer à l'informatique, à l'intelligence artificielle et aux rôles de gestion et de leadership. Je me consacre entièrement à l'informatique et au leadership depuis le début de l'année 2022. Pour y parvenir, j'ai suivi de nombreux cours d'informatique en ligne et j'ai rejoint plusieurs organisations professionnelles, dont l'Association lituanienne pour l'intelligence artificielle et la Computer Society de l'IEEE. Bien que j'aie travaillé en biologie et en bio-informatique de 2015 à 2021, je préfère résoudre des problèmes de chimie et du monde réel en programmant avec l'aide de l'IA, en trouvant des solutions d'IA et en dirigeant des équipes, plutôt que de poursuivre la recherche biologique sans IA. Cela m'amène à aujourd'hui, où je suis également revenu à mon autre passion – l'écriture.\n\nSur ce site, vous trouverez mes écrits, que je rédige depuis plus de 16 ans et que je continue à écrire. Je vous invite à vous abonner à mon blog et à soutenir mon travail, mais uniquement si vous le souhaitez. Si vous devenez abonné, c'est en or, car c'est la meilleure preuve que ce que je fais compte au-delà de ma carrière professionnelle.\n\nMes spécialités sont l'apprentissage rapide de nouvelles compétences, les langages de programmation, la résolution de problèmes, l'application de l'approche par principes fondamentaux, la gestion et la direction d'équipes. J'explore avec enthousiasme les principes fondamentaux de l'informatique, les méthodes de réflexion stratégique, les outils de gestion, les ingénieries et d'autres moteurs d'IA, frameworks, modules et principes que je peux intégrer et faire fonctionner dans ma tête, puis mettre en œuvre dans la vie réelle.",
       skills: "Compétences et expertise",
       experience: "Points forts de l'expérience",
       downloadCVShort: "Télécharger CV",
@@ -621,7 +717,7 @@ export const translations = {
     },
     blogs: {
       newsletterEyebrow: "N° 03 · La Newsletter",
-      subscribe: "— S'abonner",
+      subscribeEyebrow: "— S'abonner",
       originalSubstackLabel: "Substack d'origine",
       title: "Blog",
       subtitle: "Prochainement depuis Substack : Newsletter hebdomadaire sur l'IA, la technologie, la musique et la santé",
@@ -770,7 +866,7 @@ export const translations = {
       fillAllFields: "Veuillez remplir tous les champs"
     },
     footer: {
-      description: "Chimiste devenu Ingénieur IA et Écrivain, passionné par la croisée de l'IA, de la science, de la technologie et de la créativité.",
+      description: "Chimiste devenu Architecte, Ingénieur et Chef de Produit IA, passionné par la croisée de l'IA, de la science, de la technologie et de la créativité.",
       quickLinks: "Liens rapides",
       connect: "Se connecter",
       madeWith: "Fait avec",
@@ -791,11 +887,11 @@ export const translations = {
     currently: {
       title: "Actuellement",
       openTo: "Ouvert à",
-      openToValue: "Postes d'Ingénieur IA",
+      openToValue: "Postes en IA",
       basedIn: "Basé à",
       basedInValue: "Vilnius / À distance",
       stack: "Stack",
-      stackValue: "Py · TS · LLMs",
+      stackValue: "AIs · LLMs",
       reading: "Lecture",
       readingValue: "Yesteryear"
     },
@@ -810,7 +906,7 @@ export const translations = {
     },
     projects: {
       title: "Projets",
-      subtitle: "Produits IA de bout en bout — conçus, construits et livrés. Chacun résout un vrai problème d'entreprise.",
+      subtitle: "Les plus récents d'abord : une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer.",
       featured: "Projets en vedette",
       viewProject: "Voir le projet",
       viewCaseStudy: "Voir l'étude de cas",
@@ -829,6 +925,22 @@ export const translations = {
       backToProjects: "Retour aux projets",
       screenshotsPlaceholder: "Les captures d'écran seront ajoutées prochainement.",
       items: {
+        "100-days-with-ai": {
+          name: "100 Days With AI",
+          tagline: "Une source par jour. Une note honnête. Pendant 100 jours.",
+          description: "Un journal d'apprentissage public et quotidien de l'IA moderne — transformers, LLM, IA agentique, RAG, fine-tuning, évaluations et MLOps. Chaque jour, une source soigneusement choisie, étudiée et consignée avec une note honnête, puis partagée quotidiennement sur X, Bluesky, Threads et LinkedIn sous #100DaysWithAI jusqu'à la fin de la campagne.",
+          problem: "La plupart des apprentissages disparaissent dès que l'onglet se ferme. Lire sur l'IA est facile ; retenir, questionner et transformer en intuition opérationnelle ne l'est pas. Et apprendre seul ne laisse aucune trace — aucun registre public de ce qui a vraiment été compris, essayé, ou raté.",
+          approach: "Une source soigneusement choisie par jour — article, cours, dépôt, billet ou outil, marquée Avancé ou Intermédiaire — étudiée en profondeur, jamais survolée. Chaque jour produit une entrée consignée avec 3 à 5 enseignements, pourquoi cela compte et ce que j'ai réellement essayé. La même note, condensée, part chaque jour vers ~9h00 EEST sur X (@reksas13), Bluesky (@reksas13.bsky.social), Threads (@reksas13) et LinkedIn, avec la carte du jour. Aucun numéro sauté. Aucune expertise feinte.",
+          role: "Auteur et mainteneur. Je choisis chaque source la veille au soir, je l'étudie le matin même, j'écris la note du jour, je tiens le journal de progression et je publie chaque jour sur quatre réseaux — la discipline de la série ininterrompue étant le produit lui-même.",
+          tech: ["LLMs", "Agentic AI", "RAG", "Fine-tuning", "Evals", "MLOps", "GitHub", "X · Bluesky · Threads · LinkedIn"],
+          metrics: [
+            { value: "100", label: "Jours · une source chacun" },
+            { value: "4", label: "Réseaux, publication quotidienne ~9h00 EEST" },
+            { value: "0", label: "Jours sautés · série ininterrompue" }
+          ],
+          outcome: "Une liste croissante et hiérarchisée de 100 points d'entrée soigneusement choisis vers l'IA moderne, avec des notes de travail honnêtes — y compris ce qui n'a pas fonctionné. Sous licence MIT, la liste des sources et le format servent de modèle prêt à l'emploi pour quiconque veut lancer ses propres 100 jours.",
+          novel: "Apprendre en public vaut mieux qu'apprendre seul — et cela laisse une trace. Une source que je ne comprends pas reçoit quand même une note honnête qui le dit. Je lis ces sources en ingénieur IA venu de la chimie : je cherche le mécanisme, pas le titre accrocheur."
+        },
         cleartrace: {
           name: "ClearTrace Intelligence",
           tagline: "Plateforme agentique d'investigation LCB-FT",
@@ -892,6 +1004,38 @@ export const translations = {
           ],
           outcome: "MVP fonctionnel démontrant que l'UI Générative surpasse dramatiquement les interfaces textuelles pour les workflows B2B mobiles. Les suggestions proactives génèrent plus de 40% d'engagement par session.",
           novel: "La plupart des outils IA mobiles sont des expériences desktop rétrécies. Agentic Mobile prouve que l'IA mobile nécessite un modèle d'interaction fondamentalement différent — où l'IA génère des composants UI actionnables au lieu de réponses textuelles."
+        },
+        "machine-learning-goodness": {
+          name: "Machine Learning Goodness",
+          tagline: "Archive ML/DL ouverte — plus de 285 étoiles sur GitHub.",
+          description: "Une archive de Machine Learning plébiscitée par la communauté, née du défi #100DaysOfMLCode — notebooks Jupyter, projets ML/DL, aide-mémoire et tables soigneusement choisies de livres, outils et dépôts de valeur, maintenue et enrichie depuis 2023.",
+          problem: "Le savoir en Machine Learning est éparpillé entre cours, articles, billets de blog et boîtes à outils. Les débutants se noient dans les options ; les praticiens perdent des heures à retrouver la même référence pour la troisième fois. La plupart des « awesome lists » sont des tas de liens que personne n'a vérifiés.",
+          approach: "Construite par une discipline quotidienne : pendant #100DaysOfMLCode, chaque jour produisait un notebook achevé, un projet ou une ressource vérifiée, et la curation s'est poursuivie bien après le défi avec FinishYearWithML. Tout est organisé en tables navigables — livres, outils et dépôts de valeur — aux côtés de notebooks exécutables et de notes, chaque ajout partagé publiquement.",
+          role: "Créateur et unique mainteneur. J'ai lu, exécuté ou testé chaque ressource avant qu'elle ne mérite sa place, écrit les notebooks et projets, et tenu la cadence quotidienne à travers deux défis publics — la même discipline d'apprentissage en public que 100 Days With AI poursuit aujourd'hui pour l'ère des LLM.",
+          tech: ["Python", "Jupyter", "TensorFlow", "Keras", "PyTorch", "scikit-learn", "Pandas", "NumPy"],
+          metrics: [
+            { value: "285+", label: "Étoiles GitHub" },
+            { value: "45+", label: "Forks par des praticiens" },
+            { value: "100", label: "Jours de code ML · série quotidienne" }
+          ],
+          outcome: "Une archive de référence que des centaines de praticiens ont étoilée et forkée comme porte d'entrée vers le ML/DL — des livres de mathématiques aux outils MLOps de production. Sous licence MIT, toujours en croissance.",
+          novel: "Pas un tas de liens. Chaque entrée a été lue, exécutée ou testée avant inclusion, et l'archive est aussi un registre public de l'apprentissage lui-même — les notebooks et journaux de défi montrent le chemin, pas seulement la destination."
+        },
+        "solutions-to-problems": {
+          name: "Solutions To Problems",
+          tagline: "Algorithmes de niveau entretien — résolus, expliqués, maintenus.",
+          description: "Une collection soigneusement choisie de solutions en Python, Java, SQL et Pandas aux problèmes LeetCode et HackerRank posés lors d'entretiens dans les grandes entreprises tech — avec des conseils de préparation, construite et maintenue depuis 2022.",
+          problem: "La préparation aux entretiens est bruyante : les solutions trouvées en ligne sont souvent inexpliquées, inefficaces ou simplement fausses, et les fondamentaux algorithmiques s'estompent vite sans pratique délibérée. Il manque un ensemble fiable et organisé de solutions dont on peut apprendre le raisonnement — pas seulement copier.",
+          approach: "Résoudre d'abord, expliquer ensuite. Chaque problème est traité dans le langage qui lui convient le mieux — Python, Java, SQL ou Pandas — organisé par plateforme et par thème pour que les patterns (deux pointeurs, programmation dynamique, jointures et fonctions de fenêtre) deviennent visibles d'un problème à l'autre. Des conseils de préparation issus de vrais cycles d'entretiens accompagnent le code.",
+          role: "Auteur et mainteneur. J'ai résolu chaque problème, gardé les solutions idiomatiques pour chaque langage et organisé la collection pour qu'elle serve à la fois de pratique quotidienne et de révision avant entretien.",
+          tech: ["Python", "Java", "SQL", "Pandas", "LeetCode", "HackerRank"],
+          metrics: [
+            { value: "94+", label: "Étoiles GitHub" },
+            { value: "30+", label: "Forks" },
+            { value: "4", label: "Langages · Python, Java, SQL, Pandas" }
+          ],
+          outcome: "Une ressource régulièrement étoilée et forkée que d'autres utilisent pour préparer des entretiens exigeants — et la base algorithmique affûtée que j'apporte à chaque rôle d'ingénierie IA. Sous licence MIT.",
+          novel: "Multilingue par conception : voir le même problème résolu en Python, Java et SQL révèle ce qui est essentiel dans l'algorithme et ce qui n'est que syntaxe. La collection privilégie des solutions lisibles et expliquées plutôt que l'astuce pour l'astuce."
         }
       }
     }
