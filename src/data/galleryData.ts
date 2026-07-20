@@ -239,30 +239,5 @@ export const galleryImages: GalleryImage[] = [
       fr: 'Photo des Highlands prise pendant une course, lorsque je me suis arrêté pour immortaliser ce moment'
     },
     category: 'nature'
-  },
-  {
-    id: '10',
-    src: '/less.jpg',
-    alt: {
-      en: 'Less is more philosophy',
-      lt: 'Mažiau yra daugiau filosofija',
-      fr: 'Philosophie moins c\'est mieux'
-    },
-    title: {
-      en: 'Less is More',
-      lt: 'Mažiau yra daugiau',
-      fr: 'Moins, c\'est mieux'
-    },
-    location: {
-      en: 'Life Philosophy',
-      lt: 'Gyvenimo filosofija',
-      fr: 'Philosophie de vie'
-    },
-    description: {
-      en: 'Sometimes less is more - embracing simplicity and mindfulness',
-      lt: 'Kartais mažiau yra daugiau – priimu paprastumą ir sąmoningumą',
-      fr: 'Parfois, moins c\'est mieux : embrasser la simplicité et la pleine conscience'
-    },
-    category: 'events'
   }
 ];

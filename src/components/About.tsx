@@ -93,7 +93,7 @@ export const About: React.FC = () => {
                 <h4 className="display-sm" style={{ fontVariationSettings: '"opsz" 36, "wght" 500' }}>
                   {t.about.downloadCVShort}
                 </h4>
-                <span className="meta uppercase tracking-[0.2em]">PDF · 01 Jun 2026</span>
+                <span className="meta uppercase tracking-[0.2em]">PDF · 07 Jul 2026</span>
               </div>
               <p className="text-ink-soft text-[15px] mb-6">{t.about.downloadDescription}</p>
 
