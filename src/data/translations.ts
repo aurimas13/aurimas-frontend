@@ -203,7 +203,7 @@ export const translations = {
     },
     projects: {
       title: "Projects",
-      subtitle: "Most recent first: a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, architect, build, and ship.",
+      subtitle: "Most recent first: an AI agent built from scratch, a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, architect, build, and ship.",
       featured: "Featured Projects",
       viewProject: "View Live Project",
       viewCaseStudy: "View Case Study",
@@ -221,7 +221,29 @@ export const translations = {
       exploreLive: "Explore the deployed application and source code.",
       backToProjects: "Back to Projects",
       screenshotsPlaceholder: "Screenshots will be added soon.",
+      plate: "Plate",
       items: {
+        "calculator-agent": {
+          name: "Calculator Agent",
+          tagline: "My first AI agent, built from scratch.",
+          description: "Ask a maths problem in plain language and watch Claude break it into steps, call a calculator tool for each one and loop until it has the answer — with every step streamed live. No agent framework: model, memory, tool and loop in plain Python.",
+          problem: "\"Agents are models using tools in a loop\" is easy to say and hard to see. Frameworks hide the loop behind abstractions, tutorials stop at a notebook cell, and most demos show the final answer without the reasoning that produced it. I wanted to understand every moving part of an agent well enough to build one with nothing but the model API — and then ship it as something a stranger could use safely.",
+          approach: "The whole agent lives in one short Python file: a model (Claude Haiku 4.5) with step-by-step instructions, a calculator tool it can call, memory so follow-up questions build on the last answer, and a loop that runs the tool, feeds the result back and repeats until the model stops asking for tools. That loop is a generator, so FastAPI streams each iteration, tool call and result to the browser over Server-Sent Events — you watch the agent think. Turning it into a public product meant hardening it: the tutorial's eval() became an allow-listed AST evaluator that refuses code execution and runaway powers, the API key stays server-side behind per-visitor and daily rate limits, and a 48-test suite with a scripted fake client runs in GitHub Actions on Python 3.11–3.13. Deployed from a Dockerfile to Railway; redeploys on every push.",
+          role: "Sole author, end to end. Started from Leonie Monigatti's from-scratch notebook, then turned it into a tested, deployed product: designed the streaming architecture, wrote the agent loop, safe tool and rate limiter, built the framework-free web UI (light/dark, mobile, keyboard shortcuts), the test suite and CI, and the Railway deployment on my own subdomain.",
+          tech: ["Python", "FastAPI", "Claude API (Haiku 4.5)", "Server-Sent Events", "AI Agents", "pytest · GitHub Actions", "Docker", "Railway"],
+          metrics: [
+            { value: "0", label: "Agent frameworks · plain Python" },
+            { value: "48", label: "Automated tests · CI on Python 3.11–3.13" },
+            { value: "4", label: "Parts, all visible: model · memory · tool · loop" }
+          ],
+          outcome: "A live, public agent anyone can try at calculator.aurimas.io: ask \"A €184.50 bill plus a 12% tip, split between 6 people?\" and watch two tool calls resolve it in real time. Safe against prompt-driven code execution, cost-capped for a public demo, MIT-licensed with the original notebook included — so it doubles as a readable reference for how an agent actually works.",
+          novel: "Most agent demos hide the loop; this one is the loop. Every model turn, tool call and result streams to the screen as it happens, which makes the agent easier to trust, easier to debug, and instantly understandable to someone who has never seen one. And because the tool boundary is treated as untrusted input, it shows the security habit that framework tutorials skip.",
+          screenshotCaptions: [
+            "Splitting a restaurant bill: the agent calls the calculator twice and streams each step live",
+            "The agent trace — iterations, tool calls and results as a timeline",
+            "Mobile layout of the live demo"
+          ]
+        },
         "100-days-with-ai": {
           name: "100 Days With AI",
           tagline: "One source a day. One honest note. For 100 days.",
@@ -541,7 +563,7 @@ export const translations = {
     },
     projects: {
       title: "Projektai",
-      subtitle: "Naujausi pirmiausia: kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau.",
+      subtitle: "Naujausi pirmiausia: nuo nulio sukurtas DI agentas, kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau.",
       featured: "Pagrindiniai projektai",
       viewProject: "Žiūrėti projektą",
       viewCaseStudy: "Žiūrėti atvejo analizę",
@@ -559,7 +581,29 @@ export const translations = {
       exploreLive: "Tyrinėkite veikiančią aplikaciją ir šaltinio kodą.",
       backToProjects: "Grįžti prie projektų",
       screenshotsPlaceholder: "Ekrano nuotraukos bus pridėtos netrukus.",
+      plate: "Iliustracija",
       items: {
+        "calculator-agent": {
+          name: "Calculator Agent",
+          tagline: "Mano pirmasis DI agentas, sukurtas nuo nulio.",
+          description: "Užduokite matematikos uždavinį paprasta kalba ir stebėkite, kaip Claude jį suskaido į žingsnius, kiekvienam iškviečia skaičiuotuvo įrankį ir kartoja ciklą, kol gauna atsakymą — kiekvienas žingsnis transliuojamas gyvai. Be agentų karkaso: modelis, atmintis, įrankis ir ciklas gryname Python.",
+          problem: "„Agentai — tai modeliai, ciklu naudojantys įrankius“ — lengva pasakyti, sunku pamatyti. Karkasai paslepia ciklą po abstrakcijomis, mokymo pavyzdžiai baigiasi užrašinės langelyje, o dauguma demonstracijų rodo galutinį atsakymą be jį sukūrusio samprotavimo. Norėjau suprasti kiekvieną agento dalį taip gerai, kad sukurčiau jį vien su modelio API — ir pristatyčiau kaip produktą, kuriuo nepažįstamas žmogus galėtų saugiai naudotis.",
+          approach: "Visas agentas telpa viename trumpame Python faile: modelis (Claude Haiku 4.5) su nurodymais spręsti žingsnis po žingsnio, skaičiuotuvo įrankis, atmintis, kad tolesni klausimai remtųsi ankstesniu atsakymu, ir ciklas, kuris paleidžia įrankį, grąžina rezultatą modeliui ir kartoja, kol modelis nebeprašo įrankių. Tas ciklas — generatorius, todėl FastAPI kiekvieną iteraciją, įrankio iškvietimą ir rezultatą transliuoja į naršyklę per Server-Sent Events — matote, kaip agentas mąsto. Paversti tai viešu produktu reikėjo sutvirtinti: mokymo pavyzdžio eval() tapo AST vertintuvu su leidžiamų operacijų sąrašu, atmetančiu kodo vykdymą ir beribius laipsnius; API raktas lieka serveryje už lankytojo ir dienos limitų; 48 testų rinkinys su scenarijiniu netikru klientu vykdomas GitHub Actions su Python 3.11–3.13. Diegiama iš Dockerfile į Railway; perdiegiama su kiekvienu push.",
+          role: "Vienintelis autorius nuo pradžios iki galo. Pradėjau nuo Leonie Monigatti užrašinės „agentas nuo nulio“, tada paverčiau ją testuotu, įdiegtu produktu: suprojektavau transliavimo architektūrą, parašiau agento ciklą, saugų įrankį ir limitų valdymą, sukūriau karkaso nereikalaujančią žiniatinklio sąsają (šviesi/tamsi tema, mobilusis išdėstymas, spartieji klavišai), testų rinkinį bei CI ir diegimą Railway savo subdomene.",
+          tech: ["Python", "FastAPI", "Claude API (Haiku 4.5)", "Server-Sent Events", "AI Agents", "pytest · GitHub Actions", "Docker", "Railway"],
+          metrics: [
+            { value: "0", label: "Agentų karkasų · grynas Python" },
+            { value: "48", label: "Automatinių testų · CI su Python 3.11–3.13" },
+            { value: "4", label: "Matomos dalys: modelis · atmintis · įrankis · ciklas" }
+          ],
+          outcome: "Gyvas, viešas agentas, kurį kiekvienas gali išbandyti calculator.aurimas.io: paklauskite „184,50 € sąskaita su 12 % arbatpinigių, padalinta 6 žmonėms?“ ir stebėkite, kaip du įrankio iškvietimai išsprendžia tai realiu laiku. Apsaugotas nuo raginimais skatinamo kodo vykdymo, su kaštų ribomis viešai demonstracijai, MIT licencija ir pridėta originalia užrašine — tad kartu tai skaitoma nuoroda, kaip agentas iš tikrųjų veikia.",
+          novel: "Dauguma agentų demonstracijų paslepia ciklą; ši demonstracija ir yra ciklas. Kiekvienas modelio ėjimas, įrankio iškvietimas ir rezultatas transliuojamas į ekraną vykstant, todėl agentu lengviau pasitikėti, jį lengviau derinti ir iškart supranta net tas, kuris agento nematė. O kadangi įrankio riba traktuojama kaip nepatikima įvestis, čia matomas saugumo įprotis, kurį karkasų pamokos praleidžia.",
+          screenshotCaptions: [
+            "Restorano sąskaitos dalijimas: agentas du kartus iškviečia skaičiuotuvą ir kiekvieną žingsnį transliuoja gyvai",
+            "Agento pėdsakas — iteracijos, įrankio iškvietimai ir rezultatai kaip laiko juosta",
+            "Gyvos demonstracijos mobilusis išdėstymas"
+          ]
+        },
         "100-days-with-ai": {
           name: "100 Days With AI",
           tagline: "Vienas šaltinis per dieną. Vienas sąžiningas užrašas. 100 dienų.",
@@ -879,7 +923,7 @@ export const translations = {
     },
     projects: {
       title: "Projets",
-      subtitle: "Les plus récents d'abord : une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer.",
+      subtitle: "Les plus récents d'abord : un agent IA construit de zéro, une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer.",
       featured: "Projets en vedette",
       viewProject: "Voir le projet",
       viewCaseStudy: "Voir l'étude de cas",
@@ -897,7 +941,29 @@ export const translations = {
       exploreLive: "Explorez l'application déployée et le code source.",
       backToProjects: "Retour aux projets",
       screenshotsPlaceholder: "Les captures d'écran seront ajoutées prochainement.",
+      plate: "Planche",
       items: {
+        "calculator-agent": {
+          name: "Calculator Agent",
+          tagline: "Mon premier agent IA, construit de zéro.",
+          description: "Posez un problème de maths en langage courant et regardez Claude le découper en étapes, appeler un outil calculatrice pour chacune et boucler jusqu'à obtenir la réponse — chaque étape diffusée en direct. Aucun framework d'agents : modèle, mémoire, outil et boucle en Python pur.",
+          problem: "« Les agents sont des modèles qui utilisent des outils en boucle » : facile à dire, difficile à voir. Les frameworks cachent la boucle derrière des abstractions, les tutoriels s'arrêtent à une cellule de notebook, et la plupart des démos montrent la réponse finale sans le raisonnement qui l'a produite. Je voulais comprendre chaque pièce d'un agent assez bien pour en construire un avec la seule API du modèle — puis le livrer comme un produit qu'un inconnu peut utiliser en toute sécurité.",
+          approach: "Tout l'agent tient dans un court fichier Python : un modèle (Claude Haiku 4.5) avec des consignes de résolution pas à pas, un outil calculatrice qu'il peut appeler, une mémoire pour que les questions de suivi s'appuient sur la dernière réponse, et une boucle qui exécute l'outil, renvoie le résultat et recommence jusqu'à ce que le modèle ne demande plus d'outil. Cette boucle est un générateur : FastAPI diffuse chaque itération, appel d'outil et résultat vers le navigateur via Server-Sent Events — on regarde l'agent réfléchir. En faire un produit public a exigé de le durcir : le eval() du tutoriel est devenu un évaluateur AST à liste blanche qui refuse l'exécution de code et les puissances démesurées, la clé API reste côté serveur derrière des limites par visiteur et par jour, et une suite de 48 tests avec un faux client scripté tourne dans GitHub Actions sur Python 3.11 à 3.13. Déployé depuis un Dockerfile sur Railway ; redéployé à chaque push.",
+          role: "Seul auteur, de bout en bout. Parti du notebook « agent from scratch » de Leonie Monigatti, puis transformé en produit testé et déployé : conception de l'architecture de streaming, écriture de la boucle d'agent, de l'outil sécurisé et du limiteur de débit, interface web sans framework (thèmes clair/sombre, mobile, raccourcis clavier), suite de tests et CI, et déploiement Railway sur mon propre sous-domaine.",
+          tech: ["Python", "FastAPI", "Claude API (Haiku 4.5)", "Server-Sent Events", "AI Agents", "pytest · GitHub Actions", "Docker", "Railway"],
+          metrics: [
+            { value: "0", label: "Framework d'agents · Python pur" },
+            { value: "48", label: "Tests automatisés · CI sur Python 3.11–3.13" },
+            { value: "4", label: "Pièces, toutes visibles : modèle · mémoire · outil · boucle" }
+          ],
+          outcome: "Un agent public et en ligne que chacun peut essayer sur calculator.aurimas.io : demandez « Une addition de 184,50 € plus 12 % de pourboire, partagée entre 6 personnes ? » et regardez deux appels d'outil la résoudre en temps réel. Protégé contre l'exécution de code induite par les prompts, plafonné en coûts pour une démo publique, sous licence MIT avec le notebook d'origine inclus — il sert aussi de référence lisible sur le fonctionnement réel d'un agent.",
+          novel: "La plupart des démos d'agents cachent la boucle ; celle-ci est la boucle. Chaque tour du modèle, appel d'outil et résultat s'affiche à l'écran au moment où il se produit, ce qui rend l'agent plus facile à croire, à déboguer, et immédiatement compréhensible pour qui n'en a jamais vu. Et parce que la frontière de l'outil est traitée comme une entrée non fiable, il montre le réflexe de sécurité que les tutoriels de frameworks passent sous silence.",
+          screenshotCaptions: [
+            "Partager une addition au restaurant : l'agent appelle deux fois la calculatrice et diffuse chaque étape en direct",
+            "La trace de l'agent — itérations, appels d'outil et résultats sous forme de chronologie",
+            "Version mobile de la démo en ligne"
+          ]
+        },
         "100-days-with-ai": {
           name: "100 Days With AI",
           tagline: "Une source par jour. Une note honnête. Pendant 100 jours.",

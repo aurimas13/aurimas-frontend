@@ -4,15 +4,37 @@ import { ArrowLeft, ExternalLink, AlertCircle, Github } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
-const projectMeta: Record<string, { url: string; github: string; index: string; domain?: string }> = {
-  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '01', domain: 'github.com/aurimas13' },
-  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '02' },
-  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '03' },
-  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '04' },
-  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '05' },
-  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '06', domain: 'github.com/aurimas13' },
-  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '07', domain: 'github.com/aurimas13' },
+interface ProjectMeta {
+  url: string;
+  github: string;
+  index: string;
+  domain?: string;
+  /** Image paths under /public; captions come from translations (`screenshotCaptions`). */
+  screenshots?: string[];
+}
+
+const projectMeta: Record<string, ProjectMeta> = {
+  'calculator-agent': {
+    url: 'https://calculator.aurimas.io',
+    github: 'https://github.com/aurimas13/Calculator-Agent',
+    index: '01',
+    domain: 'calculator.aurimas.io',
+    screenshots: [
+      '/projects/calculator-agent/demo.gif',
+      '/projects/calculator-agent/screenshot-light.png',
+      '/projects/calculator-agent/screenshot-mobile.png',
+    ],
+  },
+  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '02', domain: 'github.com/aurimas13' },
+  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '03' },
+  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '04' },
+  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '05' },
+  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '06' },
+  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '07', domain: 'github.com/aurimas13' },
+  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '08', domain: 'github.com/aurimas13' },
 };
+
+const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii'];
 
 const Section: React.FC<{ title: string; children: React.ReactNode; index: string }> = ({
   title,
@@ -63,6 +85,29 @@ export const ProjectDetailPage: React.FC = () => {
   const item = projects[slug];
   const meta = projectMeta[slug];
   const [first, ...rest] = item.name.split(' ');
+  const screenshots: string[] = meta.screenshots ?? [];
+  const captions: string[] = item.screenshotCaptions ?? [];
+  const plateLabel: string = (t.projects as any).plate ?? 'Plate';
+  const [leadShot, ...moreShots] = screenshots;
+
+  const Plate = ({ src, i, tall = false }: { src: string; i: number; tall?: boolean }) => (
+    <figure className="border border-[rgba(26,22,18,0.32)] bg-paper p-3 m-0 flex flex-col">
+      <div className={tall ? 'flex-1 flex items-center justify-center bg-[rgba(26,22,18,0.03)]' : ''}>
+        <img
+          src={src}
+          alt={captions[i] ?? `${item.name} — ${plateLabel} ${ROMAN[i]}`}
+          loading="lazy"
+          className={tall ? 'max-h-[560px] w-auto h-auto block' : 'w-full h-auto block'}
+        />
+      </div>
+      <figcaption className="pt-3 px-1 flex items-baseline justify-between gap-4">
+        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute whitespace-nowrap">
+          {plateLabel} {ROMAN[i]}
+        </span>
+        {captions[i] && <span className="text-[12px] text-ink-mute text-right leading-snug">{captions[i]}</span>}
+      </figcaption>
+    </figure>
+  );
 
   return (
     <section className="pt-28 pb-24 min-h-screen">
@@ -120,6 +165,24 @@ export const ProjectDetailPage: React.FC = () => {
             </a>
           </div>
         </div>
+
+        {/* Plates / screenshots — only for projects that ship them */}
+        {leadShot && (
+          <div className="reveal reveal-d3 mb-4">
+            <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[rgba(26,22,18,0.32)]">
+              <span className="meta uppercase tracking-[0.2em]">{t.projects.screenshots}</span>
+              <span className="meta uppercase tracking-[0.2em]">{meta.domain ?? `${slug}.aurimas.io`}</span>
+            </div>
+            <Plate src={leadShot} i={0} />
+            {moreShots.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-4 mt-4 items-start">
+                {moreShots.map((src, k) => (
+                  <Plate key={src} src={src} i={k + 1} tall={/mobile/i.test(src)} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Sections */}
         <div>
