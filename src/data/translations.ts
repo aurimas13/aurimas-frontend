@@ -3,7 +3,7 @@ export const translations = {
     hero: {
       greeting: "Hi, I'm",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemist turned Principal-level AI & Python Engineer",
+      subtitle: "Chemist turned AI Trifecta",
       description: "Welcome. Hope you'll enjoy the stay.",
       cta: "Read My Story",
       fieldNotes: "— Field notes from the lab bench"
@@ -163,7 +163,7 @@ export const translations = {
       fillAllFields: "Please fill in all fields"
     },
     footer: {
-      description: "Chemist turned principal-level AI and Python engineer. I design, build and run production AI systems end to end — agents from scratch, governed LLM platforms, agentic investigation tools — and write about AI, science, technology and creativity.",
+      description: "Chemist turned AI Architect, AI Product Engineer and Principal AI/Python Engineer. I design, build, orchestrate and run production AI systems end to end - agents from scratch, governed LLM platforms, agentic investigation tools - and write about AI, science, technology and creativity.",
       quickLinks: "Quick Links",
       connect: "Connect",
       madeWith: "Made with",
@@ -386,7 +386,7 @@ export const translations = {
     hero: {
       greeting: "Laba, esu",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemikas, tapęs vyriausiuoju DI ir Python inžinieriumi",
+      subtitle: "Chemikas - dabar DI trys rolės",
       description: "Sveiki. Tikiuosi patiks užklydimas.",
       cta: "Skaityti mano istoriją",
       fieldNotes: "— Užrašai iš laboratorijos"
@@ -546,7 +546,7 @@ export const translations = {
       fillAllFields: "Prašome užpildyti visus laukus"
     },
     footer: {
-      description: "Chemikas, tapęs vyriausiojo lygio DI ir Python inžinieriumi. Nuo pradžios iki galo projektuoju, kuriu ir prižiūriu gamybines DI sistemas — agentus nuo nulio, valdomas DKM platformas, agentinius tyrimų įrankius — ir rašau apie DI, mokslą, technologijas ir kūrybą.",
+      description: "Chemikas, tapęs DI architektu, DI produktų inžinieriumi ir vyriausiuoju DI / Python inžinieriumi. Nuo pradžios iki galo projektuoju, kuriu, orkestruoju ir prižiūriu gamybines DI sistemas - agentus nuo nulio, valdomas DKM platformas, agentinius tyrimų įrankius - ir rašau apie DI, mokslą, technologijas ir kūrybą.",
       quickLinks: "Greitos nuorodos",
       connect: "Susisiekti",
       madeWith: "Sukurta su",
@@ -769,7 +769,7 @@ export const translations = {
     hero: {
       greeting: "Bonjour, je suis",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chimiste devenu ingénieur IA et Python de niveau principal",
+      subtitle: "Chimiste — aujourd'hui trois rôles en IA",
       description: "Bienvenue. J'espère que le séjour vous plaira.",
       cta: "Lire mon histoire",
       fieldNotes: "— Notes de paillasse"
@@ -929,7 +929,7 @@ export const translations = {
       fillAllFields: "Veuillez remplir tous les champs"
     },
     footer: {
-      description: "Chimiste devenu ingénieur IA et Python de niveau principal. Je conçois, construis et exploite des systèmes d'IA en production de bout en bout — agents écrits de zéro, plateformes LLM gouvernées, outils d'investigation agentiques — et j'écris sur l'IA, la science, la technologie et la créativité.",
+      description: "Chimiste devenu architecte IA, ingénieur produit IA et ingénieur principal IA/Python. Je conçois, construis, orchestre et exploite des systèmes d'IA en production de bout en bout - agents écrits de zéro, plateformes LLM gouvernées, outils d'investigation agentiques - et j'écris sur l'IA, la science, la technologie et la créativité.",
       quickLinks: "Liens rapides",
       connect: "Se connecter",
       madeWith: "Fait avec",
