@@ -1,6 +1,6 @@
 # aurimas-frontend
 
-Personal portfolio site for **Aurimas Aleksandras Nausėdas** — AI Architect, Engineer & Product Engineer.
+Personal portfolio site for **Aurimas Aleksandras Nausėdas** — principal-level AI & Python Engineer, former chemist.
 Live at [aurimas.io](https://aurimas.io). Deployed on Vercel.
 
 ## Stack

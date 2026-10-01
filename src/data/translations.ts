@@ -3,7 +3,7 @@ export const translations = {
     hero: {
       greeting: "Hi, I'm",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemist turned AI Trifecta",
+      subtitle: "Chemist turned Principal-level AI & Python Engineer",
       description: "Welcome. Hope you'll enjoy the stay.",
       cta: "Read My Story",
       fieldNotes: "— Field notes from the lab bench"
@@ -14,7 +14,7 @@ export const translations = {
       fromTheDesk: "From the desk of A. Nausėdas",
       title: "About Me",
       myStory: "My Story",
-      bio: "Since high school, I assumed I would work as a scientist, but life is far from being figured out when you're sitting at a school desk. Then, the university and numerous internships came along, deepening my self-doubt and prompting me to question everything, which has given me the confidence to never be afraid to change my career path. Having not taken many risks over the last decade, I am now.\n\nI am a chemist from the University of Edinburgh who re-specialized to become a trifecta in Computer Science and Artificial Intelligence (AI) - Architect, Engineer and Manager.\n\nI was drawn to computing relatively late, in 2010, during my time at the university. It was then that I realized I didn't fancy wet lab one bit. However, it took me until late 2021 to close my pursuit of a scientific career and concentrate on Computer Science, Artificial Intelligence, and Managing, Leadership roles. I devoted myself entirely to computing and leading from the start of 2022. To build up to that, I took numerous Computer Science online courses and joined several professional organizations, including the Artificial Intelligence Association of Lithuania and the IEEE Computer Society. Although I worked in biology and bioinformatics from 2015 to 2021, I prefer to solve chemistry and real-world problems with AI coding, finding AI solutions, and leading teams rather than continuing in biological research without AI. This brings me to the present day, when I have also returned to my other passion – writing.\n\nHere you will find my technical scribbles, as I have been writing for over 15 years and continue to do so. You are welcome to follow my blog and support me if want to. If you become a subscriber, that's golden, as it's the ultimate affirmation that what I do matters beyond my professional career.\n\nFor which - my specialties include quickly learning new skills, new engineerings, problem-solving, applying the first-principle approach, managing, and leading teams. I am enthusiastically exploring computational core principles, strategic thinking methods, management tools, engineerings, and other programming engines, frameworks, modules, and principles that I can integrate and make work in my head, then implement in real life.",
+      bio: "Since high school, I assumed I would work as a scientist, but life is far from being figured out when you're sitting at a school desk. Then, the university and numerous internships came along, deepening my self-doubt and prompting me to question everything, which has given me the confidence to never be afraid to change my career path. Having not taken many risks over the last decade, I am now.\n\nI am a chemist from the University of Edinburgh who re-specialized into AI and Python engineering at principal level: I own the design, build and running of production AI systems end to end — from agents written from scratch on the Claude API to governed LLM platforms rolled out across 13 teams — and I lead the engineers who ship them.\n\nI was drawn to computing relatively late, in 2010, during my time at the university. It was then that I realized I didn't fancy wet lab one bit. However, it took me until late 2021 to close my pursuit of a scientific career and concentrate on Computer Science, Artificial Intelligence, and Managing, Leadership roles. I devoted myself entirely to computing and leading from the start of 2022. To build up to that, I took numerous Computer Science online courses and joined several professional organizations, including the Artificial Intelligence Association of Lithuania and the IEEE Computer Society. Although I worked in biology and bioinformatics from 2015 to 2021, I prefer to solve chemistry and real-world problems with AI coding, finding AI solutions, and leading teams rather than continuing in biological research without AI. This brings me to the present day, when I have also returned to my other passion – writing.\n\nHere you will find my technical scribbles, as I have been writing for over 15 years and continue to do so. You are welcome to follow my blog and support me if want to. If you become a subscriber, that's golden, as it's the ultimate affirmation that what I do matters beyond my professional career.\n\nFor which - my specialties include quickly learning new skills, new engineerings, problem-solving, applying the first-principle approach, managing, and leading teams. I am enthusiastically exploring computational core principles, strategic thinking methods, management tools, engineerings, and other programming engines, frameworks, modules, and principles that I can integrate and make work in my head, then implement in real life.",
       skills: "Skills & Expertise",
       experience: "Experience Highlights",
       downloadCVShort: "Download CV",
@@ -163,7 +163,7 @@ export const translations = {
       fillAllFields: "Please fill in all fields"
     },
     footer: {
-      description: "Chemist turned AI Architect, Engineer and Product Manager, passionate about the intersection of AI, science, technology, and creativity.",
+      description: "Chemist turned principal-level AI and Python engineer. I design, build and run production AI systems end to end — agents from scratch, governed LLM platforms, agentic investigation tools — and write about AI, science, technology and creativity.",
       quickLinks: "Quick Links",
       connect: "Connect",
       madeWith: "Made with",
@@ -184,11 +184,11 @@ export const translations = {
     currently: {
       title: "Currently",
       openTo: "Open to",
-      openToValue: "AI roles",
+      openToValue: "Principal AI · Python Engineer",
       basedIn: "Based in",
       basedInValue: "Vilnius / Remote",
       stack: "Stack",
-      stackValue: "AIs · LLMs",
+      stackValue: "Python · LLMs · Agents",
       reading: "Reading",
       readingValue: "Yesteryear"
     },
@@ -203,7 +203,7 @@ export const translations = {
     },
     projects: {
       title: "Projects",
-      subtitle: "Most recent first: an AI agent built from scratch, a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, architect, build, and ship.",
+      subtitle: "Most recent first: two AI agents built from scratch on the Claude API, a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, design, build, and ship production Python and AI systems.",
       featured: "Featured Projects",
       viewProject: "View Live Project",
       viewCaseStudy: "View Case Study",
@@ -223,6 +223,29 @@ export const translations = {
       screenshotsPlaceholder: "Screenshots will be added soon.",
       plate: "Plate",
       items: {
+        "claude-agent-from-scratch": {
+          name: "Claude Agent From Scratch",
+          tagline: "Watch an AI agent think, use tools and answer — step by step.",
+          description: "A ReAct agent hand-built on the Claude API with no LangChain and no agent framework: a streaming Think → Act → Observe → Answer loop, real tools (calculator, weather, world clock, Anthropic web search, notes), Supabase-backed memory, an answer cache, and a human-verified public demo at agent.aurimas.io — plus an explained-like-you're-five walkthrough of how it all works.",
+          problem: "Calculator Agent proved I could write the loop. The next question was the one that separates a demo from a system: what does it take to run an agent for strangers, on a paid API, with real tools and memory, without it being abused, bankrupting me or quietly breaking? Frameworks answer that with more abstraction. I wanted to answer it with code I fully own and can explain.",
+          approach: "The backend is Python 3.13 and FastAPI. A hand-written ReAct loop over the Messages API streams every text delta, tool call and tool result to the browser as Server-Sent Events; it runs parallel tool calls, continues on pause_turn, respects max_tokens and refusals, and stops at an iteration cap so no stop reason can loop forever. Tools are real and safe: an AST calculator that only accepts maths, Open-Meteo weather, geocoding and time zones, Anthropic's server-side web search, and a notes tool. The full Claude message history lives in Supabase Postgres behind Row Level Security, trimmed to a window that never orphans a tool_result; repeated first questions that used no time-sensitive tool are served from a database cache at zero model cost. The public surface is defended in layers: one Cloudflare Turnstile check per visit exchanged for an HMAC-signed, HttpOnly, SameSite session cookie; per-visitor rate limits; a daily USD budget cap read from a usage log; input caps and hashed IPs. The front end is Next.js 16, React 19 and Tailwind 4, with a Think/Act/Observe timeline, rich tool cards, a playground and a How-it-works page. Quality is enforced end to end: typed settings, 40 offline tests against a fake Claude stream, CI with ruff, pytest, eslint, tsc, build and gitleaks, Dependabot, a non-root Docker image on Railway with health checks, Vercel for the site.",
+          role: "Sole engineer across the whole stack — architecture, Python backend, agent loop, tools, security model, data layer, Next.js front end, CI/CD and deployment. The project started from Dextra Labs' from-scratch tutorial; every step of it was re-engineered for production (async streaming client, real tools, bounded loop instead of recursion, persistent memory), the design decisions are documented in a tutorial-to-production table, and the lessons learned are written up for other engineers.",
+          tech: ["Python 3.13", "FastAPI", "Claude API · Messages & web search", "ReAct agent loop", "Server-Sent Events", "Supabase Postgres · RLS", "Next.js 16 · React 19 · Tailwind 4", "TypeScript", "Cloudflare Turnstile", "pytest · ruff · gitleaks · GitHub Actions", "Docker · Railway · Vercel"],
+          metrics: [
+            { value: "0", label: "Agent frameworks · hand-written ReAct loop" },
+            { value: "40", label: "Offline tests against a fake Claude stream · 6-stage CI" },
+            { value: "$0", label: "Model cost for cached answers · daily budget cap" }
+          ],
+          outcome: "A public, production-grade agent at agent.aurimas.io that anyone can use without signing up: ask \"I invest $10,000 at 7%. After 10 years?\" and watch three calculator calls — two of them in parallel — resolve into a step-by-step answer. Memory survives a page refresh, follow-ups reuse earlier context, repeated questions return instantly, and the paid API sits behind a bot check, signed sessions, rate limits and a hard daily spend ceiling. Open-source under MIT with a SECURITY.md, a cell-by-cell notebook and a deploy guide covering Supabase, Railway, Turnstile and Vercel.",
+          novel: "Most agent projects pick a framework and inherit its opinions. This one treats the agent loop, the tool boundary, memory, caching and abuse controls as engineering I am accountable for — and makes them visible. The trace is the UI, the How-it-works page turns the tutorial into pictures that label where each snippet runs, and the tutorial-to-production table shows exactly what changed and why: the recursion the API rejects, the eval() that was never safe, the stop reasons the tutorial never handled. It is the difference between knowing how agents work and being able to run one for the public.",
+          screenshotCaptions: [
+            "Compound interest: one question, three calculator calls (two in parallel), then the streamed answer — replayed from a saved trace",
+            "Every step is visible: thoughts, tool calls and results as a Think / Act / Observe timeline",
+            "Real tools, rich results: weather and a 3-day forecast rendered as a card, not raw JSON",
+            "Memory and cache: the first answer served from Postgres at zero model cost; the follow-up reuses earlier context",
+            "How it works, explained like you're five: the four parts of an agent and the animated ReAct loop"
+          ]
+        },
         "calculator-agent": {
           name: "Calculator Agent",
           tagline: "My first AI agent, built from scratch.",
@@ -363,7 +386,7 @@ export const translations = {
     hero: {
       greeting: "Laba, esu",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chemikas - dabar DI trys rolės",
+      subtitle: "Chemikas, tapęs vyriausiuoju DI ir Python inžinieriumi",
       description: "Sveiki. Tikiuosi patiks užklydimas.",
       cta: "Skaityti mano istoriją",
       fieldNotes: "— Užrašai iš laboratorijos"
@@ -374,7 +397,7 @@ export const translations = {
       fromTheDesk: "Nuo A. Nausėdo stalo",
       title: "Apie mane",
       myStory: "Mano istorija",
-      bio: "Nuo vidurinės mokyklos maniau, kad dirbsiu mokslininku, bet gyvenimas toli gražu nėra nuspręstas, kai sėdi mokyklos suole. Tada atėjo universitetas ir daugybė stažuočių, kurios pagilino mano abejones savimi ir paskatino viską kvestionuoti, o tai davė man pasitikėjimo niekada nebijoti keisti karjeros kelio. Neprisiėmęs daug rizikos per pastaruosius dešimt metų, dabar tai darau.\n\nEsu chemikas, baigęs Edinburgo universitetą, kuris persikvalifikavo, kad taptų kompiuterių mokslo ir dirbtinio intelekto (DI) architektu, inžinieriu ir vadybininku.\n\nPrie kompiuterijos prisijungiau gana vėlai, 2010 metais, studijų universitete metu. Būtent tada supratau, kad laboratorijos darbas man visai nepatinka. Tačiau man prireikė iki 2021 metų pabaigos, kad užbaigčiau mokslinės karjeros siekius ir susitelkčiau į kompiuterių mokslą, dirbtinį intelektą ir vadovavimo pareigas. Visiškai atsidaviau kompiuterijai ir vadovavimui nuo 2022 metų pradžios. Tam pasiruošti lankiau daugybę kompiuterių mokslo internetinių kursų ir prisijungiau prie kelių profesinių organizacijų, tokių kaip Lietuvos Dirbtinio Intelekto Asociacija ir IEEE kompiuterių draugija. Nors nuo 2015 iki 2021 metų dirbau biologijos ir bioinformatikos srityse, man labiau patinka spręsti chemijos ir realaus pasaulio problemas programuojant DI pagalba, ieškant DI sprendimų ir vadovaujant komandoms, nei tęsti biologijos tyrimus be DI. Tai mane atveda į šiandienos dieną, kai taip pat grįžau prie kitos savo aistros – rašymo.\n\nČia rasite mano keverziojimus, nes rašau jau daugiau nei 15 metų ir tęsiu. Kviečiu sekti mano tinklaraštį ir, jei norite - paremti. Jei tapsite prenumeratoriumi – tai aukso vertės, nes tai yra geriausias patvirtinimas, kad tai, ką darau, yra svarbu, ne tik mano profesinėje karjeroje.\n\nMano specialybės apima greitą naujų įgūdžių mokymąsi, naujas inžinerijas, problemų sprendimus, pirmųjų principų taikymus, valdymą ir vadovavimą. Entuziastingai tyrinėju kompiuterijos pagrindinius principus, strateginio mąstymo metodus, valdymo įrankius, inžinerijas ir kitus DI variklius, karkasus, modulius ir principus, kuriuos galiu integruoti ir priversti veikti savo galvoje, o tada įgyvendinti realybėje.",
+      bio: "Nuo vidurinės mokyklos maniau, kad dirbsiu mokslininku, bet gyvenimas toli gražu nėra nuspręstas, kai sėdi mokyklos suole. Tada atėjo universitetas ir daugybė stažuočių, kurios pagilino mano abejones savimi ir paskatino viską kvestionuoti, o tai davė man pasitikėjimo niekada nebijoti keisti karjeros kelio. Neprisiėmęs daug rizikos per pastaruosius dešimt metų, dabar tai darau.\n\nEsu chemikas, baigęs Edinburgo universitetą ir persikvalifikavęs į vyriausiojo (angl. principal) lygio DI ir Python inžinieriaus vaidmenį: nuo pradžios iki galo atsakau už gamybinių DI sistemų projektavimą, kūrimą ir veikimą — nuo nuo nulio parašytų agentų su Claude API iki valdomų DKM platformų, įdiegtų 13 komandų — ir vadovauju jas kuriantiems inžinieriams.\n\nPrie kompiuterijos prisijungiau gana vėlai, 2010 metais, studijų universitete metu. Būtent tada supratau, kad laboratorijos darbas man visai nepatinka. Tačiau man prireikė iki 2021 metų pabaigos, kad užbaigčiau mokslinės karjeros siekius ir susitelkčiau į kompiuterių mokslą, dirbtinį intelektą ir vadovavimo pareigas. Visiškai atsidaviau kompiuterijai ir vadovavimui nuo 2022 metų pradžios. Tam pasiruošti lankiau daugybę kompiuterių mokslo internetinių kursų ir prisijungiau prie kelių profesinių organizacijų, tokių kaip Lietuvos Dirbtinio Intelekto Asociacija ir IEEE kompiuterių draugija. Nors nuo 2015 iki 2021 metų dirbau biologijos ir bioinformatikos srityse, man labiau patinka spręsti chemijos ir realaus pasaulio problemas programuojant DI pagalba, ieškant DI sprendimų ir vadovaujant komandoms, nei tęsti biologijos tyrimus be DI. Tai mane atveda į šiandienos dieną, kai taip pat grįžau prie kitos savo aistros – rašymo.\n\nČia rasite mano keverziojimus, nes rašau jau daugiau nei 15 metų ir tęsiu. Kviečiu sekti mano tinklaraštį ir, jei norite - paremti. Jei tapsite prenumeratoriumi – tai aukso vertės, nes tai yra geriausias patvirtinimas, kad tai, ką darau, yra svarbu, ne tik mano profesinėje karjeroje.\n\nMano specialybės apima greitą naujų įgūdžių mokymąsi, naujas inžinerijas, problemų sprendimus, pirmųjų principų taikymus, valdymą ir vadovavimą. Entuziastingai tyrinėju kompiuterijos pagrindinius principus, strateginio mąstymo metodus, valdymo įrankius, inžinerijas ir kitus DI variklius, karkasus, modulius ir principus, kuriuos galiu integruoti ir priversti veikti savo galvoje, o tada įgyvendinti realybėje.",
       skills: "Įgūdžiai ir kompetencijos",
       experience: "Patirties akcentai",
       downloadCVShort: "Atsisiųsti CV",
@@ -523,7 +546,7 @@ export const translations = {
       fillAllFields: "Prašome užpildyti visus laukus"
     },
     footer: {
-      description: "Chemikas tapęs DI architektu, inžinieriumi ir vadybininku, aistringas DI, mokslo, technologijų ir kūrybos sankirtos srityse.",
+      description: "Chemikas, tapęs vyriausiojo lygio DI ir Python inžinieriumi. Nuo pradžios iki galo projektuoju, kuriu ir prižiūriu gamybines DI sistemas — agentus nuo nulio, valdomas DKM platformas, agentinius tyrimų įrankius — ir rašau apie DI, mokslą, technologijas ir kūrybą.",
       quickLinks: "Greitos nuorodos",
       connect: "Susisiekti",
       madeWith: "Sukurta su",
@@ -544,11 +567,11 @@ export const translations = {
     currently: {
       title: "Šiuo metu",
       openTo: "Atviras",
-      openToValue: "DI pareigoms",
+      openToValue: "Vyr. DI · Python inž. pareigoms",
       basedIn: "Įsikūręs",
       basedInValue: "Vilniuje / Nuotoliniu",
       stack: "Stack",
-      stackValue: "AIs · LLMs",
+      stackValue: "Python · DKM · Agentai",
       reading: "Skaitau",
       readingValue: "Yesteryear"
     },
@@ -563,7 +586,7 @@ export const translations = {
     },
     projects: {
       title: "Projektai",
-      subtitle: "Naujausi pirmiausia: nuo nulio sukurtas DI agentas, kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau.",
+      subtitle: "Naujausi pirmiausia: du nuo nulio su Claude API sukurti DI agentai, kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau gamybines Python ir DI sistemas.",
       featured: "Pagrindiniai projektai",
       viewProject: "Žiūrėti projektą",
       viewCaseStudy: "Žiūrėti atvejo analizę",
@@ -583,6 +606,29 @@ export const translations = {
       screenshotsPlaceholder: "Ekrano nuotraukos bus pridėtos netrukus.",
       plate: "Iliustracija",
       items: {
+        "claude-agent-from-scratch": {
+          name: "Claude Agent From Scratch",
+          tagline: "Stebėkite, kaip DI agentas mąsto, naudoja įrankius ir atsako — žingsnis po žingsnio.",
+          description: "ReAct agentas, rankomis sukurtas su Claude API be LangChain ir be agentų karkaso: transliuojamas ciklas „Mąstyk → Veik → Stebėk → Atsakyk“, tikri įrankiai (skaičiuotuvas, orai, pasaulio laikas, Anthropic interneto paieška, užrašai), Supabase saugoma atmintis, atsakymų talpykla ir žmogaus patikra apsaugota vieša demonstracija agent.aurimas.io — kartu su „paaiškink kaip penkiamečiui“ vadovu, kaip visa tai veikia.",
+          problem: "Calculator Agent įrodė, kad moku parašyti ciklą. Kitas klausimas skiria demonstraciją nuo sistemos: ko reikia, kad agentas veiktų nepažįstamiems žmonėms, su mokama API, tikrais įrankiais ir atmintimi — ir nebūtų piktnaudžiaujamas, manęs nenuskurdintų ir tyliai nesugestų? Karkasai į tai atsako dar daugiau abstrakcijų. Aš norėjau atsakyti kodu, kurį visiškai valdau ir galiu paaiškinti.",
+          approach: "Serverio dalis — Python 3.13 ir FastAPI. Rankomis parašytas ReAct ciklas virš Messages API kiekvieną teksto fragmentą, įrankio iškvietimą ir rezultatą transliuoja į naršyklę per Server-Sent Events; jis vykdo lygiagrečius įrankių iškvietimus, tęsia po pause_turn, gerbia max_tokens ir atsisakymus, o iteracijų riba užtikrina, kad jokia sustojimo priežastis negalėtų suktis amžinai. Įrankiai tikri ir saugūs: AST skaičiuotuvas, priimantis tik matematiką, Open-Meteo orai, geokodavimas ir laiko juostos, Anthropic serverio pusės interneto paieška ir užrašų įrankis. Visa Claude pranešimų istorija saugoma Supabase Postgres su eilučių lygio saugumu (RLS), apkarpoma iki lango, kuris niekada nepalieka tool_result be poros; pakartoti pirmieji klausimai, nenaudoję laikui jautraus įrankio, pateikiami iš duomenų bazės talpyklos be jokių modelio išlaidų. Vieša sąsaja ginama sluoksniais: viena Cloudflare Turnstile patikra per apsilankymą, iškeičiama į HMAC pasirašytą HttpOnly SameSite sesijos slapuką; užklausų ribos kiekvienam lankytojui; dienos biudžeto riba doleriais, skaičiuojama iš naudojimo žurnalo; įvesties ribos ir maišyti IP adresai. Naršyklės dalis — Next.js 16, React 19 ir Tailwind 4 su „Mąstyk / Veik / Stebėk“ laiko juosta, informatyviomis įrankių kortelėmis, žaidimų aikštele ir puslapiu „Kaip tai veikia“. Kokybė užtikrinama nuo pradžios iki galo: tipizuoti nustatymai, 40 autonominių testų su netikru Claude srautu, CI su ruff, pytest, eslint, tsc, build ir gitleaks, Dependabot, ne root Docker atvaizdas Railway su sveikatos patikromis, Vercel svetainei.",
+          role: "Vienintelis inžinierius visame steke — architektūra, Python serverio dalis, agento ciklas, įrankiai, saugumo modelis, duomenų sluoksnis, Next.js sąsaja, CI/CD ir diegimas. Projektas prasidėjo nuo Dextra Labs mokomosios pamokos „agentas nuo nulio“; kiekvienas jos žingsnis perkurtas gamybai (asinchroninis transliuojantis klientas, tikri įrankiai, ribotas ciklas vietoj rekursijos, ilgalaikė atmintis), projektiniai sprendimai dokumentuoti lentelėje „nuo pamokos iki gamybos“, o išmoktos pamokos surašytos kitiems inžinieriams.",
+          tech: ["Python 3.13", "FastAPI", "Claude API · Messages ir interneto paieška", "ReAct agento ciklas", "Server-Sent Events", "Supabase Postgres · RLS", "Next.js 16 · React 19 · Tailwind 4", "TypeScript", "Cloudflare Turnstile", "pytest · ruff · gitleaks · GitHub Actions", "Docker · Railway · Vercel"],
+          metrics: [
+            { value: "0", label: "Agentų karkasų · rankomis rašytas ReAct ciklas" },
+            { value: "40", label: "Autonominių testų su netikru Claude srautu · 6 pakopų CI" },
+            { value: "$0", label: "Modelio išlaidos talpyklos atsakymams · dienos biudžeto riba" }
+          ],
+          outcome: "Viešas, gamybinės kokybės agentas agent.aurimas.io, kuriuo kiekvienas gali naudotis be registracijos: paklauskite „Investuoju 10 000 $ su 7 %. Kiek bus po 10 metų?“ ir stebėkite, kaip trys skaičiuotuvo iškvietimai — du iš jų lygiagretūs — virsta žingsnis po žingsnio pateiktu atsakymu. Atmintis išlieka perkrovus puslapį, tolesni klausimai remiasi ankstesniu kontekstu, pakartoti klausimai grįžta akimirksniu, o mokama API saugoma botų patikra, pasirašytomis sesijomis, užklausų ribomis ir griežta dienos išlaidų lubų riba. Atvirasis kodas pagal MIT licenciją su SECURITY.md, užrašine langelis po langelio ir diegimo vadovu, apimančiu Supabase, Railway, Turnstile ir Vercel.",
+          novel: "Dauguma agentų projektų pasirenka karkasą ir paveldi jo nuostatas. Šis agento ciklą, įrankių ribą, atmintį, talpyklą ir piktnaudžiavimo kontrolę laiko inžinerija, už kurią atsakau aš — ir padaro ją matomą. Pėdsakas yra pati sąsaja, puslapis „Kaip tai veikia“ paverčia pamoką paveikslėliais, pažymėdamas, kur vykdomas kiekvienas kodo fragmentas, o lentelė „nuo pamokos iki gamybos“ tiksliai parodo, kas pasikeitė ir kodėl: rekursija, kurią API atmeta, eval(), kuris niekada nebuvo saugus, sustojimo priežastys, kurių pamoka niekada neapdorojo. Tai skirtumas tarp žinojimo, kaip agentai veikia, ir gebėjimo paleisti jį visuomenei.",
+          screenshotCaptions: [
+            "Sudėtinės palūkanos: vienas klausimas, trys skaičiuotuvo iškvietimai (du lygiagretūs) ir transliuojamas atsakymas — atkurta iš išsaugoto pėdsako",
+            "Kiekvienas žingsnis matomas: mintys, įrankių iškvietimai ir rezultatai laiko juostoje „Mąstyk / Veik / Stebėk“",
+            "Tikri įrankiai, informatyvūs rezultatai: orai ir 3 dienų prognozė kaip kortelė, o ne neapdorotas JSON",
+            "Atmintis ir talpykla: pirmasis atsakymas pateiktas iš Postgres be modelio išlaidų; tolesnis klausimas remiasi ankstesniu kontekstu",
+            "„Kaip tai veikia“, paaiškinta kaip penkiamečiui: keturios agento dalys ir animuotas ReAct ciklas"
+          ]
+        },
         "calculator-agent": {
           name: "Calculator Agent",
           tagline: "Mano pirmasis DI agentas, sukurtas nuo nulio.",
@@ -723,7 +769,7 @@ export const translations = {
     hero: {
       greeting: "Bonjour, je suis",
       name: "Aurimas Aleksandras Nausėdas",
-      subtitle: "Chimiste — aujourd'hui trois rôles en IA",
+      subtitle: "Chimiste devenu ingénieur IA et Python de niveau principal",
       description: "Bienvenue. J'espère que le séjour vous plaira.",
       cta: "Lire mon histoire",
       fieldNotes: "— Notes de paillasse"
@@ -734,7 +780,7 @@ export const translations = {
       fromTheDesk: "Du bureau d'A. Nausėdas",
       title: "À propos de moi",
       myStory: "Mon histoire",
-      bio: "Au lycée, je pensais devenir scientifique, mais la vie est loin d'être toute tracée quand on est assis sur les bancs de l'école. Puis sont arrivés l'université et de nombreux stages qui ont approfondi mes doutes et m'ont poussé à tout remettre en question, ce qui m'a donné la confiance de ne jamais avoir peur de changer de carrière. Après avoir pris peu de risques au cours de la dernière décennie, je me lance aujourd'hui.\n\nJe suis un chimiste diplômé de l'université d'Édimbourg qui s'est reconverti pour devenir architecte, ingénieur et manager en informatique et en intelligence artificielle (IA).\n\nJe me suis intéressé à l'informatique relativement tard, en 2010, pendant mes études universitaires. C'est à cette époque que j'ai réalisé que je n'aimais pas du tout les laboratoires. Il m'a toutefois fallu attendre la fin de l'année 2021 pour mettre un terme à ma carrière scientifique et me consacrer à l'informatique, à l'intelligence artificielle et aux rôles de gestion et de leadership. Je me consacre entièrement à l'informatique et au leadership depuis le début de l'année 2022. Pour y parvenir, j'ai suivi de nombreux cours d'informatique en ligne et j'ai rejoint plusieurs organisations professionnelles, dont l'Association lituanienne pour l'intelligence artificielle et la Computer Society de l'IEEE. Bien que j'aie travaillé en biologie et en bio-informatique de 2015 à 2021, je préfère résoudre des problèmes de chimie et du monde réel en programmant avec l'aide de l'IA, en trouvant des solutions d'IA et en dirigeant des équipes, plutôt que de poursuivre la recherche biologique sans IA. Cela m'amène à aujourd'hui, où je suis également revenu à mon autre passion – l'écriture.\n\nVous trouverez ici mes écrits techniques, que je rédige depuis plus de 15 ans et que je continue à écrire. Je vous invite à suivre mon blog et, si vous le souhaitez, à me soutenir. Si vous devenez abonné, c'est en or, car c'est la meilleure preuve que ce que je fais compte au-delà de ma carrière professionnelle.\n\nMes spécialités sont l'apprentissage rapide de nouvelles compétences, les nouvelles ingénieries, la résolution de problèmes, l'application de l'approche par principes fondamentaux, la gestion et la direction d'équipes. J'explore avec enthousiasme les principes fondamentaux de l'informatique, les méthodes de réflexion stratégique, les outils de gestion, les ingénieries et d'autres moteurs d'IA, frameworks, modules et principes que je peux intégrer et faire fonctionner dans ma tête, puis mettre en œuvre dans la vie réelle.",
+      bio: "Au lycée, je pensais devenir scientifique, mais la vie est loin d'être toute tracée quand on est assis sur les bancs de l'école. Puis sont arrivés l'université et de nombreux stages qui ont approfondi mes doutes et m'ont poussé à tout remettre en question, ce qui m'a donné la confiance de ne jamais avoir peur de changer de carrière. Après avoir pris peu de risques au cours de la dernière décennie, je me lance aujourd'hui.\n\nJe suis un chimiste diplômé de l'université d'Édimbourg, reconverti en ingénieur IA et Python de niveau principal : je porte de bout en bout la conception, la construction et l'exploitation de systèmes d'IA en production — des agents écrits de zéro sur l'API Claude aux plateformes LLM gouvernées déployées dans 13 équipes — et j'encadre les ingénieurs qui les livrent.\n\nJe me suis intéressé à l'informatique relativement tard, en 2010, pendant mes études universitaires. C'est à cette époque que j'ai réalisé que je n'aimais pas du tout les laboratoires. Il m'a toutefois fallu attendre la fin de l'année 2021 pour mettre un terme à ma carrière scientifique et me consacrer à l'informatique, à l'intelligence artificielle et aux rôles de gestion et de leadership. Je me consacre entièrement à l'informatique et au leadership depuis le début de l'année 2022. Pour y parvenir, j'ai suivi de nombreux cours d'informatique en ligne et j'ai rejoint plusieurs organisations professionnelles, dont l'Association lituanienne pour l'intelligence artificielle et la Computer Society de l'IEEE. Bien que j'aie travaillé en biologie et en bio-informatique de 2015 à 2021, je préfère résoudre des problèmes de chimie et du monde réel en programmant avec l'aide de l'IA, en trouvant des solutions d'IA et en dirigeant des équipes, plutôt que de poursuivre la recherche biologique sans IA. Cela m'amène à aujourd'hui, où je suis également revenu à mon autre passion – l'écriture.\n\nVous trouverez ici mes écrits techniques, que je rédige depuis plus de 15 ans et que je continue à écrire. Je vous invite à suivre mon blog et, si vous le souhaitez, à me soutenir. Si vous devenez abonné, c'est en or, car c'est la meilleure preuve que ce que je fais compte au-delà de ma carrière professionnelle.\n\nMes spécialités sont l'apprentissage rapide de nouvelles compétences, les nouvelles ingénieries, la résolution de problèmes, l'application de l'approche par principes fondamentaux, la gestion et la direction d'équipes. J'explore avec enthousiasme les principes fondamentaux de l'informatique, les méthodes de réflexion stratégique, les outils de gestion, les ingénieries et d'autres moteurs d'IA, frameworks, modules et principes que je peux intégrer et faire fonctionner dans ma tête, puis mettre en œuvre dans la vie réelle.",
       skills: "Compétences et expertise",
       experience: "Points forts de l'expérience",
       downloadCVShort: "Télécharger CV",
@@ -883,7 +929,7 @@ export const translations = {
       fillAllFields: "Veuillez remplir tous les champs"
     },
     footer: {
-      description: "Chimiste devenu Architecte, Ingénieur et Chef de Produit IA, passionné par la croisée de l'IA, de la science, de la technologie et de la créativité.",
+      description: "Chimiste devenu ingénieur IA et Python de niveau principal. Je conçois, construis et exploite des systèmes d'IA en production de bout en bout — agents écrits de zéro, plateformes LLM gouvernées, outils d'investigation agentiques — et j'écris sur l'IA, la science, la technologie et la créativité.",
       quickLinks: "Liens rapides",
       connect: "Se connecter",
       madeWith: "Fait avec",
@@ -904,11 +950,11 @@ export const translations = {
     currently: {
       title: "Actuellement",
       openTo: "Ouvert à",
-      openToValue: "Postes en IA",
+      openToValue: "Principal IA · Python Engineer",
       basedIn: "Basé à",
       basedInValue: "Vilnius / À distance",
       stack: "Stack",
-      stackValue: "AIs · LLMs",
+      stackValue: "Python · LLM · Agents",
       reading: "Lecture",
       readingValue: "Yesteryear"
     },
@@ -923,7 +969,7 @@ export const translations = {
     },
     projects: {
       title: "Projets",
-      subtitle: "Les plus récents d'abord : un agent IA construit de zéro, une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer.",
+      subtitle: "Les plus récents d'abord : deux agents IA construits de zéro sur l'API Claude, une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer des systèmes Python et IA en production.",
       featured: "Projets en vedette",
       viewProject: "Voir le projet",
       viewCaseStudy: "Voir l'étude de cas",
@@ -943,6 +989,29 @@ export const translations = {
       screenshotsPlaceholder: "Les captures d'écran seront ajoutées prochainement.",
       plate: "Planche",
       items: {
+        "claude-agent-from-scratch": {
+          name: "Claude Agent From Scratch",
+          tagline: "Regardez un agent IA réfléchir, utiliser des outils et répondre — étape par étape.",
+          description: "Un agent ReAct construit à la main sur l'API Claude, sans LangChain ni framework d'agents : une boucle « Réfléchir → Agir → Observer → Répondre » diffusée en direct, de vrais outils (calculatrice, météo, horloge mondiale, recherche web Anthropic, notes), une mémoire persistante sur Supabase, un cache de réponses et une démo publique protégée par vérification humaine sur agent.aurimas.io — avec, en prime, une explication « comme à un enfant de cinq ans » de son fonctionnement.",
+          problem: "Calculator Agent a prouvé que je savais écrire la boucle. La question suivante est celle qui sépare une démo d'un système : que faut-il pour faire tourner un agent pour des inconnus, sur une API payante, avec de vrais outils et de la mémoire, sans qu'il soit détourné, ne me ruine ou ne casse en silence ? Les frameworks y répondent par davantage d'abstraction. Je voulais y répondre avec du code que je maîtrise entièrement et que je peux expliquer.",
+          approach: "Le backend est en Python 3.13 et FastAPI. Une boucle ReAct écrite à la main au-dessus de l'API Messages diffuse chaque fragment de texte, chaque appel d'outil et chaque résultat vers le navigateur en Server-Sent Events ; elle exécute les appels d'outils en parallèle, reprend après un pause_turn, respecte max_tokens et les refus, et s'arrête à un plafond d'itérations pour qu'aucune raison d'arrêt ne puisse boucler indéfiniment. Les outils sont réels et sûrs : une calculatrice AST qui n'accepte que des mathématiques, la météo, le géocodage et les fuseaux horaires d'Open-Meteo, la recherche web côté serveur d'Anthropic et un outil de notes. L'historique complet des messages Claude vit dans Supabase Postgres derrière du Row Level Security, tronqué à une fenêtre qui n'orpheline jamais un tool_result ; les premières questions répétées n'ayant utilisé aucun outil sensible au temps sont servies depuis un cache en base, à coût de modèle nul. La surface publique est défendue en couches : une vérification Cloudflare Turnstile par visite, échangée contre un cookie de session signé HMAC, HttpOnly et SameSite ; des limites de débit par visiteur ; un plafond de budget quotidien en dollars calculé depuis un journal d'usage ; des limites de taille et des IP hachées. Le front est en Next.js 16, React 19 et Tailwind 4, avec une chronologie Réfléchir / Agir / Observer, des cartes d'outils riches, un bac à sable et une page « Comment ça marche ». La qualité est tenue de bout en bout : configuration typée, 40 tests hors ligne contre un flux Claude simulé, CI avec ruff, pytest, eslint, tsc, build et gitleaks, Dependabot, image Docker non-root sur Railway avec contrôles de santé, Vercel pour le site.",
+          role: "Seul ingénieur sur toute la pile — architecture, backend Python, boucle d'agent, outils, modèle de sécurité, couche de données, front Next.js, CI/CD et déploiement. Le projet est parti du tutoriel « de zéro » de Dextra Labs ; chacune de ses étapes a été réécrite pour la production (client asynchrone en streaming, vrais outils, boucle bornée à la place de la récursion, mémoire persistante), les choix de conception sont documentés dans un tableau « du tutoriel à la production » et les leçons apprises sont rédigées pour d'autres ingénieurs.",
+          tech: ["Python 3.13", "FastAPI", "API Claude · Messages et recherche web", "Boucle d'agent ReAct", "Server-Sent Events", "Supabase Postgres · RLS", "Next.js 16 · React 19 · Tailwind 4", "TypeScript", "Cloudflare Turnstile", "pytest · ruff · gitleaks · GitHub Actions", "Docker · Railway · Vercel"],
+          metrics: [
+            { value: "0", label: "Framework d'agents · boucle ReAct écrite à la main" },
+            { value: "40", label: "Tests hors ligne contre un flux Claude simulé · CI en 6 étapes" },
+            { value: "0 $", label: "Coût de modèle pour les réponses en cache · plafond quotidien" }
+          ],
+          outcome: "Un agent public de qualité production sur agent.aurimas.io, utilisable sans inscription : demandez « J'investis 10 000 $ à 7 %. Après 10 ans ? » et regardez trois appels à la calculatrice — dont deux en parallèle — se transformer en une réponse étape par étape. La mémoire survit à un rechargement de page, les questions de suivi réutilisent le contexte, les questions répétées reviennent instantanément, et l'API payante est protégée par une vérification anti-bot, des sessions signées, des limites de débit et un plafond strict de dépense quotidienne. Open source sous licence MIT, avec un SECURITY.md, un notebook cellule par cellule et un guide de déploiement couvrant Supabase, Railway, Turnstile et Vercel.",
+          novel: "La plupart des projets d'agents choisissent un framework et héritent de ses opinions. Celui-ci traite la boucle d'agent, la frontière des outils, la mémoire, le cache et les contrôles anti-abus comme de l'ingénierie dont je suis responsable — et la rend visible. La trace est l'interface, la page « Comment ça marche » transforme le tutoriel en images qui indiquent où s'exécute chaque extrait de code, et le tableau « du tutoriel à la production » montre exactement ce qui a changé et pourquoi : la récursion que l'API rejette, le eval() qui n'a jamais été sûr, les raisons d'arrêt que le tutoriel ne gérait pas. C'est la différence entre savoir comment fonctionnent les agents et être capable d'en faire tourner un pour le public.",
+          screenshotCaptions: [
+            "Intérêts composés : une question, trois appels à la calculatrice (deux en parallèle), puis la réponse diffusée — rejouée depuis une trace enregistrée",
+            "Chaque étape est visible : réflexions, appels d'outils et résultats dans une chronologie Réfléchir / Agir / Observer",
+            "De vrais outils, des résultats riches : météo et prévisions à 3 jours rendues en carte, pas en JSON brut",
+            "Mémoire et cache : la première réponse servie depuis Postgres à coût de modèle nul ; la question de suivi réutilise le contexte",
+            "« Comment ça marche », expliqué comme à un enfant de cinq ans : les quatre parties d'un agent et la boucle ReAct animée"
+          ]
+        },
         "calculator-agent": {
           name: "Calculator Agent",
           tagline: "Mon premier agent IA, construit de zéro.",

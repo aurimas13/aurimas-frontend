@@ -14,10 +14,23 @@ interface ProjectMeta {
 }
 
 const projectMeta: Record<string, ProjectMeta> = {
+  'claude-agent-from-scratch': {
+    url: 'https://agent.aurimas.io',
+    github: 'https://github.com/aurimas13/Claude-Agent-From-Scratch',
+    index: '01',
+    domain: 'agent.aurimas.io',
+    screenshots: [
+      '/projects/claude-agent-from-scratch/demo.gif',
+      '/projects/claude-agent-from-scratch/multi-step.png',
+      '/projects/claude-agent-from-scratch/weather.png',
+      '/projects/claude-agent-from-scratch/memory-and-cache.png',
+      '/projects/claude-agent-from-scratch/how-it-works.png',
+    ],
+  },
   'calculator-agent': {
     url: 'https://calculator.aurimas.io',
     github: 'https://github.com/aurimas13/Calculator-Agent',
-    index: '01',
+    index: '02',
     domain: 'calculator.aurimas.io',
     screenshots: [
       '/projects/calculator-agent/demo.gif',
@@ -25,16 +38,45 @@ const projectMeta: Record<string, ProjectMeta> = {
       '/projects/calculator-agent/screenshot-mobile.png',
     ],
   },
-  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '02', domain: 'github.com/aurimas13' },
-  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '03' },
-  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '04' },
-  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '05' },
-  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '06' },
-  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '07', domain: 'github.com/aurimas13' },
-  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '08', domain: 'github.com/aurimas13' },
+  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '03', domain: 'github.com/aurimas13' },
+  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '04' },
+  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '05' },
+  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '06' },
+  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '07' },
+  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '08', domain: 'github.com/aurimas13' },
+  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '09', domain: 'github.com/aurimas13' },
 };
 
-const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii'];
+const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
+
+interface PlateProps {
+  src: string;
+  alt: string;
+  label: string;
+  caption?: string;
+}
+
+/** A framed screenshot. Portrait images are height-capped and centred so tall captures don't dominate the page. */
+const Plate: React.FC<PlateProps> = ({ src, alt, label, caption }) => {
+  const [portrait, setPortrait] = React.useState(false);
+  return (
+    <figure className="border border-[rgba(26,22,18,0.32)] bg-paper p-3 m-0 flex flex-col">
+      <div className={portrait ? 'flex items-center justify-center bg-[rgba(26,22,18,0.03)]' : ''}>
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          onLoad={(e) => setPortrait(e.currentTarget.naturalHeight > e.currentTarget.naturalWidth)}
+          className={portrait ? 'max-h-[560px] w-auto h-auto block' : 'w-full h-auto block'}
+        />
+      </div>
+      <figcaption className="pt-3 px-1 flex items-baseline justify-between gap-4">
+        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute whitespace-nowrap">{label}</span>
+        {caption && <span className="text-[12px] text-ink-mute text-right leading-snug">{caption}</span>}
+      </figcaption>
+    </figure>
+  );
+};
 
 const Section: React.FC<{ title: string; children: React.ReactNode; index: string }> = ({
   title,
@@ -89,25 +131,14 @@ export const ProjectDetailPage: React.FC = () => {
   const captions: string[] = item.screenshotCaptions ?? [];
   const plateLabel: string = (t.projects as any).plate ?? 'Plate';
   const [leadShot, ...moreShots] = screenshots;
-
-  const Plate = ({ src, i, tall = false }: { src: string; i: number; tall?: boolean }) => (
-    <figure className="border border-[rgba(26,22,18,0.32)] bg-paper p-3 m-0 flex flex-col">
-      <div className={tall ? 'flex-1 flex items-center justify-center bg-[rgba(26,22,18,0.03)]' : ''}>
-        <img
-          src={src}
-          alt={captions[i] ?? `${item.name} — ${plateLabel} ${ROMAN[i]}`}
-          loading="lazy"
-          className={tall ? 'max-h-[560px] w-auto h-auto block' : 'w-full h-auto block'}
-        />
-      </div>
-      <figcaption className="pt-3 px-1 flex items-baseline justify-between gap-4">
-        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute whitespace-nowrap">
-          {plateLabel} {ROMAN[i]}
-        </span>
-        {captions[i] && <span className="text-[12px] text-ink-mute text-right leading-snug">{captions[i]}</span>}
-      </figcaption>
-    </figure>
-  );
+  const plateProps = (src: string, i: number): PlateProps => ({
+    src,
+    label: `${plateLabel} ${ROMAN[i]}`,
+    caption: captions[i],
+    alt: captions[i] ?? `${item.name} — ${plateLabel} ${ROMAN[i]}`,
+  });
+  // Two secondary plates read best as wide + narrow; more than two fall into even columns.
+  const gridCols = moreShots.length === 2 ? 'md:grid-cols-[3fr_2fr]' : 'md:grid-cols-2';
 
   return (
     <section className="pt-28 pb-24 min-h-screen">
@@ -173,11 +204,11 @@ export const ProjectDetailPage: React.FC = () => {
               <span className="meta uppercase tracking-[0.2em]">{t.projects.screenshots}</span>
               <span className="meta uppercase tracking-[0.2em]">{meta.domain ?? `${slug}.aurimas.io`}</span>
             </div>
-            <Plate src={leadShot} i={0} />
+            <Plate {...plateProps(leadShot, 0)} />
             {moreShots.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-4 mt-4 items-start">
+              <div className={`grid grid-cols-1 ${gridCols} gap-4 mt-4 items-start`}>
                 {moreShots.map((src, k) => (
-                  <Plate key={src} src={src} i={k + 1} tall={/mobile/i.test(src)} />
+                  <Plate key={src} {...plateProps(src, k + 1)} />
                 ))}
               </div>
             )}
