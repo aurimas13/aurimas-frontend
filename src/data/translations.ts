@@ -190,7 +190,7 @@ export const translations = {
       stack: "Stack",
       stackValue: "Python · LLMs · Agents",
       reading: "Reading",
-      readingValue: "Yesteryear"
+      readingValue: "Born a Crime"
     },
     projectIndex: {
       title: "The Project Index",
@@ -573,7 +573,7 @@ export const translations = {
       stack: "Stack",
       stackValue: "Python · DKM · Agentai",
       reading: "Skaitau",
-      readingValue: "Yesteryear"
+      readingValue: "Born a Crime"
     },
     projectIndex: {
       title: "Projektų sąrašas",
@@ -956,7 +956,7 @@ export const translations = {
       stack: "Stack",
       stackValue: "Python · LLM · Agents",
       reading: "Lecture",
-      readingValue: "Yesteryear"
+      readingValue: "Born a Crime"
     },
     projectIndex: {
       title: "L'Index des Projets",

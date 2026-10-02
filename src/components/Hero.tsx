@@ -95,7 +95,7 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
                 </div>
                 <div className="flex items-center justify-between pt-3 px-1 font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute">
                   <span>Plate i</span>
-                  <span>Aurimas · 2026</span>
+                  <span>Aurimas · 2024</span>
                 </div>
               </div>
 
