@@ -11,13 +11,26 @@ interface ProjectMeta {
   domain?: string;
   /** Image paths under /public; captions come from translations (`screenshotCaptions`). */
   screenshots?: string[];
+  /** Secondary plates layout; 'wide-narrow' suits a desktop + mobile pair. Defaults to even columns. */
+  plateGrid?: 'even' | 'wide-narrow';
 }
 
 const projectMeta: Record<string, ProjectMeta> = {
+  'code-editing-agent': {
+    url: 'https://code.aurimas.io',
+    github: 'https://github.com/aurimas13/Code-Editing-Agent',
+    index: '01',
+    domain: 'code.aurimas.io',
+    screenshots: [
+      '/projects/code-editing-agent/playground.png',
+      '/projects/code-editing-agent/guide.png',
+      '/projects/code-editing-agent/home.png',
+    ],
+  },
   'claude-agent-from-scratch': {
     url: 'https://agent.aurimas.io',
     github: 'https://github.com/aurimas13/Claude-Agent-From-Scratch',
-    index: '01',
+    index: '02',
     domain: 'agent.aurimas.io',
     screenshots: [
       '/projects/claude-agent-from-scratch/demo.gif',
@@ -30,21 +43,22 @@ const projectMeta: Record<string, ProjectMeta> = {
   'calculator-agent': {
     url: 'https://calculator.aurimas.io',
     github: 'https://github.com/aurimas13/Calculator-Agent',
-    index: '02',
+    index: '03',
     domain: 'calculator.aurimas.io',
+    plateGrid: 'wide-narrow',
     screenshots: [
       '/projects/calculator-agent/demo.gif',
       '/projects/calculator-agent/screenshot-light.png',
       '/projects/calculator-agent/screenshot-mobile.png',
     ],
   },
-  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '03', domain: 'github.com/aurimas13' },
-  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '04' },
-  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '05' },
-  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '06' },
-  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '07' },
-  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '08', domain: 'github.com/aurimas13' },
-  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '09', domain: 'github.com/aurimas13' },
+  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '04', domain: 'github.com/aurimas13' },
+  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '05' },
+  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '06' },
+  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '07' },
+  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '08' },
+  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '09', domain: 'github.com/aurimas13' },
+  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '10', domain: 'github.com/aurimas13' },
 };
 
 const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
@@ -138,7 +152,7 @@ export const ProjectDetailPage: React.FC = () => {
     alt: captions[i] ?? `${item.name} — ${plateLabel} ${ROMAN[i]}`,
   });
   // Two secondary plates read best as wide + narrow; more than two fall into even columns.
-  const gridCols = moreShots.length === 2 ? 'md:grid-cols-[3fr_2fr]' : 'md:grid-cols-2';
+  const gridCols = meta.plateGrid === 'wide-narrow' ? 'md:grid-cols-[3fr_2fr]' : 'md:grid-cols-2';
 
   return (
     <section className="pt-28 pb-24 min-h-screen">

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
-const projectSlugs = ['claude-agent-from-scratch', 'calculator-agent', '100-days-with-ai', 'cleartrace', 'aegis', 'gateway', 'agentic', 'machine-learning-goodness', 'solutions-to-problems'];
+const projectSlugs = ['code-editing-agent', 'claude-agent-from-scratch', 'calculator-agent', '100-days-with-ai', 'cleartrace', 'aegis', 'gateway', 'agentic', 'machine-learning-goodness', 'solutions-to-problems'];
 
 const socials = [
   { Icon: Github,    url: 'https://github.com/aurimas13',                   label: 'GitHub' },

@@ -203,7 +203,7 @@ export const translations = {
     },
     projects: {
       title: "Projects",
-      subtitle: "Most recent first: two AI agents built from scratch on the Claude API, a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, design, build, and ship production Python and AI systems.",
+      subtitle: "Most recent first: three AI agents built from scratch on the Claude API in Go and Python, a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, design, build, and ship production Python and AI systems.",
       featured: "Featured Projects",
       viewProject: "View Live Project",
       viewCaseStudy: "View Case Study",
@@ -223,6 +223,27 @@ export const translations = {
       screenshotsPlaceholder: "Screenshots will be added soon.",
       plate: "Plate",
       items: {
+        "code-editing-agent": {
+          name: "Code-Editing Agent",
+          tagline: "An LLM, a loop, and three tools — made safe for strangers.",
+          description: "A code-editing AI agent built from first principles in Go: an LLM, a ~40-line loop and three file tools. I took a ~300-line tutorial program and made it safe for anonymous users — a per-visitor sandbox enforced in code, cost and rate limits, a stored trace of every step, and evals that run on every commit. The site includes a build guide that shows exactly where each line of the program goes.",
+          problem: "Most agent demos stop at \"it works on my laptop\". This one starts there. The tutorial agent can read and write any file on the machine. Its edit tool could silently corrupt a file in two ways. It had no limits on rounds, tokens or spend. You could not see what it did, and there was no way to know it worked. I wanted to know what it takes to let strangers use it, so I wrote down what could go wrong and built a control and a test for each.",
+          approach: "The core is Thorsten Ball's tutorial loop and it has not changed: send the conversation to Claude, run the tools it asks for, send the results back, repeat. Everything else is what the loop needs before it can face the internet. A sandbox: tools work on a workspace they cannot leave — an in-memory file tree per visitor on the web, an os.Root directory in the terminal — enforced in Go rather than in the prompt. Safer edits: an empty search string on an existing file and a search string that matches more than once are refused; a baseline test runs against the untouched tutorial code and proves both bugs exist there. Limits: rounds, tokens, time, messages per session and per visitor, and a daily budget in dollars that survives a restart. Credentials in files are redacted before they reach the model. Every step is one typed event, streamed to a Next.js front end over Server-Sent Events and stored in Supabase behind Row Level Security. Quality is gated, not assumed: 39 deterministic evals run on every commit — 25 tool-level adversarial cases with no model involved and 14 agent-loop cases against a wire-level fake of the Messages API — an 11-case live-model suite runs on demand, and a mutation check confirms each safeguard is covered by a test that fails when the safeguard is removed. Five decision records explain what was chosen and what was rejected. Docker image on Railway, site on Vercel.",
+          role: "Sole engineer across the stack: Go backend, agent loop, sandbox, guardrails, Supabase store, eval harness, Next.js site, CI/CD and deployment. The six checkpoints in the build guide are the tutorial's code as I typed it while following along; the production work was built with Claude as a pair programmer, and every decision is written down so I can defend it. A separate AI review pass before release found seven real issues — including a stalled browser holding a server slot and failed calls not being charged to the budget — and each was fixed with a test.",
+          tech: ["Go 1.24", "Anthropic API · tool use · streaming", "Agent loop · 3 file tools", "os.Root · in-memory FS sandbox", "Server-Sent Events", "Supabase Postgres · RLS", "Next.js · TypeScript", "Evals · wire-level fake API", "GitHub Actions · mutation check", "Docker · Railway · Vercel"],
+          metrics: [
+            { value: "3", label: "Tools · a ~40-line loop, unchanged from the tutorial" },
+            { value: "39", label: "Deterministic evals on every commit · 11 live-model cases" },
+            { value: "5", label: "Decision records, each with the alternatives rejected" }
+          ],
+          outcome: "A public code-editing agent at code.aurimas.io that anyone can try without a key: a playground with files, chat and an X-ray of every step; a build guide that derives six compiled checkpoints from the finished program and labels where every change belongs; an evals page that reports the committed results honestly, showing the live suite as \"not run\" rather than implying a result. With no API key the server runs in demo mode — a scripted stand-in drives the real tools through the real loop. MIT-licensed, with SECURITY.md, a deploy guide and the decision records.",
+          novel: "The decision I would defend hardest: the agent's safety comes from what it is able to reach, not from what it is told. A prompt can be argued with; a filesystem boundary cannot. The tool-level evals call the tools directly with hostile paths, so they hold for any model and any prompt. The honesty is designed in, too — the README lists what this does not do (single-process rate limits, estimated cost, no code execution) and the site refuses to show a result it did not produce.",
+          screenshotCaptions: [
+            "The playground: files, chat, and an X-ray of every step the agent takes",
+            "The build guide: main.go after each step, with the new lines marked and their place described in words",
+            "The landing page: an LLM, a loop and three tools, with a replay of a real run"
+          ]
+        },
         "claude-agent-from-scratch": {
           name: "Claude Agent From Scratch",
           tagline: "Watch an AI agent think, use tools and answer — step by step.",
@@ -586,7 +607,7 @@ export const translations = {
     },
     projects: {
       title: "Projektai",
-      subtitle: "Naujausi pirmiausia: du nuo nulio su Claude API sukurti DI agentai, kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau gamybines Python ir DI sistemas.",
+      subtitle: "Naujausi pirmiausia: trys nuo nulio su Claude API sukurti DI agentai (Go ir Python), kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau gamybines Python ir DI sistemas.",
       featured: "Pagrindiniai projektai",
       viewProject: "Žiūrėti projektą",
       viewCaseStudy: "Žiūrėti atvejo analizę",
@@ -606,6 +627,27 @@ export const translations = {
       screenshotsPlaceholder: "Ekrano nuotraukos bus pridėtos netrukus.",
       plate: "Iliustracija",
       items: {
+        "code-editing-agent": {
+          name: "Code-Editing Agent",
+          tagline: "DKM, ciklas ir trys įrankiai — saugūs nepažįstamiems.",
+          description: "Kodą redaguojantis DI agentas, sukurtas nuo pirmųjų principų Go kalba: DKM, maždaug 40 eilučių ciklas ir trys failų įrankiai. Paėmiau ~300 eilučių mokomąją programą ir padariau ją saugią anoniminiams naudotojams — smėlio dėžė kiekvienam lankytojui, užtikrinta kodu, išlaidų ir užklausų ribos, išsaugotas kiekvieno žingsnio pėdsakas ir evaluacijos, vykdomos su kiekvienu commit'u. Svetainėje yra kūrimo vadovas, tiksliai parodantis, kur dedama kiekviena programos eilutė.",
+          problem: "Dauguma agentų demonstracijų baigiasi ties „veikia mano nešiojamame“. Ši čia prasideda. Mokomasis agentas gali skaityti ir rašyti bet kurį failą kompiuteryje. Jo redagavimo įrankis galėjo dviem būdais tyliai sugadinti failą. Jis neturėjo jokių ribų — nei ciklams, nei žetonams, nei išlaidoms. Nebuvo matyti, ką jis daro, ir nebuvo būdo žinoti, ar jis veikia. Norėjau sužinoti, ko reikia, kad juo galėtų naudotis nepažįstami žmonės, todėl surašiau, kas gali nutikti blogo, ir kiekvienam atvejui sukūriau kontrolę ir testą.",
+          approach: "Branduolys — Thorsteno Ballo mokomasis ciklas, ir jis nepasikeitė: siųsk pokalbį Claude, vykdyk jo prašomus įrankius, grąžink rezultatus, kartok. Visa kita — tai, ko ciklui reikia prieš išeinant į internetą. Smėlio dėžė: įrankiai dirba darbo erdvėje, iš kurios negali išeiti — atmintyje laikomas failų medis kiekvienam lankytojui žiniatinklyje, os.Root katalogas terminale — ir tai užtikrinama Go kodu, o ne užklausos tekstu. Saugesni redagavimai: tuščia paieškos eilutė esamam failui ir daugiau nei kartą pasitaikanti paieškos eilutė atmetamos; bazinis testas vykdomas prieš nepakeistą mokomąjį kodą ir įrodo, kad abi klaidos ten yra. Ribos: ciklai, žetonai, laikas, žinutės sesijai ir lankytojui bei dienos biudžetas doleriais, išliekantis po perkrovimo. Failuose esantys prisijungimo duomenys užmaskuojami prieš pasiekiant modelį. Kiekvienas žingsnis — vienas tipizuotas įvykis, transliuojamas į Next.js sąsają per Server-Sent Events ir saugomas Supabase su eilučių lygio saugumu. Kokybė tikrinama, o ne numanoma: 39 deterministinės evaluacijos vykdomos su kiekvienu commit'u — 25 įrankių lygio priešiški atvejai be jokio modelio ir 14 agento ciklo atvejų prieš Messages API imitaciją tinklo protokolo lygiu — 11 atvejų gyvo modelio rinkinys paleidžiamas pagal poreikį, o mutacijų patikra patvirtina, kad kiekvieną apsaugą dengia testas, kuris sugenda ją pašalinus. Penki sprendimų įrašai paaiškina, kas pasirinkta ir kas atmesta. Docker atvaizdas Railway, svetainė Vercel.",
+          role: "Vienintelis inžinierius visame steke: Go serverio dalis, agento ciklas, smėlio dėžė, apsaugos, Supabase saugykla, evaluacijų karkasas, Next.js svetainė, CI/CD ir diegimas. Šeši kūrimo vadovo kontroliniai taškai — mokomosios pamokos kodas, kurį surinkau sekdamas kartu; gamybinis darbas atliktas su Claude kaip programavimo partneriu, o kiekvienas sprendimas užrašytas, kad galėčiau jį apginti. Atskira DI peržiūra prieš išleidimą rado septynias tikras problemas — tarp jų užstrigusią naršyklę, laikančią serverio vietą, ir nepavykusius iškvietimus, neįskaičiuotus į biudžetą — ir kiekviena ištaisyta su testu.",
+          tech: ["Go 1.24", "Anthropic API · įrankių naudojimas · transliavimas", "Agento ciklas · 3 failų įrankiai", "os.Root · atminties FS smėlio dėžė", "Server-Sent Events", "Supabase Postgres · RLS", "Next.js · TypeScript", "Evaluacijos · API imitacija protokolo lygiu", "GitHub Actions · mutacijų patikra", "Docker · Railway · Vercel"],
+          metrics: [
+            { value: "3", label: "Įrankiai · ~40 eilučių ciklas, nepakeistas nuo pamokos" },
+            { value: "39", label: "Deterministinės evaluacijos su kiekvienu commit'u · 11 gyvo modelio atvejų" },
+            { value: "5", label: "Sprendimų įrašai, kiekvienas su atmestomis alternatyvomis" }
+          ],
+          outcome: "Viešas kodą redaguojantis agentas code.aurimas.io, kurį kiekvienas gali išbandyti be rakto: žaidimų aikštelė su failais, pokalbiu ir kiekvieno žingsnio „rentgenu“; kūrimo vadovas, iš galutinės programos išvedantis šešis sukompiliuojamus kontrolinius taškus ir pažymintis, kur priklauso kiekvienas pakeitimas; evaluacijų puslapis, sąžiningai rodantis commit'intus rezultatus — gyvo modelio rinkinys rodomas kaip „nevykdytas“, o ne numanomas. Be API rakto serveris veikia demonstraciniu režimu — scenarijumi pagrįstas pakaitalas varo tikrus įrankius per tikrą ciklą. MIT licencija, SECURITY.md, diegimo vadovas ir sprendimų įrašai.",
+          novel: "Sprendimas, kurį ginčiau atkakliausiai: agento saugumas kyla iš to, ką jis gali pasiekti, o ne iš to, kas jam pasakyta. Su užklausos tekstu galima ginčytis; su failų sistemos riba — ne. Įrankių lygio evaluacijos tiesiogiai iškviečia įrankius su priešiškais keliais, todėl jos galioja bet kuriam modeliui ir bet kuriam promptui. Sąžiningumas taip pat suprojektuotas — README išvardija, ko šis projektas nedaro (vieno proceso užklausų ribos, apytikslė kaina, jokio kodo vykdymo), o svetainė atsisako rodyti rezultatą, kurio nesukūrė.",
+          screenshotCaptions: [
+            "Žaidimų aikštelė: failai, pokalbis ir kiekvieno agento žingsnio „rentgenas“",
+            "Kūrimo vadovas: main.go po kiekvieno žingsnio, su pažymėtomis naujomis eilutėmis ir žodžiais aprašyta jų vieta",
+            "Pradinis puslapis: DKM, ciklas ir trys įrankiai, su tikro paleidimo atkūrimu"
+          ]
+        },
         "claude-agent-from-scratch": {
           name: "Claude Agent From Scratch",
           tagline: "Stebėkite, kaip DI agentas mąsto, naudoja įrankius ir atsako — žingsnis po žingsnio.",
@@ -969,7 +1011,7 @@ export const translations = {
     },
     projects: {
       title: "Projets",
-      subtitle: "Les plus récents d'abord : deux agents IA construits de zéro sur l'API Claude, une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer des systèmes Python et IA en production.",
+      subtitle: "Les plus récents d'abord : trois agents IA construits de zéro sur l'API Claude en Go et en Python, une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer des systèmes Python et IA en production.",
       featured: "Projets en vedette",
       viewProject: "Voir le projet",
       viewCaseStudy: "Voir l'étude de cas",
@@ -989,6 +1031,27 @@ export const translations = {
       screenshotsPlaceholder: "Les captures d'écran seront ajoutées prochainement.",
       plate: "Planche",
       items: {
+        "code-editing-agent": {
+          name: "Code-Editing Agent",
+          tagline: "Un LLM, une boucle et trois outils — rendus sûrs pour des inconnus.",
+          description: "Un agent IA d'édition de code construit à partir des premiers principes, en Go : un LLM, une boucle d'environ 40 lignes et trois outils de fichiers. J'ai pris un programme-tutoriel d'environ 300 lignes et je l'ai rendu sûr pour des utilisateurs anonymes — un bac à sable par visiteur imposé par le code, des limites de coût et de débit, une trace enregistrée de chaque étape et des évaluations exécutées à chaque commit. Le site inclut un guide de construction qui montre exactement où va chaque ligne du programme.",
+          problem: "La plupart des démos d'agents s'arrêtent à « ça marche sur mon portable ». Celle-ci commence là. L'agent du tutoriel peut lire et écrire n'importe quel fichier de la machine. Son outil d'édition pouvait corrompre un fichier en silence de deux façons. Il n'avait aucune limite — ni de tours, ni de tokens, ni de dépense. On ne voyait pas ce qu'il faisait, et rien ne permettait de savoir s'il fonctionnait. Je voulais savoir ce qu'il faut pour laisser des inconnus l'utiliser ; j'ai donc écrit ce qui pouvait mal tourner et construit un contrôle et un test pour chaque point.",
+          approach: "Le cœur est la boucle du tutoriel de Thorsten Ball, et elle n'a pas changé : envoyer la conversation à Claude, exécuter les outils demandés, renvoyer les résultats, recommencer. Tout le reste est ce dont la boucle a besoin avant d'affronter Internet. Un bac à sable : les outils travaillent dans un espace qu'ils ne peuvent pas quitter — une arborescence de fichiers en mémoire par visiteur sur le web, un répertoire os.Root dans le terminal — imposé en Go plutôt que dans le prompt. Des éditions plus sûres : une chaîne de recherche vide sur un fichier existant et une chaîne qui correspond plus d'une fois sont refusées ; un test de référence s'exécute sur le code du tutoriel intact et prouve que les deux bogues y existent. Des limites : tours, tokens, temps, messages par session et par visiteur, et un budget quotidien en dollars qui survit à un redémarrage. Les identifiants présents dans les fichiers sont caviardés avant d'atteindre le modèle. Chaque étape est un événement typé, diffusé vers un front Next.js en Server-Sent Events et stocké dans Supabase derrière du Row Level Security. La qualité est vérifiée, pas supposée : 39 évaluations déterministes tournent à chaque commit — 25 cas adverses au niveau des outils, sans aucun modèle, et 14 cas de boucle d'agent contre une imitation de l'API Messages au niveau du protocole — une suite de 11 cas avec le vrai modèle s'exécute à la demande, et un contrôle par mutation confirme que chaque garde-fou est couvert par un test qui échoue si on le retire. Cinq fiches de décision expliquent ce qui a été choisi et ce qui a été rejeté. Image Docker sur Railway, site sur Vercel.",
+          role: "Seul ingénieur sur toute la pile : backend Go, boucle d'agent, bac à sable, garde-fous, stockage Supabase, harnais d'évaluation, site Next.js, CI/CD et déploiement. Les six jalons du guide de construction sont le code du tutoriel tel que je l'ai tapé en le suivant ; le travail de production a été réalisé avec Claude comme binôme de programmation, et chaque décision est consignée pour que je puisse la défendre. Une passe de revue par IA, distincte et menée avant la publication, a trouvé sept vrais problèmes — dont un navigateur bloqué qui conservait un créneau serveur et des appels échoués non imputés au budget — chacun corrigé avec un test.",
+          tech: ["Go 1.24", "API Anthropic · tool use · streaming", "Boucle d'agent · 3 outils de fichiers", "os.Root · bac à sable FS en mémoire", "Server-Sent Events", "Supabase Postgres · RLS", "Next.js · TypeScript", "Évaluations · fausse API au niveau du protocole", "GitHub Actions · contrôle par mutation", "Docker · Railway · Vercel"],
+          metrics: [
+            { value: "3", label: "Outils · une boucle d'environ 40 lignes, inchangée depuis le tutoriel" },
+            { value: "39", label: "Évaluations déterministes à chaque commit · 11 cas avec le vrai modèle" },
+            { value: "5", label: "Fiches de décision, chacune avec les alternatives rejetées" }
+          ],
+          outcome: "Un agent d'édition de code public sur code.aurimas.io, que chacun peut essayer sans clé : un bac à sable avec fichiers, chat et une radiographie de chaque étape ; un guide de construction qui dérive six jalons compilables du programme final et indique où appartient chaque changement ; une page d'évaluations qui rapporte honnêtement les résultats commités, en affichant la suite avec le vrai modèle comme « non exécutée » plutôt que de suggérer un résultat. Sans clé d'API, le serveur tourne en mode démo — un substitut scripté pilote les vrais outils à travers la vraie boucle. Sous licence MIT, avec un SECURITY.md, un guide de déploiement et les fiches de décision.",
+          novel: "La décision que je défendrais le plus fermement : la sécurité de l'agent vient de ce qu'il peut atteindre, pas de ce qu'on lui dit. On peut discuter avec un prompt ; pas avec une frontière de système de fichiers. Les évaluations au niveau des outils appellent directement les outils avec des chemins hostiles, elles tiennent donc pour n'importe quel modèle et n'importe quel prompt. L'honnêteté est aussi conçue dès le départ — le README liste ce que ce projet ne fait pas (limites de débit dans un seul processus, coût estimé, pas d'exécution de code) et le site refuse d'afficher un résultat qu'il n'a pas produit.",
+          screenshotCaptions: [
+            "Le bac à sable : fichiers, chat et une radiographie de chaque étape de l'agent",
+            "Le guide de construction : main.go après chaque étape, avec les nouvelles lignes marquées et leur place décrite en mots",
+            "La page d'accueil : un LLM, une boucle et trois outils, avec la rediffusion d'une vraie exécution"
+          ]
+        },
         "claude-agent-from-scratch": {
           name: "Claude Agent From Scratch",
           tagline: "Regardez un agent IA réfléchir, utiliser des outils et répondre — étape par étape.",
