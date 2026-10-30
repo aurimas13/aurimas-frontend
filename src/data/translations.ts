@@ -190,7 +190,7 @@ export const translations = {
       stack: "Stack",
       stackValue: "Python · LLMs · Agents",
       reading: "Reading",
-      readingValue: "Born a Crime"
+      readingValue: "Trust"
     },
     projectIndex: {
       title: "The Project Index",
@@ -594,7 +594,7 @@ export const translations = {
       stack: "Stack",
       stackValue: "Python · DKM · Agentai",
       reading: "Skaitau",
-      readingValue: "Born a Crime"
+      readingValue: "Trust"
     },
     projectIndex: {
       title: "Projektų sąrašas",
@@ -998,7 +998,7 @@ export const translations = {
       stack: "Stack",
       stackValue: "Python · LLM · Agents",
       reading: "Lecture",
-      readingValue: "Born a Crime"
+      readingValue: "Trust"
     },
     projectIndex: {
       title: "L'Index des Projets",
