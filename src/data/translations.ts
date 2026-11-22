@@ -203,7 +203,7 @@ export const translations = {
     },
     projects: {
       title: "Projects",
-      subtitle: "Most recent first: three AI agents built from scratch on the Claude API in Go and Python, a daily public AI learning campaign, four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, design, build, and ship production Python and AI systems.",
+      subtitle: "Most recent first: three AI agents built from scratch on the Claude API in Go and Python, two daily public AI learning logs — one open-ended, one of 100 days — four end-to-end AI product prototypes, and two community-starred open-source archives — how I learn, design, build, and ship production Python and AI systems.",
       featured: "Featured Projects",
       viewProject: "View Live Project",
       viewCaseStudy: "View Case Study",
@@ -286,6 +286,25 @@ export const translations = {
             "Splitting a restaurant bill: the agent calls the calculator twice and streams each step live",
             "The agent trace — iterations, tool calls and results as a timeline",
             "Mobile layout of the live demo"
+          ]
+        },
+        "ai-magic": {
+          name: "AI Magic",
+          tagline: "One AI lesson a day, drawn as a picture and explained like you are five.",
+          description: "An open-ended daily learning log of current AI and ML: every day one idea from a talk, post, paper or repository is turned into one clear picture and one plain-words explanation, timestamped to the exact moment in the source. Day 1 is 23 November 2026; there is no end day. Posted daily at 06:50 EET on X, Bluesky, Threads and LinkedIn under #AIMagic.",
+          problem: "AI is moving faster than anyone can read about it. Summaries pile up, but a summary is not understanding — and most explanations either hide the mechanism behind jargon or simplify it until it is wrong. 100 Days With AI proved that a daily, honest, public log works; it also ended on day 100. The question was how to keep learning in public indefinitely, with a format that forces real understanding and lets anyone check every claim against the original.",
+          approach: "Every lesson has to pass three tests: can it be drawn, can it be said simply, and can you check it against the source in one click. The source — a video, post, article, paper or reader suggestion — is chosen the day before; when none is shared, the next lesson from a prepared queue runs so the streak never breaks. One idea, not a summary: a talk with twelve ideas becomes twelve days, spread so consecutive days come from different speakers. One 16:9 card per day, built from a few fixed shapes (a flow, a before-and-after, a stack, a loop, a grid) so the eye learns the visual language. Every lesson links to the minute where it is said; because captions are auto-generated, names and terms that could not be verified are marked unverified instead of guessed. Sources accumulate in numbered Worthy tables — Talks, Posts and Articles, Publications, Repositories and Tools — in the style of Machine Learning Goodness, and new vocabulary lands in a Visual Glossary in plain words. The lesson ships the same morning at 06:50 EET to four networks with the card.",
+          role: "Author, editor and publisher, building in the open with Claude Code as the assistant. I choose the day's source, do the final edit, review and the decision to publish, and paste the LinkedIn post by hand; Claude Code breaks a source into timestamped lessons, drafts the day note and the four posts, and draws the card from a fixed template I approved. The split is published in the README, with a signed statement that every claim traces back to the source or it does not ship — no invented numbers, no invented quotes.",
+          tech: ["LLMs", "Agentic AI", "Claude Code", "ELI5 visuals", "Timestamped sources", "GitHub", "X · Bluesky · Threads · LinkedIn", "MIT"],
+          metrics: [
+            { value: "1", label: "Idea a day · drawn, said simply, timestamped to the source" },
+            { value: "06:50", label: "EET · posted daily on 4 networks under #AIMagic" },
+            { value: "∞", label: "No end day · Day 1 on 23 Nov 2026, the log keeps growing" }
+          ],
+          outcome: "A living, MIT-licensed archive that others can take from directly: a curated, timestamped reading and watching list of current AI growing day by day; explain-like-I'm-five cards reusable in a talk, a team wiki or a lesson; a visual glossary of modern AI engineering vocabulary; and a working template for anyone who wants to run their own open-ended learning log. Readers can propose material through a Suggest-a-Source issue template.",
+          novel: "The magic is not in the tricks; it is in seeing how they work. Most AI explainers stop at a summary — this one forces every idea through a picture, five-year-old words and a one-click check against the original, and keeps a public receipt of the AI collaboration behind it. It is the daily discipline of 100 Days With AI with no finish line, run by an AI engineer who came from chemistry and learns best when he can see the mechanism.",
+          screenshotCaptions: [
+            "The AI Magic logo — line icons of AI and of magic in the colours of the Lithuanian flag, following the circular layout of Machine Learning Goodness"
           ]
         },
         "100-days-with-ai": {
@@ -607,7 +626,7 @@ export const translations = {
     },
     projects: {
       title: "Projektai",
-      subtitle: "Naujausi pirmiausia: trys nuo nulio su Claude API sukurti DI agentai (Go ir Python), kasdienė vieša DI mokymosi kampanija, keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau gamybines Python ir DI sistemas.",
+      subtitle: "Naujausi pirmiausia: trys nuo nulio su Claude API sukurti DI agentai (Go ir Python), du kasdieniai vieši DI mokymosi žurnalai — vienas be pabaigos, kitas 100 dienų — keturi DI produktų prototipai nuo A iki Z ir du bendruomenės įvertinti atvirojo kodo archyvai — kaip mokausi, projektuoju, kuriu ir pristatau gamybines Python ir DI sistemas.",
       featured: "Pagrindiniai projektai",
       viewProject: "Žiūrėti projektą",
       viewCaseStudy: "Žiūrėti atvejo analizę",
@@ -690,6 +709,25 @@ export const translations = {
             "Restorano sąskaitos dalijimas: agentas du kartus iškviečia skaičiuotuvą ir kiekvieną žingsnį transliuoja gyvai",
             "Agento pėdsakas — iteracijos, įrankio iškvietimai ir rezultatai kaip laiko juosta",
             "Gyvos demonstracijos mobilusis išdėstymas"
+          ]
+        },
+        "ai-magic": {
+          name: "AI Magic",
+          tagline: "Viena DI pamoka per dieną — nupiešta kaip paveikslas ir paaiškinta taip, lyg tau būtų penkeri.",
+          description: "Begalinis kasdienis šiuolaikinio DI ir mašininio mokymosi žurnalas: kasdien viena idėja iš pranešimo, įrašo, straipsnio ar repozitorijos paverčiama vienu aiškiu paveikslu ir vienu paaiškinimu paprastais žodžiais, su tikslia laiko žyma į tą šaltinio vietą. 1 diena — 2026 m. lapkričio 23 d.; pabaigos dienos nėra. Kasdien 06:50 EET publikuojama X, Bluesky, Threads ir LinkedIn su #AIMagic.",
+          problem: "DI juda greičiau, nei kas nors spėja apie jį skaityti. Santraukų daugėja, bet santrauka nėra supratimas — o dauguma paaiškinimų arba slepia mechanizmą už žargono, arba supaprastina tiek, kad tampa klaidingi. 100 Days With AI įrodė, kad kasdienis, sąžiningas, viešas žurnalas veikia; jis taip pat baigėsi 100-ąją dieną. Klausimas buvo, kaip mokytis viešai be pabaigos tokiu formatu, kuris verčia iš tiesų suprasti ir leidžia kiekvienam patikrinti kiekvieną teiginį pagal originalą.",
+          approach: "Kiekviena pamoka turi išlaikyti tris testus: ar ją galima nupiešti, ar galima pasakyti paprastai ir ar galima vienu paspaudimu patikrinti pagal šaltinį. Šaltinis — vaizdo įrašas, įrašas, straipsnis, publikacija ar skaitytojo pasiūlymas — parenkamas dieną prieš; jei nieko nepasidalinta, paleidžiama kita pamoka iš paruoštos eilės, kad serija niekada nenutrūktų. Viena idėja, ne santrauka: pranešimas su dvylika idėjų tampa dvylika dienų, išdėstytų taip, kad gretimos dienos būtų iš skirtingų pranešėjų. Viena 16:9 kortelė per dieną, sudėta iš kelių fiksuotų formų (srautas, prieš ir po, sluoksniai, ciklas, tinklelis), kad akis išmoktų vizualinę kalbą. Kiekviena pamoka nuveda į minutę, kurioje tai pasakyta; kadangi subtitrai generuojami automatiškai, nepatikrinti vardai ir terminai pažymimi kaip nepatikrinti, o ne spėjami. Šaltiniai kaupiasi numeruotose „Worthy“ lentelėse — pranešimai, įrašai ir straipsniai, publikacijos, repozitorijos ir įrankiai — Machine Learning Goodness stiliumi, o nauji terminai paprastais žodžiais gula į vizualinį žodynėlį. Pamoka tą patį rytą 06:50 EET keliauja į keturis tinklus kartu su kortele.",
+          role: "Autorius, redaktorius ir leidėjas, kuriantis atvirai su Claude Code kaip asistentu. Aš parenku dienos šaltinį, atlieku galutinį redagavimą, peržiūrą ir priimu sprendimą publikuoti, o LinkedIn įrašą įkeliu ranka; Claude Code suskaido šaltinį į pamokas su laiko žymomis, parengia dienos užrašo ir keturių įrašų juodraščius ir nupiešia kortelę pagal mano patvirtintą fiksuotą šabloną. Šis pasidalijimas paskelbtas README kartu su pasirašytu pareiškimu: kiekvienas teiginys atsekamas iki šaltinio arba nepublikuojamas — jokių išgalvotų skaičių, jokių išgalvotų citatų.",
+          tech: ["DKM", "Agentinis DI", "Claude Code", "ELI5 vizualai", "Šaltiniai su laiko žymomis", "GitHub", "X · Bluesky · Threads · LinkedIn", "MIT"],
+          metrics: [
+            { value: "1", label: "Idėja per dieną · nupiešta, pasakyta paprastai, su laiko žyma į šaltinį" },
+            { value: "06:50", label: "EET · kasdien 4 tinkluose su #AIMagic" },
+            { value: "∞", label: "Be pabaigos dienos · 1 diena 2026-11-23, žurnalas tik auga" }
+          ],
+          outcome: "Gyvas MIT licencijos archyvas, iš kurio kiti gali imti tiesiogiai: kasdien augantis kruopščiai atrinktas skaitymo ir žiūrėjimo sąrašas su laiko žymomis apie šiuolaikinį DI; „paaiškink lyg man būtų penkeri“ kortelės, tinkančios pranešimui, komandos wiki ar pamokai; vizualinis šiuolaikinės DI inžinerijos žodynėlis; ir veikiantis šablonas kiekvienam, norinčiam vesti savo begalinį mokymosi žurnalą. Skaitytojai gali siūlyti medžiagą per „Suggest a Source“ užklausos šabloną.",
+          novel: "Magija ne triukuose — ji tame, kad matai, kaip jie veikia. Dauguma DI paaiškinimų sustoja ties santrauka; čia kiekviena idėja privalo pereiti per paveikslą, penkiamečiui suprantamus žodžius ir vieno paspaudimo patikrą pagal originalą, o už viso to lieka viešas įrodymas apie bendradarbiavimą su DI. Tai 100 Days With AI kasdienė disciplina be finišo linijos, kurią veda iš chemijos atėjęs DI inžinierius, geriausiai mokantis tada, kai mato mechanizmą.",
+          screenshotCaptions: [
+            "AI Magic logotipas — DI ir magijos linijinės ikonos Lietuvos vėliavos spalvomis, pagal apskritą Machine Learning Goodness logotipo išdėstymą"
           ]
         },
         "100-days-with-ai": {
@@ -1011,7 +1049,7 @@ export const translations = {
     },
     projects: {
       title: "Projets",
-      subtitle: "Les plus récents d'abord : trois agents IA construits de zéro sur l'API Claude en Go et en Python, une campagne quotidienne et publique d'apprentissage de l'IA, quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer des systèmes Python et IA en production.",
+      subtitle: "Les plus récents d'abord : trois agents IA construits de zéro sur l'API Claude en Go et en Python, deux journaux d'apprentissage de l'IA publics et quotidiens — l'un sans fin, l'autre de 100 jours — quatre prototypes de produits IA de bout en bout et deux archives open source plébiscitées — ma façon d'apprendre, de concevoir, de construire et de livrer des systèmes Python et IA en production.",
       featured: "Projets en vedette",
       viewProject: "Voir le projet",
       viewCaseStudy: "Voir l'étude de cas",
@@ -1094,6 +1132,25 @@ export const translations = {
             "Partager une addition au restaurant : l'agent appelle deux fois la calculatrice et diffuse chaque étape en direct",
             "La trace de l'agent — itérations, appels d'outil et résultats sous forme de chronologie",
             "Version mobile de la démo en ligne"
+          ]
+        },
+        "ai-magic": {
+          name: "AI Magic",
+          tagline: "Une leçon d'IA par jour, dessinée en image et expliquée comme à un enfant de cinq ans.",
+          description: "Un journal d'apprentissage quotidien et sans fin sur l'IA et le ML d'aujourd'hui : chaque jour, une idée tirée d'une conférence, d'un billet, d'un article ou d'un dépôt devient une image claire et une explication en mots simples, horodatée à l'instant exact de la source. Le jour 1 est le 23 novembre 2026 ; il n'y a pas de jour de fin. Publié chaque jour à 06h50 EET sur X, Bluesky, Threads et LinkedIn sous #AIMagic.",
+          problem: "L'IA avance plus vite que quiconque ne peut la lire. Les résumés s'accumulent, mais un résumé n'est pas une compréhension — et la plupart des explications cachent le mécanisme derrière le jargon ou le simplifient jusqu'à le fausser. 100 Days With AI a prouvé qu'un journal public, quotidien et honnête fonctionne ; il s'est aussi arrêté au jour 100. La question était de continuer à apprendre en public indéfiniment, avec un format qui force une vraie compréhension et permet à chacun de vérifier chaque affirmation dans l'original.",
+          approach: "Chaque leçon doit passer trois tests : peut-on la dessiner, peut-on la dire simplement, peut-on la vérifier dans la source en un clic. La source — vidéo, billet, article, publication ou suggestion d'un lecteur — est choisie la veille ; si rien n'est partagé, la leçon suivante d'une file préparée prend le relais pour que la série ne casse jamais. Une idée, pas un résumé : une conférence à douze idées devient douze jours, répartis pour que deux jours consécutifs viennent d'intervenants différents. Une carte 16:9 par jour, construite à partir de quelques formes fixes (un flux, un avant-après, une pile, une boucle, une grille) pour que l'œil apprenne le langage visuel. Chaque leçon renvoie à la minute où la chose est dite ; les sous-titres étant générés automatiquement, les noms et termes non vérifiables sont marqués comme tels plutôt que devinés. Les sources s'accumulent dans des tables « Worthy » numérotées — conférences, billets et articles, publications, dépôts et outils — dans l'esprit de Machine Learning Goodness, et le vocabulaire nouveau rejoint un glossaire visuel en mots simples. La leçon part le matin même à 06h50 EET vers quatre réseaux, avec la carte.",
+          role: "Auteur, éditeur et publieur, construisant en public avec Claude Code comme assistant. Je choisis la source du jour, je fais la relecture finale, la validation et je décide de publier, et je colle le post LinkedIn à la main ; Claude Code découpe une source en leçons horodatées, rédige la note du jour et les quatre posts, et dessine la carte à partir d'un gabarit fixe que j'ai approuvé. Cette répartition est publiée dans le README, avec une déclaration signée : chaque affirmation remonte à la source ou ne sort pas — aucun chiffre inventé, aucune citation inventée.",
+          tech: ["LLM", "IA agentique", "Claude Code", "Visuels ELI5", "Sources horodatées", "GitHub", "X · Bluesky · Threads · LinkedIn", "MIT"],
+          metrics: [
+            { value: "1", label: "Idée par jour · dessinée, dite simplement, horodatée à la source" },
+            { value: "06h50", label: "EET · publiée chaque jour sur 4 réseaux sous #AIMagic" },
+            { value: "∞", label: "Pas de jour de fin · jour 1 le 23 nov. 2026, le journal ne cesse de grandir" }
+          ],
+          outcome: "Une archive vivante sous licence MIT dans laquelle d'autres peuvent puiser directement : une liste de lecture et de visionnage de l'IA actuelle, sélectionnée et horodatée, qui grandit jour après jour ; des cartes « explique-moi comme si j'avais cinq ans » réutilisables dans une présentation, un wiki d'équipe ou un cours ; un glossaire visuel du vocabulaire de l'ingénierie IA moderne ; et un modèle prêt à l'emploi pour quiconque veut tenir son propre journal d'apprentissage sans fin. Les lecteurs peuvent proposer du matériel via un modèle d'issue « Suggest a Source ».",
+          novel: "La magie n'est pas dans les tours ; elle est dans le fait de voir comment ils fonctionnent. La plupart des explications d'IA s'arrêtent au résumé — ici, chaque idée passe par une image, des mots d'enfant de cinq ans et une vérification en un clic dans l'original, avec un reçu public de la collaboration avec l'IA derrière. C'est la discipline quotidienne de 100 Days With AI sans ligne d'arrivée, menée par un ingénieur IA venu de la chimie qui apprend le mieux quand il peut voir le mécanisme.",
+          screenshotCaptions: [
+            "Le logo AI Magic — icônes filaires de l'IA et de la magie aux couleurs du drapeau lituanien, selon la disposition circulaire du logo de Machine Learning Goodness"
           ]
         },
         "100-days-with-ai": {

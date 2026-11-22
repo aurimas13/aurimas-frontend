@@ -52,13 +52,20 @@ const projectMeta: Record<string, ProjectMeta> = {
       '/projects/calculator-agent/screenshot-mobile.png',
     ],
   },
-  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '04', domain: 'github.com/aurimas13' },
-  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '05' },
-  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '06' },
-  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '07' },
-  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '08' },
-  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '09', domain: 'github.com/aurimas13' },
-  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '10', domain: 'github.com/aurimas13' },
+  'ai-magic': {
+    url: 'https://github.com/aurimas13/AI-Magic',
+    github: 'https://github.com/aurimas13/AI-Magic',
+    index: '04',
+    domain: 'github.com/aurimas13',
+    screenshots: ['/projects/ai-magic/logo.png'],
+  },
+  '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '05', domain: 'github.com/aurimas13' },
+  cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '06' },
+  aegis:      { url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',        index: '07' },
+  gateway:    { url: 'https://gateway.aurimas.io',    github: 'https://github.com/aurimas13/AI_Platform',     index: '08' },
+  agentic:    { url: 'https://agentic.aurimas.io',    github: 'https://github.com/aurimas13/web_application', index: '09' },
+  'machine-learning-goodness': { url: 'https://github.com/aurimas13/Machine-Learning-Goodness', github: 'https://github.com/aurimas13/Machine-Learning-Goodness', index: '10', domain: 'github.com/aurimas13' },
+  'solutions-to-problems': { url: 'https://github.com/aurimas13/Solutions-To-Problems', github: 'https://github.com/aurimas13/Solutions-To-Problems', index: '11', domain: 'github.com/aurimas13' },
 };
 
 const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
