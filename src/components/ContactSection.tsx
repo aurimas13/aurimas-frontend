@@ -22,7 +22,7 @@ export const ContactSection: React.FC = () => {
     try {
       const response = await fetch('https://formspree.io/f/xzzvbzwg', {
         method: 'POST',
-        // Formspree requires `Accept: application/json` for AJAX/fetch submissions —
+        // Formspree requires `Accept: application/json` for AJAX/fetch submissions -
         // otherwise it replies with a cross-origin redirect that fetch cannot read.
         headers: {
           'Content-Type': 'application/json',

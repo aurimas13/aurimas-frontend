@@ -87,7 +87,7 @@ export const About: React.FC = () => {
               ))}
             </div>
 
-            {/* CV download — sober box, not a gradient */}
+            {/* CV download - sober box, not a gradient */}
             <div className="mt-12 panel-strong p-6 sm:p-8">
               <div className="flex items-baseline justify-between mb-2 flex-wrap gap-2">
                 <h4 className="display-sm" style={{ fontVariationSettings: '"opsz" 36, "wght" 500' }}>

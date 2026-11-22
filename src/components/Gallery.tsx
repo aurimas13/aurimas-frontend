@@ -374,7 +374,7 @@ export const Gallery: React.FC = () => {
                 <span>Plate {String(index + 1).padStart(2, '0')}</span>
                 <span className="text-ink-soft">{image.location[currentLanguage as keyof LocalizedGalleryText]}</span>
               </div>
-              {/* Hover panel — paper, not black */}
+              {/* Hover panel - paper, not black */}
               <div className="absolute inset-2 bg-paper/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                 <h3 className="display-sm text-ink mb-2" style={{ fontSize: '20px', fontVariationSettings: '"opsz" 24, "wght" 500' }}>
                   {image.title[currentLanguage as keyof LocalizedGalleryText]}

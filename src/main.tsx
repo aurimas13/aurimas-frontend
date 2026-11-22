@@ -17,7 +17,7 @@ ReactDOM.createRoot(root).render(
   </React.StrictMode>,
 );
 
-// Signal that React has mounted — hides the static fallback via CSS
+// Signal that React has mounted - hides the static fallback via CSS
 requestAnimationFrame(() => {
   document.body.classList.add('app-loaded');
 });

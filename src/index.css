@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 /* =========================================================================
-   Editorial Lab Notebook — design tokens
+   Editorial Lab Notebook - design tokens
    ========================================================================= */
 :root {
   /* Paper / ink */
@@ -20,7 +20,7 @@
   --rule-strong:  rgba(26, 22, 18, 0.32);
   --rule-mute:    rgba(26, 22, 18, 0.06);
 
-  /* Accents — sparing use only */
+  /* Accents - sparing use only */
   --sulfur:       #e8b500;        /* highlight (single swipe) */
   --oxblood:      #7a1f1f;        /* italic display, hover */
   --cyan:         #0d6a6a;        /* fountain-pen teal links */
@@ -365,11 +365,12 @@ body {
 }
 .marginnote h4 { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em; color: var(--ink-mute); margin-bottom: 14px; }
 .marginnote .row {
-  display: flex; justify-content: space-between;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
   padding: 9px 0; border-bottom: 1px dashed var(--rule);
 }
+.marginnote .row span { white-space: nowrap; }
 .marginnote .row:last-child { border-bottom: 0; }
-.marginnote .row b { color: var(--ink); font-weight: 500; font-family: var(--font-mono); font-size: 12px; }
+.marginnote .row b { color: var(--ink); font-weight: 500; font-family: var(--font-mono); font-size: 12px; text-align: right; }
 
 /* =========================================================================
    Static fallback hide once React mounts

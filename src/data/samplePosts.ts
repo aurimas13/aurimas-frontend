@@ -24,7 +24,7 @@ Welcome to a lighter template that keeps the focus on the ideas underpinning Mol
 
 ## Slice Of Life
 
-> "Simplicity arrives when you cut away the noise and sit with the signal." — personal lab notes, Jul 2025
+> "Simplicity arrives when you cut away the noise and sit with the signal." - personal lab notes, Jul 2025
 
 ## Keep Exploring
 

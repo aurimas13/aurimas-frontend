@@ -30,7 +30,7 @@ export const sanitizeHtml = (dirty: string): string => {
   return DOMPurify.sanitize(dirty, {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
-    // Only allow http(s)/mailto links and relative paths — blocks javascript: etc.
+    // Only allow http(s)/mailto links and relative paths - blocks javascript: etc.
     ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
     ADD_ATTR: ['target'],
   });

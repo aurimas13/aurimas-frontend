@@ -245,7 +245,7 @@ export const BlogsPage: React.FC = () => {
             <h3 className="display-sm text-ink" style={{ fontSize: '24px', fontVariationSettings: '"opsz" 36, "wght" 480' }}>
               {t.blogs.stayUpdated}
             </h3>
-            <span className="meta uppercase tracking-[0.2em]">— Subscribe</span>
+            <span className="meta uppercase tracking-[0.2em]">- Subscribe</span>
           </div>
           <p className="text-ink-soft text-[15px] mb-6">{t.blogs.newsletterDescription}</p>
           <div className="flex flex-col sm:flex-row gap-3">

@@ -42,7 +42,7 @@ export const BlogPage: React.FC = () => {
         </Link>
 
         <div className="mb-12 reveal reveal-d2">
-          <p className="eyebrow mb-3">— {categoryTitle}</p>
+          <p className="eyebrow mb-3">- {categoryTitle}</p>
           <h1 className="display-lg text-ink" style={{ fontSize: 'clamp(40px, 6vw, 80px)', fontVariationSettings: '"opsz" 96, "wght" 440' }}>
             {categoryTitle}.
           </h1>

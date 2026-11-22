@@ -156,7 +156,7 @@ export const ProjectDetailPage: React.FC = () => {
     src,
     label: `${plateLabel} ${ROMAN[i]}`,
     caption: captions[i],
-    alt: captions[i] ?? `${item.name} — ${plateLabel} ${ROMAN[i]}`,
+    alt: captions[i] ?? `${item.name} - ${plateLabel} ${ROMAN[i]}`,
   });
   // Two secondary plates read best as wide + narrow; more than two fall into even columns.
   const gridCols = meta.plateGrid === 'wide-narrow' ? 'md:grid-cols-[3fr_2fr]' : 'md:grid-cols-2';
@@ -218,7 +218,7 @@ export const ProjectDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Plates / screenshots — only for projects that ship them */}
+        {/* Plates / screenshots - only for projects that ship them */}
         {leadShot && (
           <div className="reveal reveal-d3 mb-4">
             <div className="flex items-baseline justify-between mb-6 pb-3 border-b border-[rgba(26,22,18,0.32)]">
