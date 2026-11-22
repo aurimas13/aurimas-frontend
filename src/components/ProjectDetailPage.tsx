@@ -16,10 +16,17 @@ interface ProjectMeta {
 }
 
 const projectMeta: Record<string, ProjectMeta> = {
+  'ai-magic': {
+    url: 'https://github.com/aurimas13/AI-Magic',
+    github: 'https://github.com/aurimas13/AI-Magic',
+    index: '01',
+    domain: 'github.com/aurimas13',
+    screenshots: ['/projects/ai-magic/logo.png'],
+  },
   'code-editing-agent': {
     url: 'https://code.aurimas.io',
     github: 'https://github.com/aurimas13/Code-Editing-Agent',
-    index: '01',
+    index: '02',
     domain: 'code.aurimas.io',
     screenshots: [
       '/projects/code-editing-agent/playground.png',
@@ -30,7 +37,7 @@ const projectMeta: Record<string, ProjectMeta> = {
   'claude-agent-from-scratch': {
     url: 'https://agent.aurimas.io',
     github: 'https://github.com/aurimas13/Claude-Agent-From-Scratch',
-    index: '02',
+    index: '03',
     domain: 'agent.aurimas.io',
     screenshots: [
       '/projects/claude-agent-from-scratch/demo.gif',
@@ -43,7 +50,7 @@ const projectMeta: Record<string, ProjectMeta> = {
   'calculator-agent': {
     url: 'https://calculator.aurimas.io',
     github: 'https://github.com/aurimas13/Calculator-Agent',
-    index: '03',
+    index: '04',
     domain: 'calculator.aurimas.io',
     plateGrid: 'wide-narrow',
     screenshots: [
@@ -51,13 +58,6 @@ const projectMeta: Record<string, ProjectMeta> = {
       '/projects/calculator-agent/screenshot-light.png',
       '/projects/calculator-agent/screenshot-mobile.png',
     ],
-  },
-  'ai-magic': {
-    url: 'https://github.com/aurimas13/AI-Magic',
-    github: 'https://github.com/aurimas13/AI-Magic',
-    index: '04',
-    domain: 'github.com/aurimas13',
-    screenshots: ['/projects/ai-magic/logo.png'],
   },
   '100-days-with-ai': { url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', index: '05', domain: 'github.com/aurimas13' },
   cleartrace: { url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',    index: '06' },

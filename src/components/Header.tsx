@@ -5,7 +5,7 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
-const projectSlugs = ['code-editing-agent', 'claude-agent-from-scratch', 'calculator-agent', 'ai-magic', '100-days-with-ai', 'cleartrace', 'aegis', 'gateway', 'agentic', 'machine-learning-goodness', 'solutions-to-problems'] as const;
+const projectSlugs = ['ai-magic', 'code-editing-agent', 'claude-agent-from-scratch', 'calculator-agent', '100-days-with-ai', 'cleartrace', 'aegis', 'gateway', 'agentic', 'machine-learning-goodness', 'solutions-to-problems'] as const;
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

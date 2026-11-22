@@ -4,10 +4,10 @@ import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
 const projectLinks = [
+  { slug: 'ai-magic', url: 'https://github.com/aurimas13/AI-Magic', github: 'https://github.com/aurimas13/AI-Magic', stack: 'LLMs · ELI5 · DAILY' },
   { slug: 'code-editing-agent', url: 'https://code.aurimas.io', github: 'https://github.com/aurimas13/Code-Editing-Agent', stack: 'GO · NEXT.JS · SUPABASE' },
   { slug: 'claude-agent-from-scratch', url: 'https://agent.aurimas.io', github: 'https://github.com/aurimas13/Claude-Agent-From-Scratch', stack: 'PYTHON · ReAct · SUPABASE' },
   { slug: 'calculator-agent', url: 'https://calculator.aurimas.io', github: 'https://github.com/aurimas13/Calculator-Agent', stack: 'PYTHON · CLAUDE · SSE' },
-  { slug: 'ai-magic', url: 'https://github.com/aurimas13/AI-Magic', github: 'https://github.com/aurimas13/AI-Magic', stack: 'LLMs · ELI5 · DAILY' },
   { slug: '100-days-with-ai', url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', stack: 'LLMs · AGENTS · DAILY' },
   { slug: 'cleartrace', url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace', stack: 'PYTHON · NEO4J · LLM' },
   { slug: 'aegis',      url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',      stack: 'NEXT.JS · POSTGRES' },
@@ -146,7 +146,7 @@ export const Hero: React.FC<HeroProps> = ({ onSectionChange }) => {
 
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
             <span>{projectIndex.tip}</span>
-            <a href={projectLinks[0].url} target="_blank" rel="noopener noreferrer" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.openLiveSite}</a>
+            <a href={(projectLinks.find((p) => !p.url.includes('github.com')) ?? projectLinks[0]).url} target="_blank" rel="noopener noreferrer" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.openLiveSite}</a>
             <Link to="/projects" className="text-ink-soft hover:text-ink border-b border-transparent hover:border-ink transition-colors">{projectIndex.allProjects}</Link>
           </div>
         </div>

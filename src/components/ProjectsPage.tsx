@@ -5,10 +5,10 @@ import { useLanguage } from '../hooks/useLanguage';
 import { translations } from '../data/translations';
 
 const projectLinks = [
+  { slug: 'ai-magic', url: 'https://github.com/aurimas13/AI-Magic', github: 'https://github.com/aurimas13/AI-Magic', stack: 'LLMs · ELI5 · DAILY' },
   { slug: 'code-editing-agent', url: 'https://code.aurimas.io', github: 'https://github.com/aurimas13/Code-Editing-Agent', stack: 'GO · NEXT.JS · SUPABASE' },
   { slug: 'claude-agent-from-scratch', url: 'https://agent.aurimas.io', github: 'https://github.com/aurimas13/Claude-Agent-From-Scratch', stack: 'PYTHON · ReAct · SUPABASE' },
   { slug: 'calculator-agent', url: 'https://calculator.aurimas.io', github: 'https://github.com/aurimas13/Calculator-Agent', stack: 'PYTHON · CLAUDE · SSE' },
-  { slug: 'ai-magic', url: 'https://github.com/aurimas13/AI-Magic', github: 'https://github.com/aurimas13/AI-Magic', stack: 'LLMs · ELI5 · DAILY' },
   { slug: '100-days-with-ai', url: 'https://github.com/aurimas13/100-Days-With-AI', github: 'https://github.com/aurimas13/100-Days-With-AI', stack: 'LLMs · AGENTS · DAILY' },
   { slug: 'cleartrace', url: 'https://cleartrace.aurimas.io', github: 'https://github.com/aurimas13/ClearTrace',     stack: 'PYTHON · NEO4J · LLM' },
   { slug: 'aegis',      url: 'https://aegis.aurimas.io',      github: 'https://github.com/aurimas13/Aegis_AI',         stack: 'NEXT.JS · POSTGRES' },
