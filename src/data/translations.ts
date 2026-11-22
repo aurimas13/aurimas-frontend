@@ -188,7 +188,7 @@ export const translations = {
       basedIn: "Based in",
       basedInValue: "Vilnius / Remote",
       stack: "Stack",
-      stackValue: "Python · ML · AI · CV",
+      stackValue: "Python · ML · LLMs · Agents",
       reading: "Reading",
       readingValue: "Trust"
     },
@@ -611,7 +611,7 @@ export const translations = {
       basedIn: "Įsikūręs",
       basedInValue: "Vilniuje / Nuotoliniu",
       stack: "Stack",
-      stackValue: "Python · MM · DI · KR",
+      stackValue: "Python · MM · DKM · Agentai",
       reading: "Skaitau",
       readingValue: "Trust"
     },
@@ -1034,7 +1034,7 @@ export const translations = {
       basedIn: "Basé à",
       basedInValue: "Vilnius / À distance",
       stack: "Stack",
-      stackValue: "Python · ML · IA · Vision",
+      stackValue: "Python · ML · LLM · Agents",
       reading: "Lecture",
       readingValue: "Trust"
     },
